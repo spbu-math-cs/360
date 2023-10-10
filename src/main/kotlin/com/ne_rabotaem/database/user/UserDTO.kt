@@ -6,5 +6,5 @@ class UserDTO(
     val father_name: String,
     val login: String,
     val password: String,
-    val rank: String
+    val rank: rank
 )

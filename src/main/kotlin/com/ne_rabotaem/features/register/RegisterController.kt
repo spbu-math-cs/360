@@ -4,10 +4,13 @@ import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.token.TokenDTO
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.database.user.UserDTO
+import com.ne_rabotaem.database.user.rank
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
+import org.jetbrains.exposed.sql.StdOutSqlLogger
+import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
@@ -30,18 +33,10 @@ class RegisterController(val call: ApplicationCall) {
                 father_name = registerReceiveRemote.father_name,
                 login = registerReceiveRemote.login,
                 password = registerReceiveRemote.password,
-                rank = registerReceiveRemote.rank
+                rank = rank.valueOf(registerReceiveRemote.rank)
             )
         )
 
-        Token.insert(
-            TokenDTO(
-                rowId = UUID.randomUUID().toString(),
-                login = registerReceiveRemote.login,
-                token = token
-            )
-        )
-
-        call.respond(RegisterResponseRemote(token = token))
+        call.respond(HttpStatusCode.OK);
     }
 }

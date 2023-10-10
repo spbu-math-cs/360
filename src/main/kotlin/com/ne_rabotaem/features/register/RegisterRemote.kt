@@ -11,8 +11,3 @@ data class RegisterReceiveRemote(
     val password: String,
     val rank: String
 )
-
-@Serializable
-data class RegisterResponseRemote(
-    val token: String,
-)

@@ -7,11 +7,13 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
 class LoginController(val call: ApplicationCall) {
     suspend fun performLogin() {
         val loginReceiveRemote = call.receive<LoginReceiveRemote>()
+        print(loginReceiveRemote.login);
 
         val userDTO = User.fetchUser(loginReceiveRemote.login)
         if (userDTO == null) {
@@ -27,7 +29,6 @@ class LoginController(val call: ApplicationCall) {
         val token = UUID.randomUUID().toString()
         Token.insert(
             TokenDTO(
-                rowId = UUID.randomUUID().toString(),
                 login = loginReceiveRemote.login,
                 token = token
             )
