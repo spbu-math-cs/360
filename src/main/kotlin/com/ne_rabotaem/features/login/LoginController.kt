@@ -7,7 +7,6 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
 class LoginController(val call: ApplicationCall) {
@@ -15,7 +14,7 @@ class LoginController(val call: ApplicationCall) {
         val loginReceiveRemote = call.receive<LoginReceiveRemote>()
         print(loginReceiveRemote.login);
 
-        val userDTO = User.fetchUser(loginReceiveRemote.login)
+        val userDTO = User.fetch(loginReceiveRemote.login)
         if (userDTO == null) {
             call.respond(HttpStatusCode.Conflict, "User is not found!")
             return

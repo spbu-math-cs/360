@@ -1,5 +1,6 @@
 package com.ne_rabotaem
-import com.ne_rabotaem.database.user.rank
+
+import com.ne_rabotaem.features.demo.configureDemoRouting
 import com.ne_rabotaem.features.login.configureLoginRouting
 import com.ne_rabotaem.features.register.configureRegisterRouting
 import com.ne_rabotaem.plugins.*
@@ -20,4 +21,5 @@ fun Application.module() {
     configureRouting()
     configureLoginRouting()
     configureRegisterRouting()
+    configureDemoRouting()
 }

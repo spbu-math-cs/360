@@ -1,7 +1,5 @@
 package com.ne_rabotaem.features.register
 
-import com.ne_rabotaem.database.token.Token
-import com.ne_rabotaem.database.token.TokenDTO
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.database.user.UserDTO
 import com.ne_rabotaem.database.user.rank
@@ -9,16 +7,13 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import org.jetbrains.exposed.sql.StdOutSqlLogger
-import org.jetbrains.exposed.sql.addLogger
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
 class RegisterController(val call: ApplicationCall) {
     suspend fun registerNewUser() {
         val registerReceiveRemote = call.receive<RegisterReceiveRemote>()
 
-        val userDTO = User.fetchUser(registerReceiveRemote.login)
+        val userDTO = User.fetch(registerReceiveRemote.login)
         if (userDTO != null) {
             call.respond(HttpStatusCode.Conflict, "User already exists!")
             return

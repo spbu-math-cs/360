@@ -41,7 +41,7 @@ object User : Table("Person") {
         }
     }
 
-    fun fetchUser(login: String): UserDTO? {
+    fun fetch(login: String): UserDTO? {
         return try {
             transaction {
                 val userModel = select { User.login.eq(login) }.single()
