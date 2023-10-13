@@ -1,12 +1,12 @@
 package com.ne_rabotaem.database.token
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.lang.IllegalArgumentException
 
-object Token : Table("Token") {
+object Token : IntIdTable("Token") {
     private val login = varchar("login", 20)
     private val token = varchar("token", 128)
 

@@ -1,5 +1,6 @@
 package com.ne_rabotaem.database.user
 
+import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.postgresql.util.PGobject
@@ -19,7 +20,7 @@ class PGEnum<T : Enum<T>>(enumTypeName: String, enumValue: T?) : PGobject() {
     }
 }
 
-object User : Table("Person") {
+object User : IntIdTable("Person") {
     private val first_name = varchar("first_name", 24)
     private val last_name = varchar("last_name", 24)
     private val father_name = varchar("father_name", 24)
