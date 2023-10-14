@@ -12,7 +12,7 @@ import java.util.*
 class LoginController(val call: ApplicationCall) {
     suspend fun performLogin() {
         val loginReceiveRemote = call.receive<LoginReceiveRemote>()
-        print(loginReceiveRemote.login);
+        print(loginReceiveRemote.login)
 
         val userDTO = User.fetch(loginReceiveRemote.login)
         if (userDTO == null) {
@@ -29,8 +29,8 @@ class LoginController(val call: ApplicationCall) {
         Token.insert(
             TokenDTO(
                 login = loginReceiveRemote.login,
-                token = token
-            )
+                token = token,
+            ),
         )
 
         call.respond(LoginResponseRemote(token = token))

@@ -25,11 +25,11 @@ object Token : IntIdTable("Token") {
                 val tokenModel = select { Token.token.eq(token) }.single()
                 TokenDTO(
                     login = tokenModel[login],
-                    token = tokenModel[Token.token]
+                    token = tokenModel[Token.token],
                 )
             }
         } catch (e: Exception) {
-            when(e) {
+            when (e) {
                 is NoSuchElementException, is IllegalArgumentException -> null
                 else -> {
                     throw e

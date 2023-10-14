@@ -10,6 +10,7 @@ import kotlinx.serialization.encoding.Encoder
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import javax.xml.stream.events.Comment
 
 object LocalDateSerializer : KSerializer<LocalDate> {
     override val descriptor = PrimitiveSerialDescriptor("LocalDate", PrimitiveKind.STRING)
@@ -36,7 +37,7 @@ object LocalTimeSerializer : KSerializer<LocalTime> {
 }
 
 @Serializable
-class EventResponseRemote(
+data class EventResponseRemote(
     val eventId: Int,
     val type: EventType,
     @Serializable(with = LocalDateSerializer::class)
@@ -45,4 +46,29 @@ class EventResponseRemote(
     val start: LocalTime,
     @Serializable(with = LocalTimeSerializer::class)
     val finish: LocalTime
+)
+
+@Serializable
+data class TeamResponseRemote(
+    val teamId: Int,
+    val number: Int,
+    val name: String,
+    val projectName: String,
+    val teacherId: Int
+)
+
+@Serializable
+data class GradeReceiveRemote(
+    val teamId: Int,
+    val grade: Int,
+    val comment: String
+)
+
+@Serializable
+data class GradeResponseRemote(
+    val gradeId: Int,
+    val personId: Int,
+    val teamId: Int,
+    val grade: Int,
+    val comment: String
 )
