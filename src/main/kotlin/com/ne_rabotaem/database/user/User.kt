@@ -64,4 +64,12 @@ object User : IntIdTable("Person") {
             }
         }
     }
+
+    fun getUserId(login: String): Int? {
+        return transaction {
+            val userModel = select { User.login.eq(login) }.firstOrNull() ?: return@transaction null
+
+            userModel[User.id].value
+        }
+    }
 }

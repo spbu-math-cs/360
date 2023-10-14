@@ -18,7 +18,8 @@ fun Application.configureDemoRouting() {
         }
 
         post("/demo/vote") {
-
+            val demoController = DemoController(call)
+            demoController.vote(call)
         }
     }
 }

@@ -19,8 +19,6 @@ class RegisterController(val call: ApplicationCall) {
             return
         }
 
-        val token = UUID.randomUUID().toString()
-
         User.insert(
             UserDTO(
                 first_name = registerReceiveRemote.first_name,

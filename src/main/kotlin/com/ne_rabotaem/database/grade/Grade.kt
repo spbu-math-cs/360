@@ -5,6 +5,7 @@ import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.features.demo.GradeResponseRemote
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -16,7 +17,15 @@ object Demo_grade : IntIdTable("Demo_grade") {
     private val comment = varchar("comment", 500)
 
     fun insert(gradeDTO: GradeDTO) {
-        throw NotImplementedError()
+        transaction {
+            insert {
+                it[eventId] = gradeDTO.eventId
+                it[personId] = gradeDTO.personId
+                it[teamId] = gradeDTO.teamId
+                it[grade] = gradeDTO.grade
+                it[comment] = gradeDTO.comment.orEmpty()
+            }
+        }
     }
 
     fun fetch(eventId: Int): List<GradeResponseRemote> {

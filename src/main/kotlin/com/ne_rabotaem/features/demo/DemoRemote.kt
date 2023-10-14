@@ -59,6 +59,7 @@ data class TeamResponseRemote(
 
 @Serializable
 data class GradeReceiveRemote(
+    val eventId: Int,
     val teamId: Int,
     val grade: Int,
     val comment: String

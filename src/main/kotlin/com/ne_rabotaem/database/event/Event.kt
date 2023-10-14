@@ -12,7 +12,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 enum class EventType {
     demo,
-    _360,
+    _360
 }
 
 object Event : IntIdTable("Event") {
@@ -20,6 +20,7 @@ object Event : IntIdTable("Event") {
     private val date = date("date")
     private val start = time("start")
     private val finish = time("finish")
+
 
     fun insert(eventDTO: EventDTO) {
         transaction {
@@ -45,7 +46,7 @@ object Event : IntIdTable("Event") {
                 )
             }
         } catch (e: Exception) {
-            when (e) {
+            when(e) {
                 is NoSuchElementException, is IllegalArgumentException -> null
                 else -> {
                     throw e
@@ -56,7 +57,7 @@ object Event : IntIdTable("Event") {
 
     fun fetchAll(): List<EventResponseRemote> {
         return transaction {
-            Event.selectAll().toList().map { EventResponseRemote(it[Event.id].value, it[type], it[date], it[start], it[finish]) }
+                Event.selectAll().toList().map { EventResponseRemote(it[Event.id].value, it[type], it[date], it[start], it[finish]) }
         }
     }
 }
