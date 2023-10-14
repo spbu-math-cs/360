@@ -5,7 +5,7 @@ import io.ktor.server.routing.*
 
 fun Application.configureDemoRouting() {
     routing {
-        post("/demo") {
+        get("/demo") {
             val demoController = DemoController(call)
             demoController.getDemos(call)
         }

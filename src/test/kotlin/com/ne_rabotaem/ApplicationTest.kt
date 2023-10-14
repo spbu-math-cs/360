@@ -9,13 +9,13 @@ import kotlin.test.*
 
 class ApplicationTest {
     @Test
-    fun testRoot() = testApplication {
+    fun testMain() = testApplication {
         application {
             configureRouting()
         }
-        client.get("/").apply {
+        client.get("/test").apply {
             assertEquals(HttpStatusCode.OK, status)
-            assertEquals("Hello World!", bodyAsText())
+            assertEquals("Test passed!", bodyAsText())
         }
     }
 }
