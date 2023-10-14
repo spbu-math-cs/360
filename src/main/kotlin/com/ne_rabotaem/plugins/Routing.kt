@@ -16,10 +16,6 @@ fun Application.configureRouting() {
 
     routing {
         staticFiles("/", File("static"))
-
-        get("/home") {
-            call.respondText("Home")
-        }
         get("/test") {
             call.respondText("Test passed!")
         }

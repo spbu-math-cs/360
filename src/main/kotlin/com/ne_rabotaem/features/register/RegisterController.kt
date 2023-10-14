@@ -28,10 +28,10 @@ class RegisterController(val call: ApplicationCall) {
                 father_name = registerReceiveRemote.father_name,
                 login = registerReceiveRemote.login,
                 password = registerReceiveRemote.password,
-                rank = rank.valueOf(registerReceiveRemote.rank)
-            )
+                rank = rank.valueOf(registerReceiveRemote.rank),
+            ),
         )
 
-        call.respond(HttpStatusCode.OK);
+        call.respond(HttpStatusCode.OK)
     }
 }
