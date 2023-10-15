@@ -14,7 +14,7 @@ group = "com.ne-rabotaem"
 version = "0.0.1"
 
 application {
-    mainClass.set("com.ne-rabotaem.ApplicationKt")
+    mainClass.set("com.ne_rabotaem.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
