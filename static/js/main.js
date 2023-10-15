@@ -37,15 +37,22 @@ function showProfileButton() {
     document.getElementById("profile-button").style.display = 'inline';
 }
 
+function showDemoMenuOption() {
+    document.getElementById("menu-option-demo").style.display = 'inline';
+}
+
 function checkLoggedIn() {
     // if cliend is logged (he has token), hide sign-in button and show profile button
     // by default, sign-in button is showed, and profile is hidden
     var pageName = getPageName();
     if (pageName != "login_sub.html" && pageName != "register_sub.html") {
         if (getCookie(TOKEN_COOKIE_NAME) != null) {
+            // user not logged in
             window.loggedIn = true;
             showProfileButton();
+            showDemoMenuOption();
         } else {
+            // user is not logged in
             window.loggedIn = false;
             showVisibilitySignIn();
         }
@@ -57,16 +64,16 @@ function signInSubmit() {
     var login = document.getElementById("email-input");
     var password = document.getElementById("password-input");
     // TODO: send request, get answer
-//     fetch('/login', {
-//         method: 'POST',
-//         headers: {
-//             'Accept': 'application/json',
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({ 'login': login, 'password': password })
-//     })
-//    .then(response => response.json())
-//    .then(response => console.log(JSON.stringify(response)))
+    fetch('/login', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 'login': login, 'password': password })
+    })
+   .then(response => response.json())
+   .then(response => console.log(JSON.stringify(response)))
     // setCookie(TOKEN_COOKIE_NAME, "12345");
     window.location.href = "index.html";
 }
