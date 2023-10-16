@@ -32,7 +32,6 @@ object User : IntIdTable("Person") {
     private val father_name = varchar("father_name", father_name_max_length)
     private val login = varchar("login", login_max_length)
     private val password = varchar("password", password_max_length)
-
     private val rank_ = customEnumeration("rank", "rank", { value -> rank.valueOf(value as String) }, { PGEnum("rank", it) })
 
 

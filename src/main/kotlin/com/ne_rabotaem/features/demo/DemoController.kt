@@ -8,13 +8,18 @@ import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.utils.TokenCheck
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.mustache.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class DemoController(val call: ApplicationCall) {
-    suspend fun getDemos(call: ApplicationCall) {
+    suspend fun getPage() {
+        call.respond(MustacheContent("demo.html", mapOf<String, String>()))
+    }
+
+    suspend fun getDemos() {
         if (!TokenCheck.isTokenValid(call)) {
             call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
             return
@@ -23,14 +28,14 @@ class DemoController(val call: ApplicationCall) {
         call.respond(Json.encodeToString(Event.fetchAll()))
     }
 
-    suspend fun getDemo(call: ApplicationCall, id: Int) {
+    suspend fun getDemo(id: Int) {
         if (!TokenCheck.isTokenValid(call))
             return
 
         call.respond(Demo_grade.fetch(id).groupBy { it.teamId })
     }
 
-    suspend fun vote(call: ApplicationCall) {
+    suspend fun vote() {
         if (!TokenCheck.isTokenValid(call))
             return
 
@@ -43,12 +48,18 @@ class DemoController(val call: ApplicationCall) {
             call.respond(HttpStatusCode.PreconditionFailed, "Grade must be in range from 0 to 10!")
         }
 
+        val userId = User.getUserId(
+            Token.fetch(call.request.headers["Bearer-Authorization"]!!)!!.login
+        )!!
+
+        if (Demo_grade.fetch(grade.eventId, userId, grade.teamId) == null) {
+            call.respond(HttpStatusCode.Conflict, "You have already rated!")
+        }
+
         Demo_grade.insert(
             GradeDTO(
                 eventId = grade.eventId,
-                personId = User.getUserId(
-                    Token.fetch(call.request.headers["Bearer-Authorization"]!!)!!.login
-                )!!,
+                personId = userId,
                 teamId = grade.teamId,
                 grade = grade.grade,
                 comment = grade.comment

@@ -1,8 +1,5 @@
 .gradle
-<<<<<<< HEAD
-build
 .idea
-=======
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -38,4 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
->>>>>>> testing
+.idea
+
+### Front-end ###
+/src/main/resources/templates/
+/static/

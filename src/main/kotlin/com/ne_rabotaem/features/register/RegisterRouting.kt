@@ -8,11 +8,10 @@ import io.ktor.server.routing.*
 fun Application.configureRegisterRouting() {
     routing {
         get("/register") {
-            call.respond(MustacheContent("register_sub.html", mapOf<String, String>()))
+            RegisterController(call).getPage()
         }
         post("/register") {
-            val registerController = RegisterController(call)
-            registerController.registerNewUser()
+            RegisterController(call).registerNewUser()
         }
     }
 }

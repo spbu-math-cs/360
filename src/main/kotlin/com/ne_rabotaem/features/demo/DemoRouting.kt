@@ -7,19 +7,21 @@ import io.ktor.server.routing.*
 fun Application.configureDemoRouting() {
     routing {
         get("/demo") {
+            DemoController(call).getPage()
+        }
+        get("/demo_list") {
             val demoController = DemoController(call)
 
             if (call.request.queryParameters.contains("id")) {
-                demoController.getDemo(call, Integer.parseInt(call.request.queryParameters["id"]!!))
+                demoController.getDemo(Integer.parseInt(call.request.queryParameters["id"]!!))
                 return@get
             }
 
-            demoController.getDemos(call)
+            demoController.getDemos()
         }
 
         post("/demo/vote") {
-            val demoController = DemoController(call)
-            demoController.vote(call)
+            DemoController(call).vote()
         }
     }
 }
