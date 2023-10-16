@@ -36,11 +36,11 @@ class DemoController(val call: ApplicationCall) {
 
         val grade = call.receive<GradeReceiveRemote>()
         if (grade.comment.length > 500) {
-            call.respond(HttpStatusCode.PayloadTooLarge)
+            call.respond(HttpStatusCode.PayloadTooLarge, "Comment length must be less than 500 symbols!")
             return
         }
         if (grade.grade < 0 || grade.grade > 10) {
-            call.respond(HttpStatusCode.PreconditionFailed)
+            call.respond(HttpStatusCode.PreconditionFailed, "Grade must be in range from 0 to 10!")
         }
 
         Demo_grade.insert(

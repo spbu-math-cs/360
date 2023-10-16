@@ -19,6 +19,13 @@ class RegisterController(val call: ApplicationCall) {
             return
         }
 
+        if (registerReceiveRemote.login.isEmpty() ||
+            registerReceiveRemote.password.isEmpty() ||
+            registerReceiveRemote.first_name.isEmpty() ||
+            registerReceiveRemote.last_name.isEmpty()) {
+            call.respond(HttpStatusCode.BadRequest, "Empty entry!")
+        }
+
         User.insert(
             UserDTO(
                 first_name = registerReceiveRemote.first_name,
