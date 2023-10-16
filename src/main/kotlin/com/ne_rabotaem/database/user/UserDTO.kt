@@ -1,6 +1,10 @@
 package com.ne_rabotaem.database.user
 
-class UserDTO(
+import kotlinx.serialization.Serializable
+
+
+@Serializable
+data class UserDTO(
     val first_name: String,
     val last_name: String,
     val father_name: String,
