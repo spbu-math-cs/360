@@ -72,7 +72,7 @@ function redirectTo(page) {
 
 function logOutSubmit() {
     eraseCookie(TOKEN_COOKIE_NAME);
-    redirectTo("home");
+    redirectTo("/");
 }
 
 // -----------------------------------------
@@ -87,7 +87,7 @@ function redirectLogin() {
         redirectTo("login");
     }
     if ((onPage("login") || onPage("register")) && window.loggedIn) {
-        redirectTo("home");
+        redirectTo("/");
     }
 }
 
