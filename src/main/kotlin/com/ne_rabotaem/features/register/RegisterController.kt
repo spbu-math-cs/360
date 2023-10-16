@@ -5,11 +5,15 @@ import com.ne_rabotaem.database.user.UserDTO
 import com.ne_rabotaem.database.user.rank
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.mustache.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import java.util.*
 
 class RegisterController(val call: ApplicationCall) {
+    suspend fun getPage() {
+        call.respond(MustacheContent("re.html", mapOf<String, String>()))
+    }
     suspend fun registerNewUser() {
         val registerReceiveRemote = call.receive<RegisterReceiveRemote>()
 

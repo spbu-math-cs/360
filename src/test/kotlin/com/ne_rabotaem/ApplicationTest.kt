@@ -70,7 +70,7 @@ class ApplicationTest {
             val last_name = getRandomString((1..User.last_name_max_length).random())
             val father_name = getRandomString((1..User.father_name_max_length).random())
             val password = getRandomString((1..User.password_max_length).random())
-            val rank_ = rank.entries.random()
+            val rank_ = rank.values().random()
             val user = UserDTO(first_name, last_name, father_name, login, password, rank_)
             loginToUser[login] = user
         }
