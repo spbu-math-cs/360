@@ -88,6 +88,42 @@ function redirectLogin() {
     }
 }
 
+function setDemosInPage(demosJson) {
+    demosJson.forEach(demo => {
+        let id = demo["event_id"];
+        let date = demo["date"];
+        document.getElementById("demo_container").appendChild(
+            document.createElement(
+            `
+            <div class="col">
+                <div class="card shadow-sm">
+                    <a class="card-block stretched-link text-decoration-none demo-card disabled-demo" href="">
+                        <div class="card-body">
+                            <h2 class="card-text text-center">Demo ${id}</h2>
+                            <p class="text-body-secondary text-center">${date}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            `
+            )
+        );
+    });
+}
+
+function getDemos() {
+    fetch('/demo', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify( {TOKEN_COOKIE_NAME: getCookie(TOKEN_COOKIE_NAME)} )
+    })
+   .then(response => response.json())
+   .then(response => setDemosInPage(response))
+}
+
 window.onload = function() {
     checkLoggedIn();
     redirectLogin();
