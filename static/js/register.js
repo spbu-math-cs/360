@@ -25,6 +25,6 @@ $(document).ready(function() {
         .then(response => response.json())
         .then(response => console.log(JSON.stringify(response)))
         setCookie(TOKEN_COOKIE_NAME, "12345");
-        window.location.href = "index.html";
+        window.location.href = "/";
     });
 });
