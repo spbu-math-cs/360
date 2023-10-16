@@ -1,10 +1,11 @@
 $(document).ready(function() {
     $('#registerForm').submit(function(event) {
-        var firstName = $("#firstNameInput").val();
-        var lastName = $("#lastNameInput").val();
-        var fatherName = $("#fatherNameInput").val();
-        var login = $("#loginInput").val();
-        var password = $("#passwordInput").val();
+        event.preventDefault()
+        var firstName = $("#firstNameInput").val()
+        var lastName = $("#lastNameInput").val()
+        var fatherName = $("#fatherNameInput").val()
+        var login = $("#loginInput").val()
+        var password = $("#passwordInput").val()
         fetch('/register', {
              method: 'POST',
              headers: {
@@ -22,9 +23,12 @@ $(document).ready(function() {
                 }
              )
          })
-        .then(response => response.json())
-        .then(response => console.log(JSON.stringify(response)))
-        // TODO: fix and tell if error occured
-        window.location.href = "/";
-    });
-});
+        .then(response => {
+            if (response.ok) {
+                window.location.href = "/";
+            } else {
+                response.text().then(text => alert(text))
+            }
+        })
+    })
+})
