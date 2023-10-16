@@ -53,24 +53,6 @@ function checkLoggedIn() {
 }
 // --------------------------------------
 
-function signInSubmit() {
-    var login = document.getElementById("email-input");
-    var password = document.getElementById("password-input");
-    // TODO: send request, get answer
-//     fetch('/login', {
-//         method: 'POST',
-//         headers: {
-//             'Accept': 'application/json',
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({ 'login': login, 'password': password })
-//     })
-//    .then(response => response.json())
-//    .then(response => console.log(JSON.stringify(response)))
-    // setCookie(TOKEN_COOKIE_NAME, "12345");
-    window.location.href = "index.html";
-}
-
 function logOutSubmit() {
     eraseCookie(TOKEN_COOKIE_NAME);
     window.location.href = "index.html";
