@@ -15,7 +15,7 @@ class ProfileController(val call: ApplicationCall) {
             return
         }
 
-        val userDTO = User.fetch(Token.fetch(call.request.headers["Bearer-Authorization"]!!)!!.login)
+        val userDTO = User.fetch(Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login)
         if (userDTO == null) {
             call.respond(HttpStatusCode.BadRequest, "User not found")
         }
