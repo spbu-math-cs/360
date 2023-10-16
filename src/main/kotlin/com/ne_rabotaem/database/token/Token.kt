@@ -7,8 +7,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import java.lang.IllegalArgumentException
 
 object Token : IntIdTable("Token") {
-    private val login = varchar("login", 20)
-    private val token = varchar("token", 128)
+    val login = varchar("login", 20)
+    val token = varchar("token", 128)
 
     fun insert(tokenDTO: TokenDTO) {
         transaction {
