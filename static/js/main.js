@@ -90,7 +90,7 @@ function setDemosInPage(demosJson) {
     demosJson.forEach(demo => {
         let id = demo["event_id"];
         let date = demo["date"];
-        document.getElementById("demo_container").appendChild(
+        document.getElementById("demo-container").appendChild(
             document.createElement(
             `
             <div class="col">
