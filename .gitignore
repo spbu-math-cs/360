@@ -1,4 +1,5 @@
 .gradle
+<<<<<<< HEAD
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -34,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+=======
+build
+.idea
+>>>>>>> dev
