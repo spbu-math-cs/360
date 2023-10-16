@@ -8,11 +8,10 @@ import io.ktor.server.routing.*
 fun Application.configureLoginRouting() {
     routing {
         get("/login") {
-            call.respond(MustacheContent("login_sub.html", mapOf<String, String>()))
+            LoginController(call).getPage()
         }
         post("/login") {
-            val loginController = LoginController(call)
-            loginController.performLogin()
+            LoginController(call).performLogin()
         }
     }
 }

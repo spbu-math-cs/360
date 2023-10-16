@@ -5,6 +5,7 @@ import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.features.demo.GradeResponseRemote
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -37,6 +38,26 @@ object Demo_grade : IntIdTable("Demo_grade") {
                     it[teamId].value,
                     it[grade],
                     it[comment],
+                )
+            }
+        }
+    }
+
+    fun fetch(eventId: Int, userId: Int, teamId: Int): GradeDTO? {
+        return transaction {
+            val query = Demo_grade.select {
+                Demo_grade.eventId.eq(eventId) and Demo_grade.personId.eq(userId) and Demo_grade.teamId.eq(teamId)
+            }
+            if (query.none())
+                return@transaction null
+
+            query.single().run {
+                GradeDTO(
+                    eventId,
+                    userId,
+                    teamId,
+                    this[grade],
+                    this[comment]
                 )
             }
         }
