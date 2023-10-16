@@ -6,17 +6,16 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 
 object TokenCheck {
-    fun isTokenValid(token: String): Boolean = Token.fetch(token) != null
+    private fun isTokenValid(token: String): Boolean = Token.fetch(token) != null
 
-    suspend fun isTokenValid(call: ApplicationCall): Boolean {
-        if (!call.request.headers.contains("Bearer-Authorization")) {
-            call.respond(HttpStatusCode.NoContent)
+    fun isTokenValid(call: ApplicationCall): Boolean {
+        call.request.cookies.rawCookies.contains("token")
+        if (!call.request.cookies.rawCookies.contains("token")) {
             return false
         }
 
-        val token = call.request.headers["Bearer-Authorization"]
+        val token = call.request.cookies.rawCookies["token"]
         if (!TokenCheck.isTokenValid(token.orEmpty())) {
-            call.respond(HttpStatusCode.Unauthorized)
             return false
         }
 
