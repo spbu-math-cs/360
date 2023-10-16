@@ -12,6 +12,7 @@ $(document).ready(function() {
          })
         .then(response => response.json())
         .then(response => setCookie(TOKEN_COOKIE_NAME, response["token"]))
+        // TODO: fix, not getting response correctly
         window.location.href = "/";
     });
 });

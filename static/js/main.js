@@ -33,6 +33,10 @@ function showVisibilitySignIn() {
     document.getElementById("sign-in-button").style.display = 'inline';
 }
 
+function showVisibilitySignUp() {
+    document.getElementById("sign-up-button").style.display = 'inline';
+}
+
 function showProfileButton() {
     document.getElementById("profile-button").style.display = 'inline';
 }
@@ -54,6 +58,7 @@ function checkLoggedIn() {
             // user is not logged in
             window.loggedIn = false;
             showVisibilitySignIn();
+            showVisibilitySignUp();
         }
     }    
 }

@@ -5,7 +5,7 @@ $(document).ready(function() {
         var fatherName = $("#fatherNameInput").val();
         var login = $("#loginInput").val();
         var password = $("#passwordInput").val();
-        fetch('/login', {
+        fetch('/register', {
              method: 'POST',
              headers: {
                  'Accept': 'application/json',
@@ -24,7 +24,7 @@ $(document).ready(function() {
          })
         .then(response => response.json())
         .then(response => console.log(JSON.stringify(response)))
-        setCookie(TOKEN_COOKIE_NAME, "12345");
+        // TODO: fix and tell if error occured
         window.location.href = "/";
     });
 });
