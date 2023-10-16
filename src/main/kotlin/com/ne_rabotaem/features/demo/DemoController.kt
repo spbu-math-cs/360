@@ -16,6 +16,10 @@ import kotlinx.serialization.json.Json
 
 class DemoController(val call: ApplicationCall) {
     suspend fun getPage() {
+        if (!TokenCheck.isTokenValid(call)) {
+            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
+            return
+        }
         call.respond(MustacheContent("demo.html", mapOf<String, String>()))
     }
 
@@ -29,15 +33,19 @@ class DemoController(val call: ApplicationCall) {
     }
 
     suspend fun getDemo(id: Int) {
-        if (!TokenCheck.isTokenValid(call))
+        if (!TokenCheck.isTokenValid(call)) {
+            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
             return
+        }
 
         call.respond(Demo_grade.fetch(id).groupBy { it.teamId })
     }
 
     suspend fun vote() {
-        if (!TokenCheck.isTokenValid(call))
+        if (!TokenCheck.isTokenValid(call)) {
+            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
             return
+        }
 
         val grade = call.receive<GradeReceiveRemote>()
         if (grade.comment.length > 500) {
@@ -49,7 +57,7 @@ class DemoController(val call: ApplicationCall) {
         }
 
         val userId = User.getUserId(
-            Token.fetch(call.request.headers["Bearer-Authorization"]!!)!!.login
+            Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login
         )!!
 
         if (Demo_grade.fetch(grade.eventId, userId, grade.teamId) == null) {
