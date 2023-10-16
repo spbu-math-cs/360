@@ -38,7 +38,7 @@ function showProfileButton() {
 }
 
 function showDemoMenuOption() {
-    document.getElementById("menu-option-demo").style.display = 'inline';
+    document.getElementById("menu-option-demo").style.display = 'block';
 }
 
 function checkLoggedIn() {

@@ -11,8 +11,8 @@ $(document).ready(function() {
              body: JSON.stringify( {login: login, password: password} )
          })
         .then(response => response.json())
-        .then(response => console.log(JSON.stringify(response)))
-        setCookie(TOKEN_COOKIE_NAME, "12345");
+        .then(response => setCookie(TOKEN_COOKIE_NAME, response["token"]))
+        window.alert("ssdfsdfsdfsdfsdfsdf");
         window.location.href = "/";
     });
 });
