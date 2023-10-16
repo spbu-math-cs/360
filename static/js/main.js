@@ -66,24 +66,6 @@ function redirectTo(page) {
 
 // --------------------------------------
 
-function signInSubmit() {
-    var login = document.getElementById("floatingInput").value;
-    var password = document.getElementById("floatingPassword").value;
-    // TODO: send request, get answer
-//     fetch('login', {
-//         method: 'POST',
-//         headers: {
-//             'Accept': 'application/json',
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({ 'login': login, 'password': password })
-//     })
-//    .then(response => response.json())
-//    .then(response => window.alert(JSON.stringify(response)))
-    // setCookie(TOKEN_COOKIE_NAME, "12345");
-    redirectTo("home");
-}
-
 function logOutSubmit() {
     eraseCookie(TOKEN_COOKIE_NAME);
     redirectTo("home");
