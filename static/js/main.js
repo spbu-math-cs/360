@@ -1,5 +1,5 @@
 var loggedIn; // is client logged into server
-const TOKEN_COOKIE_NAME = "access_token";
+const TOKEN_COOKIE_NAME = "token";
 
 // Cookie functions
 
@@ -44,8 +44,7 @@ function showDemoMenuOption() {
 function checkLoggedIn() {
     // if cliend is logged (he has token), hide sign-in button and show profile button
     // by default, sign-in button is showed, and profile is hidden
-    var pageName = getPageName();
-    if (pageName != "login" && pageName != "register") {
+    if (!onPage("login") && !onPage("register")) {
         if (getCookie(TOKEN_COOKIE_NAME) != null) {
             // user not logged in
             window.loggedIn = true;
@@ -79,11 +78,10 @@ function getPageName() {
 }
 
 function redirectLogin() {
-    var pageName = getPageName();
-    if ((pageName == "demo" || pageName == "profile") && !window.loggedIn) {
+    if ((onPage("demo") || onPage("profile")) && !window.loggedIn) {
         redirectTo("login");
     }
-    if ((pageName == "login" || pageName == "register") && window.loggedIn) {
+    if ((onPage("login") || onPage("register")) && window.loggedIn) {
         redirectTo("home");
     }
 }
@@ -112,19 +110,26 @@ function setDemosInPage(demosJson) {
 }
 
 function getDemos() {
-    fetch('/demo', {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify( {TOKEN_COOKIE_NAME: getCookie(TOKEN_COOKIE_NAME)} )
-    })
-   .then(response => response.json())
-   .then(response => setDemosInPage(response))
+    if (onPage("demo")) {
+        fetch('/demo_list', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify( {TOKEN_COOKIE_NAME: getCookie(TOKEN_COOKIE_NAME)} )
+        })
+        .then(response => response.json())
+        .then(response => setDemosInPage(response));
+    }
+}
+
+function onPage(pageName) {
+    return window.location.href.match(pageName) != null;
 }
 
 window.onload = function() {
     checkLoggedIn();
     redirectLogin();
+    getDemos();
 }
