@@ -1,5 +1,5 @@
 var loggedIn; // is client logged into server
-const TOKEN_COOKIE_NAME = "access_token";
+const TOKEN_COOKIE_NAME = "token";
 
 // Cookie functions
 
@@ -33,47 +33,46 @@ function showVisibilitySignIn() {
     document.getElementById("sign-in-button").style.display = 'inline';
 }
 
+function showVisibilitySignUp() {
+    document.getElementById("sign-up-button").style.display = 'inline';
+}
+
 function showProfileButton() {
     document.getElementById("profile-button").style.display = 'inline';
+}
+
+function showDemoMenuOption() {
+    document.getElementById("menu-option-demo").style.display = 'block';
 }
 
 function checkLoggedIn() {
     // if cliend is logged (he has token), hide sign-in button and show profile button
     // by default, sign-in button is showed, and profile is hidden
-    var pageName = getPageName();
-    if (pageName != "login_sub.html" && pageName != "register_sub.html") {
+    if (!onPage("login") && !onPage("register")) {
         if (getCookie(TOKEN_COOKIE_NAME) != null) {
+            // user not logged in
             window.loggedIn = true;
             showProfileButton();
+            showDemoMenuOption();
         } else {
+            // user is not logged in
             window.loggedIn = false;
             showVisibilitySignIn();
+            showVisibilitySignUp();
         }
     }    
 }
 // --------------------------------------
 
-function signInSubmit() {
-    var login = document.getElementById("email-input");
-    var password = document.getElementById("password-input");
-    // TODO: send request, get answer
-//     fetch('/login', {
-//         method: 'POST',
-//         headers: {
-//             'Accept': 'application/json',
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({ 'login': login, 'password': password })
-//     })
-//    .then(response => response.json())
-//    .then(response => console.log(JSON.stringify(response)))
-    // setCookie(TOKEN_COOKIE_NAME, "12345");
-    window.location.href = "index.html";
+function redirectTo(page) {
+    window.location.href = page;
 }
+
+// --------------------------------------
 
 function logOutSubmit() {
     eraseCookie(TOKEN_COOKIE_NAME);
-    window.location.href = "index.html";
+    redirectTo("home");
 }
 
 // -----------------------------------------
@@ -84,16 +83,64 @@ function getPageName() {
 }
 
 function redirectLogin() {
-    var pageName = getPageName();
-    if ((pageName == "demo.html" || pageName == "profile.html") && !window.loggedIn) {
-        window.location.href = "login_sub.html";
+    if ((onPage("demo") || onPage("profile")) && !window.loggedIn) {
+        redirectTo("login");
     }
-    if ((pageName == "login_sub.html" || pageName == "register_sub.html") && window.loggedIn) {
-        window.location.href = "index.html";
+    if ((onPage("login") || onPage("register")) && window.loggedIn) {
+        redirectTo("home");
     }
+}
+
+function htmlToElement(html) {
+    var template = document.createElement('template');
+    html = html.trim(); // Never return a text node of whitespace as the result
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
+
+function setDemosInPage(demosJson) {
+    demosJson.forEach(demo => {
+        let id = demo["eventId"];
+        let date = demo["date"];
+        document.getElementById("demo-container").appendChild(
+            htmlToElement(
+            `
+            <div class="col">
+                <div class="card shadow-sm">
+                    <a class="card-block stretched-link text-decoration-none demo-card" href="">
+                        <div class="card-body">
+                            <h2 class="card-text text-center">Demo ${id}</h2>
+                            <p class="text-body-secondary text-center">${date}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            `
+            )
+        );
+    });
+}
+
+function getDemos() {
+    if (onPage("demo")) {
+        fetch('/demo_list', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(response => setDemosInPage(response));
+    }
+}
+
+function onPage(pageName) {
+    return window.location.href.match(pageName) != null;
 }
 
 window.onload = function() {
     checkLoggedIn();
     redirectLogin();
+    getDemos();
 }

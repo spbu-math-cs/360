@@ -23,14 +23,15 @@
             <div class="col-md-3 mb-2 mb-md-0"></div>
 
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="/" class="nav-link px-2">Home</a></li>
-                <li><a href="#" class="nav-link px-2 link-secondary">Demo</a></li>
-                <li><a href="/about" class="nav-link px-2">About</a></li>
+                <li><a id="menu-option-home" href="/" class="nav-link px-2">Home</a></li>
+                <li><a id="menu-option-demo" href="#" class="nav-link px-2 link-secondary">Demo</a></li>
+                <li><a id="menu-option-about" href="/about" class="nav-link px-2">About</a></li>
             </ul>
 
             <div class="col-md-3 text-end">
-				<a href="/login" class="btn btn-outline-primary me-2" id="sign-in-button" style="display: none">Sign In</a>
-				<a href="profile.html" class="btn btn-outline-primary me-2" id="profile-button" style="display: none">My Profile</a>
+                <a id="sign-in-button" href="/login" class="btn btn-outline-primary me-2" style="display: none">Sign In</a>
+                <a id="sign-up-button" href="/register" class="btn btn-primary me-2" style="display: none">Sign Up</a>
+                <a id="profile-button" href="/profile" class="btn btn-outline-primary me-2" style="display: none">My Profile</a>
             </div>
         </header>
     </div>
@@ -40,37 +41,8 @@
     </div>
     <div class="container">
 
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <div class="col">
-                <div class="card shadow-sm">
-                    <a class="card-block stretched-link text-decoration-none demo-card disabled-demo" href="">
-                        <div class="card-body">
-                            <h2 class="card-text text-center">Demo 1</h2>
-                            <p class="text-body-secondary text-center">3rd October</p>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card shadow-sm">
-                    <a class="card-block stretched-link text-decoration-none demo-card enabled-demo" href="">
-                        <div class="card-body">
-                            <h2 class="card-text text-center">Demo 2</h2>
-                            <p class="text-body-secondary text-center">17th October</p>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card shadow-sm">
-                    <a class="card-block stretched-link text-decoration-none demo-card locked-demo" href="">
-                        <div class="card-body">
-                            <h2 class="card-text text-center">Demo 3</h2>
-                            <p class="text-body-secondary text-center">31th October</p>
-                        </div>
-                    </a>
-                </div>
-            </div>
+        <div id="demo-container" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <!-- Place for demos, got from GET-request in main.js:getDemos() -->
         </div>
     </div>
 </body>

@@ -247,5 +247,4 @@ class ApplicationTest {
     fun emptyPasswordInRegisterTest() {
         TODO()
     }
-
 }
