@@ -12,7 +12,6 @@ $(document).ready(function() {
          })
         .then(response => response.json())
         .then(response => setCookie(TOKEN_COOKIE_NAME, response["token"]))
-        window.alert("ssdfsdfsdfsdfsdfsdf");
         window.location.href = "/";
     });
 });
