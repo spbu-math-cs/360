@@ -24,6 +24,7 @@ class RegisterController(val call: ApplicationCall) {
             registerReceiveRemote.first_name.isEmpty() ||
             registerReceiveRemote.last_name.isEmpty()) {
             call.respond(HttpStatusCode.BadRequest, "Empty entry!")
+            return
         }
 
         User.insert(
