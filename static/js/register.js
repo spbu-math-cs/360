@@ -25,7 +25,7 @@ $(document).ready(function() {
          })
         .then(response => {
             if (response.ok) {
-                window.location.href = "/";
+                window.location.href = "/login";
             } else {
                 response.text().then(text => alert(text))
             }
