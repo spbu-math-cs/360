@@ -107,7 +107,7 @@ function setDemosInPage(demosJson) {
             `
             <div class="col">
                 <div class="card shadow-sm">
-                    <a class="card-block stretched-link text-decoration-none demo-card" href="">
+                    <a class="card-block stretched-link text-decoration-none demo-card" href="/demo/vote">
                         <div class="card-body">
                             <h2 class="card-text text-center">Demo ${id}</h2>
                             <p class="text-body-secondary text-center">${date}</p>
