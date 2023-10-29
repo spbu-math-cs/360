@@ -31,13 +31,4 @@ class DemoController(val call: ApplicationCall) {
 
         call.respond(Json.encodeToString(Event.fetchAll()))
     }
-
-    suspend fun getDemo(id: Int) {
-        if (!TokenCheck.isTokenValid(call)) {
-            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
-            return
-        }
-
-        call.respond(Demo_grade.fetch(id).groupBy { it.teamId })
-    }
 }

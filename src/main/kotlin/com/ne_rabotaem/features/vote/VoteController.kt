@@ -22,6 +22,15 @@ class VoteController(val call: ApplicationCall) {
         call.respond(MustacheContent("demo_vote.html", mapOf<String, String>()))
     }
 
+    suspend fun getDemo(id: Int) {
+        if (!TokenCheck.isTokenValid(call)) {
+            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
+            return
+        }
+
+        call.respond(Demo_grade.fetch(id).groupBy { it.teamId })
+    }
+
     suspend fun vote() {
         if (!TokenCheck.isTokenValid(call)) {
             call.respond(HttpStatusCode.Unauthorized, "Wrong token!")

@@ -6,6 +6,7 @@ import com.ne_rabotaem.features.home.configureHomeRouting
 import com.ne_rabotaem.features.login.configureLoginRouting
 import com.ne_rabotaem.features.profile.configureProfileRouting
 import com.ne_rabotaem.features.register.configureRegisterRouting
+import com.ne_rabotaem.features.vote.configureVoteRouting
 import com.ne_rabotaem.plugins.*
 import io.ktor.server.application.*
 import io.ktor.server.cio.*
@@ -30,6 +31,7 @@ fun Application.module() {
     configureLoginRouting()
     configureRegisterRouting()
     configureDemoRouting()
+    configureVoteRouting()
     configureAboutRouting()
     configureProfileRouting()
 }

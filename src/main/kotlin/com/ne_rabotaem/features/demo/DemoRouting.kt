@@ -12,11 +12,6 @@ fun Application.configureDemoRouting() {
         get("/demo_list") {
             val demoController = DemoController(call)
 
-            if (call.request.queryParameters.contains("id")) {
-                demoController.getDemo(Integer.parseInt(call.request.queryParameters["id"]!!))
-                return@get
-            }
-
             demoController.getDemos()
         }
     }
