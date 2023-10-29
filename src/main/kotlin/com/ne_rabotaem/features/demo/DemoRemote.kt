@@ -61,7 +61,10 @@ data class TeamResponseRemote(
 data class GradeReceiveRemote(
     val eventId: Int,
     val teamId: Int,
+    val level: Int,
     val grade: Int,
+    val presentation: Int,
+    val additional: Int,
     val comment: String
 )
 
@@ -70,6 +73,9 @@ data class GradeResponseRemote(
     val gradeId: Int,
     val personId: Int,
     val teamId: Int,
+    val level: Int,
     val grade: Int,
+    val presentation: Int,
+    val additional: Int,
     val comment: String
 )

@@ -19,9 +19,5 @@ fun Application.configureDemoRouting() {
 
             demoController.getDemos()
         }
-
-        post("/demo/vote") {
-            DemoController(call).vote()
-        }
     }
 }
