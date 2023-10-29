@@ -14,7 +14,10 @@ object Demo_grade : IntIdTable("Demo_grade") {
     private val eventId = reference("event_id", Event.id)
     private val personId = reference("person_id", User.id)
     private val teamId = reference("team_id", Team.id)
+    private val level = integer("level")
     private val grade = integer("grade")
+    private val presentation = integer("presentation")
+    private val additional = integer("additional")
     private val comment = varchar("comment", 500)
 
     fun insert(gradeDTO: GradeDTO) {
@@ -23,7 +26,10 @@ object Demo_grade : IntIdTable("Demo_grade") {
                 it[eventId] = gradeDTO.eventId
                 it[personId] = gradeDTO.personId
                 it[teamId] = gradeDTO.teamId
+                it[level] = gradeDTO.level
                 it[grade] = gradeDTO.grade
+                it[presentation] = gradeDTO.presentation
+                it[additional] = gradeDTO.additional
                 it[comment] = gradeDTO.comment.orEmpty()
             }
         }
@@ -36,7 +42,10 @@ object Demo_grade : IntIdTable("Demo_grade") {
                     it[Demo_grade.id].value,
                     it[personId].value,
                     it[teamId].value,
+                    it[level],
                     it[grade],
+                    it[presentation],
+                    it[additional],
                     it[comment],
                 )
             }
@@ -56,7 +65,10 @@ object Demo_grade : IntIdTable("Demo_grade") {
                     eventId,
                     userId,
                     teamId,
+                    this[level],
                     this[grade],
+                    this[presentation],
+                    this[additional],
                     this[comment]
                 )
             }
