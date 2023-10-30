@@ -4,6 +4,7 @@ import com.ne_rabotaem.database.event.Event
 import com.ne_rabotaem.database.grade.Demo_grade
 import com.ne_rabotaem.database.grade.GradeDTO
 import com.ne_rabotaem.database.token.Token
+import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.features.demo.GradeReceiveRemote
 import com.ne_rabotaem.utils.TokenCheck
@@ -31,6 +32,15 @@ class VoteController(val call: ApplicationCall) {
         call.respond(Demo_grade.fetch(id).groupBy { it.teamId })
     }
 
+    suspend fun getTeams(eventId: Int) {
+        if (!TokenCheck.isTokenValid(call)) {
+            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
+            return
+        }
+
+        call.respond(Team.fetchAll());
+    }
+
     suspend fun vote() {
         if (!TokenCheck.isTokenValid(call)) {
             call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
@@ -44,14 +54,16 @@ class VoteController(val call: ApplicationCall) {
         }
         if (grade.grade < 0 || grade.grade > 10) {
             call.respond(HttpStatusCode.PreconditionFailed, "Grade must be in range from 0 to 10!")
+            return
         }
 
         val userId = User.getUserId(
             Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login
         )!!
 
-        if (Demo_grade.fetch(grade.eventId, userId, grade.teamId) == null) {
+        if (Demo_grade.fetch(grade.eventId, userId, grade.teamId) != null) {
             call.respond(HttpStatusCode.Conflict, "You have already rated!")
+            return
         }
 
         Demo_grade.insert(

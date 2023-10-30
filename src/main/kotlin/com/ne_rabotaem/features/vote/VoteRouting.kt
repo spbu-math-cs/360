@@ -10,11 +10,18 @@ fun Application.configureVoteRouting() {
         get("/demo/grades") {
             VoteController(call).getPage()
         }
-        post("/demo/grades") {
+        get("/demo/grades") {
             if (call.request.queryParameters.contains("id")) {
                 VoteController(call).getDemo(Integer.parseInt(call.request.queryParameters["id"]!!))
             }
             else call.respond(HttpStatusCode.BadRequest, "Request must contain demo id!")
+        }
+        get("/demo/teams") {
+            // Get a list of all the teams you can vote for
+            if (call.request.queryParameters.contains("eventId")) {
+                VoteController(call).getTeams(Integer.parseInt(call.request.queryParameters["eventId"]!!))
+            }
+            else call.respond(HttpStatusCode.BadRequest, "BadRequest: Request must contain eventId.")
         }
         post("/demo/vote") {
             VoteController(call).vote()
