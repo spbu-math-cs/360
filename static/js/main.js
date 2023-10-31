@@ -107,12 +107,12 @@ function setDemosInPage(demosJson) {
         let date_s = date.split('-');
         // console.log(date_s);
         let date_f = date_s[0] + '-' + date_s[1] + '-' + date_s[2];
-        let st = Date.parse(date_f + 'T' + start + ":00.000Z");
-        let fn = Date.parse(date_f + 'T' + finish + ":00.000Z");
+        let st = Date.parse(date_f + 'T' + start + ":00.000+03:00");
+        let fn = Date.parse(date_f + 'T' + finish + ":00.000+03:00");
         let now = Date.now();
-        // console.log(st);
-        // console.log(fn);
-        // console.log(now);
+        console.log(st);
+        console.log(fn);
+        console.log(now);
         // console.log(date_f + 'T' + start + ":00.000Z");
         
         let demo_class = "locked-demo"
