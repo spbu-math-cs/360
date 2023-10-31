@@ -102,12 +102,32 @@ function setDemosInPage(demosJson) {
     demosJson.forEach(demo => {
         let id = demo["eventId"];
         let date = demo["date"];
+        let start = demo["start"];
+        let finish = demo["finish"];
+        let date_s = date.split('-');
+        // console.log(date_s);
+        let date_f = date_s[0] + '-' + date_s[1] + '-' + date_s[2];
+        let st = Date.parse(date_f + 'T' + start + ":00.000Z");
+        let fn = Date.parse(date_f + 'T' + finish + ":00.000Z");
+        let now = Date.now();
+        // console.log(st);
+        // console.log(fn);
+        // console.log(now);
+        // console.log(date_f + 'T' + start + ":00.000Z");
+        
+        let demo_class = "locked-demo"
+        if (st <= now && now <= fn) {
+            demo_class = "";
+        } else if (now > fn) {
+            demo_class = "disabled-demo";
+        }
+        // window.alert(Date.parse(date + start));
         document.getElementById("demo-container").appendChild(
             htmlToElement(
             `
             <div class="col">
                 <div class="card shadow-sm">
-                    <a class="card-block stretched-link text-decoration-none demo-card" href="/demo/grades?eventId=${id}">
+                    <a class="card-block stretched-link text-decoration-none demo-card ${demo_class}" href="/demo/grades?eventId=${id}">
                         <div class="card-body">
                             <h2 class="card-text text-center">Demo ${id}</h2>
                             <p class="text-body-secondary text-center">${date}</p>
