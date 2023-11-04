@@ -34,6 +34,4 @@ out/
 
 ### VS Code ###
 .vscode/
-
-### Database Backup ###
-/db_backups/
+db_backups/
