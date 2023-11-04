@@ -24,7 +24,7 @@ function lockVoteCard(teamId, success) {
 
 function getTeamsOnDemo(eventId) {
     console.log("demoId = " + eventId);
-    fetch(`/demo/teams?eventId=${eventId}`, {
+    fetch(`/demo/vote/teams?eventId=${eventId}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',

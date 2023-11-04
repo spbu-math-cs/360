@@ -35,7 +35,7 @@ function setDemosInPage(demosJson) {
         `
         <div class="col">
             <div class="card shadow-sm">
-                <a class="card-block stretched-link text-decoration-none demo-card ${demoClass}" href="/demo/grades?eventId=${id}">
+                <a class="card-block stretched-link text-decoration-none demo-card ${demoClass}" href="/demo/vote?eventId=${id}">
                     <div class="card-body">
                         <h2 class="card-text text-center">Demo ${id}</h2>
                         <p class="text-body-secondary text-center">${date}</p>
