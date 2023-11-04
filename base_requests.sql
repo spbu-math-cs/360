@@ -1,5 +1,18 @@
-create type rank as enum ('second_grade', 'fourth_grade', 'teacher', 'god');
 
+
+
+-- CREATE ENUMS
+create type rank as enum ('second_grade', 'fourth_grade', 'teacher', 'god');
+create type event_type as enum ('demo', '_360');
+
+-- DELETE TABLES
+drop table if exists Person;
+drop table if exists Token;
+drop table if exists Event;
+drop table if exists Team;
+drop table if exists Demo_grade;
+
+-- CREATE TABLES
 create table if not exists Person(
 	id serial primary key,
 	first_name varchar(24),
@@ -15,8 +28,6 @@ create table if not exists Token(
 	login varchar(20),
 	token varchar(128) 
 );
-
-create type event_type as enum ('demo', '_360');
 
 create table if not exists Event(
 	id serial primary key,
@@ -35,20 +46,25 @@ create table if not exists Team(
 );
 
 create table if not exists Demo_grade(
-	id serial primary key,
+    id serial primary key,
 	event_id serial references Event(id),
 	person_id serial references Person(id),
 	team_id serial references Team(id),
-	grade int,
+    level int,
+    grade int,
+    presentation int,
+    additional int,
 	comment varchar(500)
 );
 
-truncate Person;
-truncate Token;
-truncate Event;
-truncate Team;
-truncate Demo_grade;
+-- CLEAR TABLES
+truncate Person restart identity cascade;
+truncate Token restart identity cascade;
+truncate Event restart identity cascade;
+truncate Team restart identity cascade;
+truncate Demo_grade restart identity cascade;
 
+-- SHOW TABLES
 select * from Person;
 select * from Token;
 select * from Event;
@@ -56,5 +72,22 @@ select * from Team;
 select * from Demo_grade;
 
 SELECT SESSION_USER, CURRENT_USER;
+
+-- SET OPTIONS
+SET datestyle = dmy;
+set client_encoding='WIN866';
+
+-- INSERT START VALUES
+insert into Person (first_name, last_name, father_name, login, password, rank) values
+('преподаватель', ' препод', 'учитель', 'prepod', '12345678', rank 'teacher');
+
+insert into Team (number, name, project_name, teacher_id) values
+(1, 'Team 1', 'Roomkn', 1),
+(2, 'Team 2', 'Topic Keeper', 1),
+(3, 'Team 3', 'IG Platform', 1),
+(4, 'Team 4', 'Zakroma', 1),
+(5, 'Team 5', 'RollPlayer', 1),
+(6, 'Team 6', 'GiveGift', 1),
+(7, 'Team 7', '360', 1);
 
 insert into Event values (1, event_type 'demo', date '17-10-2023', time '11:15', time '12:50');

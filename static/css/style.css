@@ -9,6 +9,23 @@
     color: gray;
 }
 
+.locked-vote-card {
+    background-color: #f4f4f4;
+}
+
+.hidden-vote-button {
+    /* visibility: hidden; */
+    display: none;
+}
+
+.hidden-grade-status {
+    display: none;
+}
+
+.shown-grade-status {
+    display: block;
+}
+
 html,
 body {
   height: 100%;
