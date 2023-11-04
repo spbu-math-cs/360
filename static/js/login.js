@@ -15,7 +15,7 @@ $(document).ready(function() {
                    login: login,
                    password: password
                }
-              )
+            )
         })
         .then(response => {
             if (response.ok) {

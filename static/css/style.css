@@ -13,17 +13,19 @@
     background-color: #f4f4f4;
 }
 
-.hidden-vote-button {
-    /* visibility: hidden; */
+.hidden-vote-button,
+.hidden-grade-status,
+.hidden {
     display: none;
 }
 
-.hidden-grade-status {
-    display: none;
-}
-
-.shown-grade-status {
+.shown-grade-status,
+.visible-block {
     display: block;
+}
+
+.visible-inline {
+    display: inline;
 }
 
 html,

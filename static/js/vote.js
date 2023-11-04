@@ -48,32 +48,30 @@ function addVoteCards(teams, eventId) {
         var teamNum = team["number"];
         var teamName = team["name"];
         var projectName = team["projectName"];
-        document.getElementById("vote-cards").appendChild(
-            htmlToElement(
-            `
-            <div id="vote-card-team${teamId}" class="col border rounded text-center justify-content-between p-3">
-                <form id="vote-card-form-team${teamId}">
-                    <h3 class="my-2">Team ${teamNum}</h3>
-                    <h5 class="my-1 mx-3">${teamName}</h5>
-                    <p class="my-1 mx-3">${projectName}</p>
-                    <label for="grade-input-team${teamId}-1" class="form-label mt-2">Сложность спринта</label>
-                    <input type="range" name="grade-input-1" class="form-range" id="grade-input-team${teamId}-1" min="1" max="5">
-                    <label for="grade-input-team${teamId}-2" class="form-label mt-2">Уровень выполнения</label>
-                    <input type="range" name="grade-input-2" class="form-range" id="grade-input-team${teamId}-2" min="1" max="5">
-                    <label for="grade-input-team${teamId}-3" class="form-label mt-2">Качество презентации</label>
-                    <input type="range" name="grade-input-3" class="form-range" id="grade-input-team${teamId}-3" min="1" max="5">
-                    <label for="grade-input-team${teamId}-4" class="form-label mt-2">Дополнительные баллы</label>
-                    <input type="range" name="grade-input-4" class="form-range w-50" id="grade-input-team${teamId}-4" min="0" max="3" value="0">
-                    <div class="form-group">
-                        <label for="grade-comment-team${teamId}" class="mt-2">Комментарий</label>
-                        <textarea class="form-control my-2" id="grade-comment-team${teamId}" rows="2"></textarea>
-                    </div>
-                    <p id=grade-status-team${teamId} class="hidden-grade-status fst-italic py-2 my-3"></p>
-                    <input class="btn btn-outline-primary w-75 py-2 my-3" type="submit" id="grade-input-team${teamId}-btn" value="Vote">
-                </form>
-            </div>
-            `
-            )
+        $("#vote-cards").append(
+        `
+        <div id="vote-card-team${teamId}" class="col border rounded text-center justify-content-between p-3">
+            <form id="vote-card-form-team${teamId}">
+                <h3 class="my-2">Team ${teamNum}</h3>
+                <h5 class="my-1 mx-3">${teamName}</h5>
+                <p class="my-1 mx-3">${projectName}</p>
+                <label for="grade-input-team${teamId}-1" class="form-label mt-2">Сложность спринта</label>
+                <input type="range" name="grade-input-1" class="form-range" id="grade-input-team${teamId}-1" min="1" max="5">
+                <label for="grade-input-team${teamId}-2" class="form-label mt-2">Уровень выполнения</label>
+                <input type="range" name="grade-input-2" class="form-range" id="grade-input-team${teamId}-2" min="1" max="5">
+                <label for="grade-input-team${teamId}-3" class="form-label mt-2">Качество презентации</label>
+                <input type="range" name="grade-input-3" class="form-range" id="grade-input-team${teamId}-3" min="1" max="5">
+                <label for="grade-input-team${teamId}-4" class="form-label mt-2">Дополнительные баллы</label>
+                <input type="range" name="grade-input-4" class="form-range w-50" id="grade-input-team${teamId}-4" min="0" max="3" value="0">
+                <div class="form-group">
+                    <label for="grade-comment-team${teamId}" class="mt-2">Комментарий</label>
+                    <textarea class="form-control my-2" id="grade-comment-team${teamId}" rows="2"></textarea>
+                </div>
+                <p id=grade-status-team${teamId} class="hidden-grade-status fst-italic py-2 my-3"></p>
+                <input class="btn btn-outline-primary w-75 py-2 my-3" type="submit" id="grade-input-team${teamId}-btn" value="Vote">
+            </form>
+        </div>
+        `
         );
         $(`#vote-card-form-team${teamId}`).submit(function(event) {
             event.preventDefault();
