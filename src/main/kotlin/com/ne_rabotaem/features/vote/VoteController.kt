@@ -38,6 +38,14 @@ class VoteController(val call: ApplicationCall) {
             return
         }
 
+        // var event = Event.fetch(eventId)
+        // NOT WORKING! (fetch(1) returns null, but event with id == 1 is in table)
+
+        if (Event.fetchAll().filter { it.eventId == eventId }.size == 0) {
+            call.respond(HttpStatusCode.BadRequest, "No such event!")
+            return;
+        } // TODO: check, if current time not in [start, finish] (and date doesn't match), than send BadRequest
+
         call.respond(Team.fetchAll());
     }
 
