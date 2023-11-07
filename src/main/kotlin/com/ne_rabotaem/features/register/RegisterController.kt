@@ -12,7 +12,7 @@ import java.util.*
 
 class RegisterController(val call: ApplicationCall) {
     suspend fun getPage() {
-        call.respond(MustacheContent("register_sub.html", mapOf<String, String>()))
+        call.respond(MustacheContent("register.html", mapOf<String, String>()))
     }
     suspend fun registerNewUser() {
         val registerReceiveRemote = call.receive<RegisterReceiveRemote>()

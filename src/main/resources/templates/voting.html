@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>360 Voting</title>
+
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/voting.css">
+
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="../js/cookie.js"></script>
+	<script src="../js/navbar.js"></script>
+	<script src="../js/redirects.js"></script>
+	<script src="../js/vote.js"></script>
+
+</head>
+<body class="body-voting=page with-nav-bar">
+    <nav> <!-- will be loaded by navbar.js --> </nav>
+
+    <div class="voting-content">
+        <div class="voting-panel">
+            <div class="voting-panel-graph" id="graph-team1"></div>
+            <div class="voting-panel-button active">1</div>
+            <div class="voting-panel-graph" id="graph-team2"></div>
+            <div class="voting-panel-button draft">2</div>
+            <div class="voting-panel-graph" id="graph-team3"></div>
+            <div class="voting-panel-button voted">3</div>
+            <div class="voting-panel-graph" id="graph-team4"></div>
+            <div class="voting-panel-button">4</div>
+            <div class="voting-panel-graph" id="graph-team5"></div>
+            <div class="voting-panel-button">5</div>
+            <div class="voting-panel-graph" id="graph-team6"></div>
+            <div class="voting-panel-button">6</div>
+            <div class="voting-panel-graph" id="graph-team7"></div>
+            <div class="voting-panel-button">7</div>
+        </div>
+        <div class="voting-cards">
+            <form class="voting-card" action="javascript:;" onsubmit="voteSubmit(this)">
+                <h1>Team 1</h1>
+                <h3>Project Name</h3>
+
+                <label for="grade-input-team1-1">Сложность спринта</label>
+                <input class="grade" type="range" id="grade-input-team1-1" min="1" max="5">
+
+                <label for="grade-input-team1-2">Уровень выполнения</label>
+                <input class="grade" type="range" id="grade-input-team1-2" min="1" max="5">
+
+                <label for="grade-input-team1-3">Качество презентации</label>
+                <input class="grade" type="range" id="grade-input-team1-3" min="1" max="5">
+
+                <label for="grade-input-team1-4">Дополнительные баллы</label>
+                <input class="bonus-grade" type="range" id="grade-input-team1-4" min="0" max="3" value="0">
+
+                <label for="grade-comment-team1">Комментарий</label>
+                <textarea id="grade-comment-team1" rows="2"></textarea>
+
+                <button class="black-button" type="submit">Vote</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

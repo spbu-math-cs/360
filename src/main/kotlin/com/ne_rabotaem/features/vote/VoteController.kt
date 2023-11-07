@@ -20,7 +20,7 @@ class VoteController(val call: ApplicationCall) {
             call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
             return
         }
-        call.respond(MustacheContent("demo_vote.html", mapOf<String, String>()))
+        call.respond(MustacheContent("voting.html", mapOf<String, String>()))
     }
 
     suspend fun getDemo(id: Int) {

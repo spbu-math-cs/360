@@ -29,19 +29,13 @@ function setDemosInPage(demosJson) {
         let now = Date.now();
 
         // If too early, then locked, if too late, then disabled, else nothing (opened)
-        let demoClass = now < st ? "locked-demo" : (now > fn ? "disabled-demo" : "");
+        let demoStatus = now < st ? "locked" : (now > fn ? "disabled" : "unlocked");
 
         $("#demo-container").append(
         `
-        <div class="col">
-            <div class="card shadow-sm">
-                <a class="card-block stretched-link text-decoration-none demo-card ${demoClass}" href="/demo/vote?eventId=${id}">
-                    <div class="card-body">
-                        <h2 class="card-text text-center">Demo ${id}</h2>
-                        <p class="text-body-secondary text-center">${date}</p>
-                    </div>
-                </a>
-            </div>
+        <div class="demo-card ${demoStatus}" ${demoStatus == "unlocked" ? `onclick="location.href='/demo/vote?eventId=${id}'"` : ""}>
+            <h2 class="demo-card-title">Demo ${id}</h2>
+            <h3 class="demo-card-date">${date}</h3>
         </div>
         `);
     });

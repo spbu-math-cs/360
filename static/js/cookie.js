@@ -24,6 +24,8 @@ function eraseCookie(name) {
     document.cookie = name+'=; Max-Age=0; path=/; domain=' + location.hostname;
 }
 
+TOKEN_COOKIE_NAME = "token";
+
 function isLoggedIn() {
-    return getCookie("token") != null;
+    return getCookie(TOKEN_COOKIE_NAME) != null;
 }

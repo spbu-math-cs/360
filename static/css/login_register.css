@@ -1,0 +1,90 @@
+html {
+    height: 100%;
+}
+
+body.body-login-page {
+    height: 100%;
+    background: rgb(120,214,198);
+    background: linear-gradient(140deg, rgba(120,214,198,1) 0%, rgba(18,72,107,1) 100%);
+}
+
+body.body-register-page {
+    height: 100%;
+    background: rgb(120,214,198);
+    background: linear-gradient(315deg, rgba(120,214,198,1) 0%, rgba(18,72,107,1) 100%);
+}
+
+.login-content, .register-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.login-content form, .register-content form {
+    padding: 1rem 1rem;
+    border-radius: 8px;
+    background-color: white;
+
+    display: grid;
+    /* width: 20%; */
+    width: min(300px, 20%);
+    min-width: fit-content;
+    grid-template-columns: 1fr;
+    margin: auto;
+
+    box-shadow: #222 5px 5px 20px;
+}
+
+.register-content form {
+    width: min(380px, 25%);
+}
+
+.login-content form h1, .register-content form h1 {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.login-content form input, .register-content form input {
+    font-size: 17px;
+    padding: .4rem .5rem;
+    margin-bottom: 1rem;
+    border-radius: 3px;
+    border: 1px solid #12486B; 
+}
+
+.login-content form input[type="password"], .register-content form input[type="password"]{
+    font-family: caption;
+    letter-spacing: 3px;
+}
+
+.login-content label, .register-content label {
+    margin-bottom: .4rem;
+    margin-left: .5rem;
+    font-size: 18px;
+}
+
+.login-content form button, .register-content form button {
+    display: block;
+    margin-top: .5rem;
+    width: 50%;
+    justify-self: center;
+}
+
+.login-content form a, .register-content form a {
+    text-decoration: none;
+    color: #00979B;
+    letter-spacing: 0px;
+    transition: letter-spacing .2s ease-in-out;
+}
+
+.login-content form a:hover, 
+.register-content form a:hover {
+    letter-spacing: 1px;
+}
+
+.login-content form a.to-register-page, .register-content form a.to-login-page {
+    margin-top: .8rem;;
+    justify-self: center;
+    color: #3F5885;
+}

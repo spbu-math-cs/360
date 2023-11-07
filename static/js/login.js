@@ -1,8 +1,8 @@
 $(document).ready(function() {
-    $('#loginForm').submit(function(event) {
+    $('#login-form').submit(function(event) {
         event.preventDefault()
-        var login = $("#loginInput").val()
-        var password = $("#passwordInput").val()
+        var login = $("#login-input").val()
+        var password = $("#password-input").val()
 
         fetch('/login', {
             method: 'POST',

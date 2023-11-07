@@ -1,0 +1,68 @@
+
+.about-heading {
+    text-align: center;
+    margin-top: 4rem;
+}
+
+.about-content {
+    line-height: 1.6rem;
+    color: #002D27;
+    font-size: 18px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    display: grid;
+    grid-template-columns: 1fr 1fr .2fr .8fr;
+}
+
+.about-content > * {
+    padding: 2rem;
+}
+
+.about-content .main-text {
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+
+.about-content .developers {
+    color: #1D2D42;
+    grid-column-start: 4;
+    grid-column-end: 5;
+}
+
+.about-content .third-sprint {
+    color: #33190F;
+}
+
+.about-content .fourth-sprint {
+    grid-column-start: 3;
+    grid-column-end: 5;
+    color: #33350D;
+}
+
+.about-content .developers h3 {
+    color: #4C76AD;
+}
+
+.about-content .developers ul {
+    padding-left: 1.4rem;
+}
+
+.about-content span {
+    display: block;
+    font-weight: bold;
+    font-size: 22px;
+    margin-bottom: .8rem;
+}
+
+.about-content .second-sprint span {
+    color: #007665;
+}
+
+.about-content .third-sprint span {
+    color: #B75E38;
+}
+
+.about-content .fourth-sprint span {
+    color: #AEB72D;
+}
