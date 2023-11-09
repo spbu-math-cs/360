@@ -1,7 +1,14 @@
 
 .about-heading {
     text-align: center;
-    margin-top: 4rem;
+    margin-top: 5vw;
+}
+
+h3 {
+    display: block;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: .8rem;
 }
 
 .about-content {
@@ -20,14 +27,12 @@
 }
 
 .about-content .main-text {
-    grid-column-start: 1;
-    grid-column-end: 4;
+    grid-column: 1 / 4;
 }
 
 .about-content .developers {
     color: #1D2D42;
-    grid-column-start: 4;
-    grid-column-end: 5;
+    grid-column: 4 / 5;
 }
 
 .about-content .third-sprint {
@@ -35,34 +40,26 @@
 }
 
 .about-content .fourth-sprint {
-    grid-column-start: 3;
-    grid-column-end: 5;
+    grid-column: 3 / 5;
     color: #33350D;
-}
-
-.about-content .developers h3 {
-    color: #4C76AD;
 }
 
 .about-content .developers ul {
     padding-left: 1.4rem;
 }
 
-.about-content span {
-    display: block;
-    font-weight: bold;
-    font-size: 22px;
-    margin-bottom: .8rem;
+.about-content .developers h3 {
+    color: #4C76AD;
 }
 
-.about-content .second-sprint span {
+.about-content .second-sprint h3 {
     color: #007665;
 }
 
-.about-content .third-sprint span {
+.about-content .third-sprint h3 {
     color: #B75E38;
 }
 
-.about-content .fourth-sprint span {
+.about-content .fourth-sprint h3 {
     color: #AEB72D;
 }
