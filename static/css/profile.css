@@ -1,17 +1,15 @@
 .profile-content {
-    width: 100%;
     max-width: 500px;
     margin: 4rem auto 2rem auto;
     padding: 1.4rem;
-
     border-radius: 5px;
     background-color: white;
-    filter: drop-shadow(5px 5px 10px rgb(0, 0, 0, 50%));
+    filter: drop-shadow(5px 5px 8px rgb(0, 0, 0, 20%));
 }
 
 h1 {
     text-align: start;
-    margin: 0 0 3rem 0;
+    margin: 0 0 1rem 0;
 }
 
 button {
