@@ -12,10 +12,7 @@
 
     margin: 0 auto;
     padding: 1rem 2rem;
-    width: 40%;
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: 1fr 1fr 1fr;
+    max-width: 700px;
 }
 
 .demo-card {
@@ -23,6 +20,7 @@
     padding-bottom: 0.5rem;
     text-align: center;    
     border-radius: 5px;
+    margin-bottom: 1rem;
 
     cursor: default;
 }
@@ -49,4 +47,12 @@
 .demo-card.disabled {
     background-color: #68B7A9;
     color: #495C68;
+}
+
+@media (min-width: 1280px) {
+    .demo-list {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
 }
