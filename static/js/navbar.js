@@ -30,18 +30,21 @@ $(function() {
         // Load navigation bar
         $('nav').html(
         `
+        <h3>360</h3>
+        <div class="menu-button" onclick="showHideMenu()">
+            <div>.</div>
+            <div>.</div>
+            <div>.</div>
+        </div>
         <div class="nav-buttons">
-            <a id="home-navbar-button" class="${selectedClassDict["home"]}" href="/">Home</a>
-
+            <a class="${selectedClassDict["home"]}" href="/">Home</a>
             ${
                 logged ? `
                     <a id="demo-navbar-button" class="${selectedClassDict["demo"]}" href="/demo">Demo</a>
                 ` : ""
             }
-            
             <a id="about-navbar-button" class="${selectedClassDict["about"]}" href="/about">About</a>
             <div class="nav-split">.</div>
-
             ${
                 logged ? `
                     <a id="profile-navbar-button" class="${selectedClassDict["profile"]}" href="/profile">Profile</a>
@@ -50,8 +53,22 @@ $(function() {
                     <a id="register-navbar-button" href="/register">Register</a>
                 `
             }
-
         </div>
         `);
     }
 });
+
+// Mobile screen menu logic
+
+var menuVisibility = false;
+
+function showHideMenu() {
+    if (!menuVisibility) {
+        $(".menu-button").addClass("clicked");
+        $("nav").css("grid-template-rows", "min-content 1fr");
+    } else {
+        $(".menu-button").removeClass("clicked");
+        $("nav").css("grid-template-rows", "min-content 0fr");
+    }
+    menuVisibility = !menuVisibility;
+}
