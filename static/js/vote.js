@@ -4,6 +4,7 @@ $(document).ready(function() {
     var eventId = url.searchParams.get("eventId");
     if (eventId == null) {
         window.alert("You haven't choose demo to vote!");
+        window.location.href = "/demo";
         return;
     }
     getTeamsOnDemo(parseInt(eventId));
@@ -43,37 +44,37 @@ function getTeamsOnDemo(eventId) {
 }
 
 function addVoteCards(teams, eventId) {
+    console.log(teams);
     teams.forEach(team => {
+        console.log(team);
         var teamId = team["teamId"];
         var teamNum = team["number"];
         var teamName = team["name"];
         var projectName = team["projectName"];
-        $("#vote-cards").append(
+
+        $("#voting-cards").append(
         `
-        <div id="vote-card-team${teamId}" class="col border rounded text-center justify-content-between p-3">
-            <form id="vote-card-form-team${teamId}">
-                <h3 class="my-2">Team ${teamNum}</h3>
-                <h5 class="my-1 mx-3">${teamName}</h5>
-                <p class="my-1 mx-3">${projectName}</p>
-                <label for="grade-input-team${teamId}-1" class="form-label mt-2">Сложность спринта</label>
-                <input type="range" name="grade-input-1" class="form-range" id="grade-input-team${teamId}-1" min="1" max="5">
-                <label for="grade-input-team${teamId}-2" class="form-label mt-2">Уровень выполнения</label>
-                <input type="range" name="grade-input-2" class="form-range" id="grade-input-team${teamId}-2" min="1" max="5">
-                <label for="grade-input-team${teamId}-3" class="form-label mt-2">Качество презентации</label>
-                <input type="range" name="grade-input-3" class="form-range" id="grade-input-team${teamId}-3" min="1" max="5">
-                <label for="grade-input-team${teamId}-4" class="form-label mt-2">Дополнительные баллы</label>
-                <input type="range" name="grade-input-4" class="form-range w-50" id="grade-input-team${teamId}-4" min="0" max="3" value="0">
-                <div class="form-group">
-                    <label for="grade-comment-team${teamId}" class="mt-2">Комментарий</label>
-                    <textarea class="form-control my-2" id="grade-comment-team${teamId}" rows="2"></textarea>
-                </div>
-                <p id=grade-status-team${teamId} class="hidden-grade-status fst-italic py-2 my-3"></p>
-                <input class="btn btn-outline-primary w-75 py-2 my-3" type="submit" id="grade-input-team${teamId}-btn" value="Vote">
-            </form>
-        </div>
+<form id="voting-card-team${teamId}" class="voting-card" onsubmit="voteSubmit(this)">
+    <h1>Team ${teamNum}</h1>
+    <h3>${projectName}</h3>
+    <label for="grade-input-team${teamId}-1">Сложность спринта</label>
+    <input class="grade" type="range" id="grade-input-team${teamId}-1" min="1" max="5">
+    <label for="grade-input-team${teamId}-2">Уровень выполнения</label>
+    <input class="grade" type="range" id="grade-input-team${teamId}-2" min="1" max="5">
+    <label for="grade-input-team${teamId}-3">Качество презентации</label>
+    <input class="grade" type="range" id="grade-input-team${teamId}-3" min="1" max="5">
+    <label for="grade-input-team${teamId}-4">Дополнительные баллы</label>
+    <input class="bonus-grade" type="range" id="grade-input-team${teamId}-4" min="0" max="3" value="0">
+    <label for="grade-comment-team${teamId}">Комментарий</label>
+    <textarea id="grade-comment-team${teamId}" rows="2"></textarea>
+    <button class="black-button" type="submit">Vote</button>
+</form>
         `
         );
-        $(`#vote-card-form-team${teamId}`).submit(function(event) {
+
+        $(`#vote-card-team${teamId}`).css({"opacity": "0", "z-index" : "0"});
+
+        $(`#vote-card-team${teamId}`).submit(function(event) {
             event.preventDefault();
             var grade_1 = parseInt($(`#grade-input-team${teamId}-1`).val());
             var grade_2 = parseInt($(`#grade-input-team${teamId}-2`).val());
@@ -101,13 +102,36 @@ function addVoteCards(teams, eventId) {
             })
             .then(response => {
                 if (response.ok) {
-                    lockVoteCard(teamId, true);
+                    // lockVoteCard(teamId, true);
+                    console.log("success");
                 } else if (response.status == 409 /* HttpStatusCode.Conflict "You have already rated!" */){
-                    lockVoteCard(teamId, false);
+                    // lockVoteCard(teamId, false);
+                    console.log("already voted");
                 } else {
                     response.text().then(text => alert(text));
                 }
             });
         });
     });
+
+    $(`#voting-card-team1`).addClass("active");
+    $(`#voting-button-team1`).addClass("active");
+
+}
+
+var selectedCardId = "voting-card-team1";
+var selectedButton = "voting-button-team1"; 
+
+function selectTeam(button) {
+    let cardId = $(button).attr("data-card-id");
+    let buttonId = $(button).attr("id");
+
+    $('#' + selectedCardId).removeClass("active");
+    $('#' + cardId).addClass("active");
+
+    $('#' + selectedButton).removeClass("active");
+    $('#' + buttonId).addClass("active");
+
+    selectedCardId = cardId;
+    selectedButton = buttonId;
 }
