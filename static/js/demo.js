@@ -89,7 +89,7 @@ function dateToHumanFormat(date) {
     }
 
     if (day < 20 && day > 10) {
-        daySuffix == "th";
+        daySuffix = "th";
     } 
 
     return `<i>${day}<span>${daySuffix}</span> ${months[month]} ${year}</i>`;
