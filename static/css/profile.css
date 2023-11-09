@@ -1,7 +1,7 @@
 .profile-content {
     margin-top: 3rem;
     display: grid;
-    width: 40%;
+    max-width: 800px;
     margin-left: auto;
     margin-right: auto;
     grid-template-columns: 1fr 1fr;
@@ -15,16 +15,17 @@
 }
 
 .profile-content button {
-    margin-left: 4rem;
-    margin-right: 4rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
 
-    font-size: 16px;
+    font-size: 1rem;
     padding: 1rem .5rem;
     border-radius: 5px;
     border: 0px solid transparent;
 
     background-color: #C2FCF3;
-    transition: background-color .15s ease-in-out;
+    transition: background-color .15s;
 }
 
 .profile-content button:hover:enabled {
@@ -33,7 +34,7 @@
 
 .profile-content button.log-out-button {
     background-color: #FFC5BC;
-    transition: background-color .15s ease-in-out;
+    transition: background-color .15s;
 }
 
 .profile-content button.log-out-button:hover:enabled {
