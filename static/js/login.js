@@ -23,9 +23,21 @@ $(document).ready(function() {
                     setCookie(TOKEN_COOKIE_NAME, response.token);
                     window.location.href = "/";
                 })
+            } else if (response.status == 409) {
+                // login
+                blinkWrongInput("#login-input");
+            } else if (response.status == 400){
+                // password
+                blinkWrongInput("#password-input");
             } else {
                 response.text().then(text => alert(text))
             }
         })
     })
 })
+
+async function blinkWrongInput(input) {
+    $(input).addClass('invalid-blink');
+    await new Promise(r => setTimeout(r, 2000));
+    $(input).removeClass('invalid-blink');
+}

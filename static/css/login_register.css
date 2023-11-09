@@ -51,6 +51,9 @@ form input {
     margin-bottom: 1rem;
     border-radius: 3px;
     border: 1px solid #12486B; 
+    background-color: white;
+
+    transition: background-color 2s ease;
 }
 
 form input[type="password"]{
@@ -99,4 +102,9 @@ form a:first-child::before {
     -moz-transform: scale(1.2, .8) translate(-.6rem, .1rem) rotate(180deg);
     -o-transform: scale(1.2, .8) translate(-.6rem, .1rem) rotate(180deg);
     transform: scale(1.2, .8) translate(-.6rem, .1rem) rotate(180deg);
+}
+
+input.invalid-blink {
+    background-color: rgb(253, 202, 202);
+    transition: background-color 1s ease;
 }
