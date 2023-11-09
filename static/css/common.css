@@ -1,7 +1,7 @@
 body, input, textarea, button {
     margin: 0;
     font-family: 'Montserrat';
-    font-size: 18px;
+    font-size: clamp(14px, 3.5vw, 18px);
     justify-content: center;
 }
 
