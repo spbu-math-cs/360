@@ -13,24 +13,34 @@ $(function() {
 });
 
 function setDemosInPage(demosJson) {
+    demosJson.sort(function(d1, d2) {
+        // Order:
+        //  1. Active demos
+        //  2. Future demos
+        //  3. Past demos
+        // If in same category, sort by eventId ascending
+        function sign(x) {
+            return (x > 0) ? 1 : ((x < 0) ? -1 : 0);
+        }
+
+        function f(x) {
+            return (x == 0) ? 2 : ((x > 0) ? 1 : 0);
+        }
+
+        let a = calcTimeToDemo(d1), b = calcTimeToDemo(d2);
+        if (sign(a) == sign(b)) {
+            return sign(parseInt(d1["eventId"]) - parseInt(d2["eventId"]));
+        } else {
+            return sign(f(sign(b)) - f(sign(a)));
+        }
+    })
+
     demosJson.forEach(demo => {
         let id = demo["eventId"];
-        let date = demo["date"];
-        let start = demo["start"];
-        let finish = demo["finish"];
-
-        let date_s = date.split('-');
-        // Reverse, because var date in yyyy-mm-dd, and Date.parse needs dd-mm-yyyy
-        let date_f = date_s[0] + '-' + date_s[1] + '-' + date_s[2];
-
-        // Parse to UNIX epoch time format
-        let st = Date.parse(date_f + 'T' + start + ":00.000+03:00");
-        let fn = Date.parse(date_f + 'T' + finish + ":00.000+03:00");
-        let now = Date.now();
-
-        // If too early, then locked, if too late, then disabled, else nothing (opened)
-        let demoStatus = now < st ? "locked" : (now > fn ? "disabled" : "unlocked");
-
+        let date = demo["date"]
+        let timeToDemo = calcTimeToDemo(demo);
+        let demoStatus = (timeToDemo < 0) ? "disabled" : ((timeToDemo > 0) ? "locked" : "unlocked");
+        
         $("#demo-container").append(
         `
         <div class="demo-card ${demoStatus}" ${demoStatus == "unlocked" ? `onclick="location.href='/demo/vote?eventId=${id}'"` : ""}>
@@ -78,5 +88,28 @@ function dateToHumanFormat(date) {
             break;
     }
 
+    if (day < 20 && day > 10) {
+        daySuffix == "th";
+    } 
+
     return `<i>${day}<span>${daySuffix}</span> ${months[month]} ${year}</i>`;
+}
+
+function calcTimeToDemo(demo) {
+    let date = demo["date"];
+    let start = demo["start"];
+    let finish = demo["finish"];
+
+    // Parse to UNIX epoch time format
+    let startUnix = Date.parse(date + 'T' + start + ":00.000+03:00");
+    let finishUnix = Date.parse(date + 'T' + finish + ":00.000+03:00");
+    let nowUnix = Date.now();
+
+    if (nowUnix < startUnix) {
+        return startUnix - nowUnix;
+    } else if (nowUnix > finishUnix) {
+        return finishUnix - nowUnix;
+    } else {
+        return 0;
+    }
 }
