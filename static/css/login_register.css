@@ -95,7 +95,8 @@ form a:first-child::before {
     border-width: .4rem;
     border-color: transparent transparent transparent #00979B;
     border-style: solid;
-    scale: 1.2 .8;
-    translate: -.6rem .1rem;
-    rotate: 180deg;
+    -webkit-transform: scale(1.2, .8), translate(-.6rem, .1rem), rotate(180deg);
+    -moz-transform: scale(1.2, .8), translate(-.6rem, .1rem), rotate(180deg);
+    -o-transform: scale(1.2, .8), translate(-.6rem, .1rem), rotate(180deg);
+    transform: scale(1.2, .8), translate(-.6rem, .1rem), rotate(180deg);
 }

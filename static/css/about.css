@@ -88,11 +88,6 @@ h3 {
         transition: grid-template-rows .2s ease;
     }
 
-    .sprint h3 {
-        padding-right: 3rem;
-        width: max-content;
-    }
-
     .sprint h3::before {
         display: inline-block;
         content: "";
@@ -101,7 +96,10 @@ h3 {
         border-color: transparent transparent transparent #4C76AD;
         border-style: solid;
         scale: 1.2 .8;
-        translate: 0 .1rem;
+        -webkit-transform: translate(0 .1rem);
+        -moz-transform: translate(0 .1rem);
+        -o-transform: translate(0 .1rem);
+        transform: translate(0 .1rem);
         transform-origin: 20% 35%;
 
         transition: rotate .2s;

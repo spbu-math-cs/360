@@ -49,6 +49,18 @@
     color: #495C68;
 }
 
+.demo-card h2, .demo-card p {
+    margin: 1rem auto;
+}
+
+.demo-card p {
+    font-size: 1.1em;
+}
+
+.demo-card-date span {
+    font-size: .8em;
+}
+
 @media (min-width: 1280px) {
     .demo-list {
         display: grid;

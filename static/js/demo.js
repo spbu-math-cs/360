@@ -35,8 +35,48 @@ function setDemosInPage(demosJson) {
         `
         <div class="demo-card ${demoStatus}" ${demoStatus == "unlocked" ? `onclick="location.href='/demo/vote?eventId=${id}'"` : ""}>
             <h2 class="demo-card-title">Demo ${id}</h2>
-            <h3 class="demo-card-date">${date}</h3>
+            <p class="demo-card-date">${dateToHumanFormat(date)}</p>
         </div>
         `);
     });
+}
+
+function dateToHumanFormat(date) {
+    let date_s = date.split('-');
+    let day = parseInt(date_s[2]);
+    let month = date_s[1];
+    let year = date_s[0];
+
+    var months = {
+        "01" : "Jan.",
+        "02" : "Feb.",
+        "03" : "Mar.",
+        "04" : "Apr.",
+        "05" : "May",
+        "06" : "Jun.",
+        "07" : "Jul.",
+        "08" : "Aug.",
+        "09" : "Sep.",
+        "10" : "Oct.",
+        "11" : "Nov.",
+        "12" : "Dec.",
+    };
+
+    let daySuffix;
+    switch (day % 10) {
+        case 1:
+            daySuffix = "st";
+            break;
+        case 2:
+            daySuffix = "nd";
+            break;
+        case 3:
+            daySuffix = "rd";
+            break;
+        default:
+            daySuffix = "th";
+            break;
+    }
+
+    return `<i>${day}<span>${daySuffix}</span> ${months[month]} ${year}</i>`;
 }
