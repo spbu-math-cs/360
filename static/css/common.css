@@ -1,7 +1,7 @@
 body, input, textarea, button {
     margin: 0;
     font-family: 'Montserrat';
-    font-size: clamp(14px, 3.5vw, 18px);
+    font-size: clamp(16px, 3.5vw, 18px);
     justify-content: center;
 }
 
@@ -21,4 +21,3 @@ button.black-button:hover {
     background-color: #333;
     text-shadow: #ddd 0px 0px 5px;
 }
-

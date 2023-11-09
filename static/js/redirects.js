@@ -14,6 +14,6 @@ $(function() {
 });
 
 function getPageName() {
-    let bodyClass = $('body').attr('class').match('body-[^\s-]*-page')[0];
+    let bodyClass = $('body').attr('class').match('body-[^\\s-]*-page')[0];
     return bodyClass.split('-')[1];
 }
