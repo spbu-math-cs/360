@@ -7,16 +7,22 @@ import io.ktor.server.routing.*
 
 fun Application.configureVoteRouting() {
     routing {
-        get("/demo/grades") {
+        get("/demo/vote") {
             VoteController(call).getPage()
         }
-        get("/demo/grades") {
-            if (call.request.queryParameters.contains("id")) {
-                VoteController(call).getDemo(Integer.parseInt(call.request.queryParameters["id"]!!))
-            }
-            else call.respond(HttpStatusCode.BadRequest, "Request must contain demo id!")
-        }
-        get("/demo/teams") {
+
+        // get("/demo/vote/grades") {
+             // TODO: get current user grades
+        // }
+
+        // get("/demo/grades") {
+        //     if (call.request.queryParameters.contains("id")) {
+        //         VoteController(call).getDemo(Integer.parseInt(call.request.queryParameters["id"]!!))
+        //     }
+        //     else call.respond(HttpStatusCode.BadRequest, "Request must contain demo id!")
+        // }
+
+        get("/demo/vote/teams") {
             // Get a list of all the teams you can vote for
             if (call.request.queryParameters.contains("eventId")) {
                 VoteController(call).getTeams(Integer.parseInt(call.request.queryParameters["eventId"]!!))

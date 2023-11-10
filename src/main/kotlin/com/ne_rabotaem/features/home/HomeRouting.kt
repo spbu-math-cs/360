@@ -8,7 +8,7 @@ import io.ktor.server.routing.*
 fun Application.configureHomeRouting() {
     routing {
         get("/") {
-            call.respond(MustacheContent("index.html", mapOf<String, String>()))
+            call.respond(MustacheContent("home.html", mapOf<String, String>()))
         }
     }
 }

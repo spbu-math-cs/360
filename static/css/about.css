@@ -1,0 +1,117 @@
+.about-heading {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.about-content h3 {
+    display: block;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: .8rem;
+    padding-left: .5rem;
+}
+
+.about-content {
+    /* line-height: 1.6rem; */
+    color: #002D27;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1200px;
+    padding: 0 1.5rem 2rem 1.5rem;
+}
+
+/* Colors */
+
+.developers h3 {
+    color: #4C76AD;
+}
+
+.second-sprint h3 {
+    color: #007665;
+}
+
+.third-sprint h3 {
+    color: #B75E38;
+}
+
+.fourth-sprint h3 {
+    color: #AEB72D;
+}
+
+.developers {
+    color: #1D2D42;
+}
+
+.third-sprint {
+    color: #33190F;
+}
+
+.fourth-sprint {
+    color: #33350D;
+}
+
+@media (min-width: 1000px) {
+       
+    .about-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr .2fr .8fr;
+    }
+
+    .about-content > * {
+        padding: 2rem;
+    }
+    
+    .main-text {
+        grid-column: 1 / 4;
+    }
+    
+    .developers {
+        grid-column: 4 / 5;
+    }
+
+    .fourth-sprint {
+        grid-column: 3 / 5;
+    }
+    
+    .developers ul {
+        padding-left: 1.4rem;
+    }
+}
+
+/* Sprints menu on mobiles */
+@media (max-width: 1000px) {
+    
+    .sprint {
+        display: grid;
+        grid-template-rows: min-content 0fr;
+
+        transition: grid-template-rows .2s ease;
+    }
+
+    .sprint h3::before {
+        display: inline-block;
+        content: "";
+        width: 0;
+        border-width: .5rem;
+        border-color: transparent transparent transparent #4C76AD;
+        border-style: solid;
+        scale: 1.2 .8;
+        -webkit-transform: translate(0 .1rem);
+        -moz-transform: translate(0 .1rem);
+        -o-transform: translate(0 .1rem);
+        transform: translate(0 .1rem);
+        transform-origin: 20% 35%;
+
+        transition: rotate .2s;
+    }
+
+    .sprint h3.active::before {
+        rotate: 90deg;
+    }
+
+    .sprint-content {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        overflow: hidden;
+    }
+}

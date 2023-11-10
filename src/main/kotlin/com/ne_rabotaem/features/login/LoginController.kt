@@ -12,7 +12,7 @@ import java.util.*
 
 class LoginController(val call: ApplicationCall) {
     suspend fun getPage() {
-        call.respond(MustacheContent("login_sub.html", mapOf<String, String>()))
+        call.respond(MustacheContent("login.html", mapOf<String, String>()))
     }
     suspend fun performLogin() {
         val loginReceiveRemote = call.receive<LoginReceiveRemote>()

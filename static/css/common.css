@@ -1,0 +1,26 @@
+body, input, textarea, button {
+    margin: 0;
+    font-family: 'Montserrat';
+    font-size: clamp(16px, 3.5vw, 18px);
+    justify-content: center;
+}
+
+body {
+    background-color: #f0f0f0;
+}
+
+button.black-button {
+    padding: 1rem 0;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+
+button.black-button:hover {
+    background-color: #333;
+    text-shadow: #ddd 0px 0px 5px;
+}

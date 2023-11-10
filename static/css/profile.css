@@ -1,0 +1,44 @@
+.profile-content {
+    max-width: 500px;
+    margin: 4rem auto 2rem auto;
+    padding: 1.4rem;
+    border-radius: 5px;
+    background-color: white;
+    filter: drop-shadow(5px 5px 8px rgb(0, 0, 0, 20%));
+}
+
+h1 {
+    text-align: start;
+    margin: 0 0 1rem 0;
+}
+
+button {
+    margin: 1rem auto 0 0;
+    width: 50%;
+    min-width: min-content;
+
+    font-size: 1rem;
+    padding: 1rem .5rem;
+    border-radius: 5px;
+    border: 0px solid transparent;
+
+    background-color: #C2FCF3;
+    transition: background-color .15s;
+}
+
+button:hover:enabled {
+    background-color: #AEE2DA;
+}
+
+button.log-out-button {
+    background-color: #FFC5BC;
+    transition: background-color .15s;
+}
+
+button.log-out-button:hover:enabled {
+    background-color: #E2AFA7;
+}
+
+button:enabled {
+    cursor: pointer;
+}

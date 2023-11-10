@@ -1,8 +1,8 @@
 $(document).ready(function() {
-    $('#loginForm').submit(function(event) {
+    $('#login-form').submit(function(event) {
         event.preventDefault()
-        var login = $("#loginInput").val()
-        var password = $("#passwordInput").val()
+        var login = $("#login-input").val()
+        var password = $("#password-input").val()
 
         fetch('/login', {
             method: 'POST',
@@ -15,7 +15,7 @@ $(document).ready(function() {
                    login: login,
                    password: password
                }
-              )
+            )
         })
         .then(response => {
             if (response.ok) {
@@ -23,9 +23,21 @@ $(document).ready(function() {
                     setCookie(TOKEN_COOKIE_NAME, response.token);
                     window.location.href = "/";
                 })
+            } else if (response.status == 409) {
+                // login
+                blinkWrongInput("#login-input");
+            } else if (response.status == 400){
+                // password
+                blinkWrongInput("#password-input");
             } else {
                 response.text().then(text => alert(text))
             }
         })
     })
 })
+
+async function blinkWrongInput(input) {
+    $(input).addClass('invalid-blink');
+    await new Promise(r => setTimeout(r, 2000));
+    $(input).removeClass('invalid-blink');
+}

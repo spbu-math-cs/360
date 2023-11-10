@@ -1,0 +1,70 @@
+.demo-content h1 {
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.demo-list {
+    border: 1px solid transparent;
+    border-radius: 5px;
+    background-color: white;
+    filter: drop-shadow(5px 5px 8px rgb(0, 0, 0, 20%));
+
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    max-width: 700px;
+}
+
+.demo-card {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    text-align: center;    
+    border-radius: 5px;
+    margin-bottom: 1rem;
+
+    cursor: default;
+}
+
+.demo-card.unlocked {
+    background-color: #78d6c6;
+    color: #F5FCFF;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+    text-shadow: 0 0 10px #78d6c6;
+    
+}
+
+.demo-card.unlocked:hover {
+    background-color: #82E5D3;
+    text-shadow: 0 0 10px #fff;
+}
+
+.demo-card.locked {
+    background-color: #97C3BC;
+    color: #70838E;
+}
+
+.demo-card.disabled {
+    background-color: #68B7A9;
+    color: #495C68;
+}
+
+.demo-card h2, .demo-card p {
+    margin: 1rem auto;
+}
+
+.demo-card p {
+    font-size: 1.1em;
+}
+
+.demo-card-date span {
+    font-size: .8em;
+}
+
+@media (min-width: 1280px) {
+    .demo-list {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}

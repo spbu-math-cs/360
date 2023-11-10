@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>360 Voting</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/voting.css">
+
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="../js/cookie.js"></script>
+	<script src="../js/navbar.js"></script>
+	<script src="../js/redirects.js"></script>
+	<script src="../js/vote.js"></script>
+
+</head>
+<body class="body-voting-page with-nav-bar">
+    <nav> <!-- will be loaded by navbar.js --> </nav>
+
+    <div class="voting-content">
+        <div class="voting-buttons">
+            <div class="team-button" id="voting-button-team1" data-card-id="voting-card-team1" onclick="selectTeam(this)">1</div>
+            <div class="team-button" id="voting-button-team2" data-card-id="voting-card-team2" onclick="selectTeam(this)">2</div>
+            <div class="team-button" id="voting-button-team3" data-card-id="voting-card-team3" onclick="selectTeam(this)">3</div>
+            <div class="team-button" id="voting-button-team4" data-card-id="voting-card-team4" onclick="selectTeam(this)">4</div>
+            <div class="team-button" id="voting-button-team5" data-card-id="voting-card-team5" onclick="selectTeam(this)">5</div>
+            <div class="team-button" id="voting-button-team6" data-card-id="voting-card-team6" onclick="selectTeam(this)">6</div>
+            <div class="team-button" id="voting-button-team7" data-card-id="voting-card-team7" onclick="selectTeam(this)">7</div>
+
+            <div class="graphs-button" id="graph-button">#</div>
+        </div>
+        <div id="voting-cards" class="voting-cards"> <!-- Loaded by vote.js --> </div>
+    </div>
+</body>
+</html>
