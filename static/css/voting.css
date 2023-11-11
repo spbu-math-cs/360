@@ -181,8 +181,10 @@
     --item-default-color: #060606;
     
     height: 20rem;
+    margin-top: auto;
     display: grid;
     grid-auto-flow: column;
+    grid-template-rows: 1fr 0fr;
     gap: var(--item-gap);
     align-items: end;
     padding-inline: var(--item-gap);
@@ -190,13 +192,21 @@
     padding-block: var(--padding-block);
     position: relative;
     isolation: isolate;
+
+    transition: none;
+}
+
+.graphs-card.active .grades-graph {
+    grid-template-rows: 0fr 1fr;
+
+    transition: grid-template-rows 1s ease;
 }
 
 .grades-graph > .item{
+    grid-row: 2 / -1;
     height: calc(1% * var(--val));
     background-color: var(--clr);
     position: relative;
-    animation: item-height 1s ease forwards
 }
 
 .grades-graph > .item > * { 
@@ -210,5 +220,3 @@
 .grades-graph > .item > .value { 
     inset: auto 0 100% 0 
 }
-
-@keyframes item-height { from { height: 0 } }
