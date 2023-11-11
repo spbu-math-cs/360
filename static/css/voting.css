@@ -26,6 +26,18 @@
     transition: background-color .1s;
 }
 
+.team-button.voted {
+    background-color: #cceecc;
+}
+
+.team-button.voted:hover {
+    background-color: #dcf1dc;
+}
+
+.team-button.voted.active:hover {
+    background-color: white;
+}
+
 .graphs-button {
     margin-left: auto;
 }
@@ -35,11 +47,13 @@
     background-color: #eee;
 }
 
-.team-button {
+.team-button, 
+.graphs-button {
     z-index: 0;
 }
 
-.team-button.active {
+.team-button.active, 
+.graphs-button.active {
     background-color: white;
     border-radius: 5px 5px 0 0;
 
@@ -48,7 +62,8 @@
     transform-style: preserve-3d;
 }
 
-.team-button.active::after {
+.team-button.active::after, 
+.graphs-button.active::after {
     position: absolute;
     content: " ";
     color: transparent;
@@ -71,27 +86,32 @@
 .voting-cards {
     padding: 2rem .5rem;
     border: 1px solid transparent;
-    border-radius: 0 5px 5px 5px;
+    border-radius: 0 0 5px 5px;
     background-color: white;
     filter: drop-shadow(5px 5px 10px rgb(0, 0, 0, 50%));
     position: relative;
     z-index: 1;
 }
 
-.voting-card {
-    display: grid;
-    grid-template-columns: 1fr;
-    text-align: center;
+.voting-card,
+.graphs-card {
     position: absolute;
     inset: 0 auto auto 0;
     margin: auto;
     opacity: 0;
     z-index: 0;
+}
+
+.voting-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    text-align: center;
 
     transition: none;
 }
 
-.voting-card.active {
+.voting-card.active,
+.graphs-card.active {
     position: relative;
     opacity: 1;
     z-index: 3;
@@ -133,3 +153,51 @@
     justify-self: center;
     margin-top: 1rem;
 }
+
+.voting-card.voted {
+    color: #666;
+}
+
+/* Graphs */
+
+.graphs-card > h2 {
+    text-align: center;
+    margin: 0 0 2rem 0;
+}
+
+.grades-graph{    
+    --item-gap: 5%;
+    --item-default-color: #060606;
+    
+    height: 20rem;
+    display: grid;
+    grid-auto-flow: column;
+    gap: var(--item-gap);
+    align-items: end;
+    padding-inline: var(--item-gap);
+    --padding-block: 1rem; /* space for labels */
+    padding-block: var(--padding-block);
+    position: relative;
+    isolation: isolate;
+}
+
+.grades-graph > .item{
+    height: calc(1% * var(--val));
+    background-color: var(--clr);
+    position: relative;
+    animation: item-height 1s ease forwards
+}
+
+.grades-graph > .item > * { 
+    position: absolute; text-align: center 
+}
+
+.grades-graph > .item > .label { 
+    inset: calc(100% + .2rem) 0 auto 0 
+}
+
+.grades-graph > .item > .value { 
+    inset: auto 0 100% 0 
+}
+
+@keyframes item-height { from { height: 0 } }
