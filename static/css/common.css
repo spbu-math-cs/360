@@ -44,5 +44,6 @@ button.white-button:hover {
 .white-card {
     border-radius: 5px;
     background-color: white;
-    filter: drop-shadow(5px 5px 8px rgb(0, 0, 0, 20%));
+    box-shadow: 5px 5px 15px rgb(0, 0, 0, 20%);
 }
+

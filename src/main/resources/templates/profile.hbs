@@ -25,6 +25,7 @@
             <h1>{{last_name}}</h1>
             <h1>{{first_name}}</h1>
             <h1>{{father_name}}</h1>
+            <p>ID: #<i>0002</i></p>
             {{!-- <button type="button" disabled>Change Password</button> --}}
             <button type="button" class="log-out-button" onclick="logOut()">Log Out</button>
         </div>
@@ -33,8 +34,8 @@
             <div class="invitation">
                 <h3>Team 4</h3>
                 <p>by Дмитрий Сидоркин</p>
-                <button class="accept-button" type="button">✓</button>
-                <button class="decline-button" type="button">⤫</button>
+                <button class="round-button accept-button" type="button">✓</button>
+                <button class="round-button decline-button" type="button">⤫</button>
             </div>
         </div>
         <div class="team-card white-card">
@@ -46,6 +47,29 @@
                 <li>Смайт Роберт #0005</li>
                 <li>Андриянов Александр #0006</li>
             </ul>
+
+            <button class="invite-button" type="button" onclick="openPopup()">Invite Members</button>
+            <div class="popup">
+                <div class="search-form">
+                    <button class="round-button" type="button" onclick="closePopup();resetSearch()">⤫</button>
+
+                    <h3>Search by ID</h3>
+
+                    <div class="search-bar">
+                        <span>#</span>
+                        <input type="text" maxlength="4" name="ID" id="id-input" placeholder="0000">
+                    </div>
+
+                    <div id="search-result" class="search-result">
+                        <p id="search-result-last-name">.</p>
+                        <p id="search-result-first-name">.</p>
+                        <p id="search-result-father-name">.</p>
+                        <p id="search-result-id">.</p>
+                        <button class="round-button">+</button>
+                    </div>
+                </div>
+            </div>
+
             <button class="leave-button" type="button">Leave Team</button>
         </div>
     </div>
