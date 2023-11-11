@@ -21,11 +21,33 @@
     <nav> <!-- will be loaded by navbar.js --> </nav>
 
     <div class="profile-content">
-        <h1>{{last_name}}</h1>
-        <h1>{{first_name}}</h1>
-        <h1>{{father_name}}</h1>
-        <button type="button" disabled>Change Password</button>
-        <button type="button" class="log-out-button" onclick="logOut()">Log Out</button>
+        <div class="account-card white-card">
+            <h1>{{last_name}}</h1>
+            <h1>{{first_name}}</h1>
+            <h1>{{father_name}}</h1>
+            {{!-- <button type="button" disabled>Change Password</button> --}}
+            <button type="button" class="log-out-button" onclick="logOut()">Log Out</button>
+        </div>
+        <div class="invitations-card white-card">
+            <h2>Team Invitations</h2>
+            <div class="invitation">
+                <h3>Team 4</h3>
+                <p>by Дмитрий Сидоркин</p>
+                <button class="accept-button" type="button">✓</button>
+                <button class="decline-button" type="button">⤫</button>
+            </div>
+        </div>
+        <div class="team-card white-card">
+            <h1>Team 7</h1>
+            <div class="team-members">
+                <p>Можаев Василий #0002</p>
+                <p>Сидоркин Дмитрий #0003</p>
+                <p>Горячкин Андрей #0004</p>
+                <p>Смайт Роберт #0005</p>
+                <p>Андриянов Александр #0006</p>
+            </div>
+            <button class="leave-button" type="button">Leave Team</button>
+        </div>
     </div>
 
 </body>

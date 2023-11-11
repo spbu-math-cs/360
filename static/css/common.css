@@ -24,3 +24,9 @@ button.black-button:hover {
     background-color: #333;
     text-shadow: #ddd 0px 0px 5px;
 }
+
+.white-card {
+    border-radius: 5px;
+    background-color: white;
+    filter: drop-shadow(5px 5px 8px rgb(0, 0, 0, 20%));
+}
