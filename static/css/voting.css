@@ -15,9 +15,12 @@
     display: flex;
 }
 
+.team-button {
+    padding: .5rem 1rem;
+}
+
 .team-button, 
 .graphs-button {
-    padding: .5rem 1rem;
     box-sizing: border-box;
     text-align: center;
     width: 3rem;
@@ -40,6 +43,14 @@
 
 .graphs-button {
     margin-left: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.graphs-button > img {
+    max-width: auto;
+    max-height: 1rem;
 }
 
 .team-button:hover,

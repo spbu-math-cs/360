@@ -128,7 +128,9 @@ function addVoteCards(teams, eventId) {
     });
 
     $(`#voting-buttons`).append(`
-        <div class="graphs-button" id="graphs-button" onclick="updateGraph();showCard('graphs-card', 'graphs-button')">#</div>
+        <div class="graphs-button" id="graphs-button" onclick="updateGraph();showCard('graphs-card', 'graphs-button')">
+            <img src="../img/chart.png" alt="Graphs">
+        </div>
     `);
 
     $(`#voting-card-team1`).addClass("active");
