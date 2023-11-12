@@ -29,8 +29,10 @@ object PersonTeam : IntIdTable("Person_team") {
     }
 
     fun getMembers(teamId: Int): List<Int> {
-        return select { PersonTeam.teamId eq teamId }.toList().map {
-            it[personId].value
+        return transaction {
+            select { PersonTeam.teamId eq teamId }.toList().map {
+                it[personId].value
+            }
         }
     }
 

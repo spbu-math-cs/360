@@ -49,8 +49,10 @@ class ProfileController(val call: ApplicationCall) {
     suspend fun getTeam() {
         if (!isTokenValid)
             return
+        println("SUCCCCCEEESSSSSSSSS!")
 
         val teamId = PersonTeam.getTeam(userId!!)
+        println("teamId $teamId, personId $userId")
         if (teamId == null) {
             call.respond(HttpStatusCode.BadRequest, "Your team not found!")
             return
