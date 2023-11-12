@@ -21,12 +21,32 @@
     <nav> <!-- will be loaded by navbar.js --> </nav>
 
     <div class="voting-content">
-        <div id="voting-buttons" class="voting-buttons"> <!-- Loaded by vote.js --> </div>
+        <div id="upper-voting-buttons" class="upper-voting-buttons"> <!-- Loaded by vote.js --> </div>
         <div id="voting-cards" class="voting-cards"> 
-            <div id="graphs-card" class="graphs-card">
+            <div id="graphs-card" class="card graphs-card">
                 <h2>Your current grades</h2>
                 <div id="graph" class="grades-graph"></div>
             </div>    
+
+            <div id="in-team-voting-card" class="card voting-card">
+                <h2>In-Team Voting</h2>
+                <p>Rate your team members</p>
+                <label for="grade-member-1">Можаев Василий</label>
+                <input class="grade" type="range" -data-UID="0002" id="grade-member-1" min="1" max="5">
+                <label for="grade-member-2">Можаев Василий</label>
+                <input class="grade" type="range" -data-UID="0002" id="grade-member-2" min="1" max="5">
+                <label for="grade-member-3">Можаев Василий</label>
+                <input class="grade" type="range" -data-UID="0002" id="grade-member-3" min="1" max="5">
+                <label for="grade-member-4">Можаев Василий</label>
+                <input class="grade" type="range" -data-UID="0002" id="grade-member-4" min="1" max="5">
+                <label for="grade-member-5">Можаев Василий</label>
+                <input class="grade" type="range" -data-UID="0002" id="grade-member-5" min="1" max="5">
+                <button class="vote-button black-button" type="button" onclick="inTeamVote(/* ${eventId} */ 1)">Vote</button>
+                <button class="revote-button white-button" type="button" onclick="unlockVoteCard('#in-team-voting-card', '#in-team-voting-button')">Revote</button>
+            </div>
+        </div>
+        <div class="lower-voting-buttons">
+            <div id="in-team-voting-button" class="voting-button" onclick="showCard('in-team-voting-card', 'in-team-voting-button')">In-Team Voting</div>
         </div>
     </div>
 </body>

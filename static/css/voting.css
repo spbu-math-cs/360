@@ -9,37 +9,36 @@
 
 /* Menu buttons */
 
-.voting-buttons {
+.upper-voting-buttons,
+.lower-voting-buttons {
     background-color: #ddd;
     border-radius: 5px 5px 0 0;
     display: flex;
 }
 
-.team-button {
+.voting-button {
     padding: .5rem 1rem;
 }
 
 .team-button, 
 .graphs-button {
+    width: 3rem;
+}
+
+.voting-button {
     box-sizing: border-box;
     text-align: center;
-    width: 3rem;
     cursor: pointer;
+    z-index: 0;
 
     transition: background-color .1s;
 }
 
-.team-button.voted {
-    background-color: #cceecc;
-}
+.voting-button.voted { background-color: #cceecc; }
 
-.team-button.voted:hover {
-    background-color: #dcf1dc;
-}
+.voting-button.voted:hover { background-color: #dcf1dc; }
 
-.team-button.voted.active:hover {
-    background-color: white;
-}
+.voting-button.voted.active:hover { background-color: white; }
 
 .graphs-button {
     margin-left: auto;
@@ -53,18 +52,9 @@
     max-height: 1rem;
 }
 
-.team-button:hover,
-.graphs-button:hover {
-    background-color: #eee;
-}
+.voting-button:hover { background-color: #eee; }
 
-.team-button, 
-.graphs-button {
-    z-index: 0;
-}
-
-.team-button.active, 
-.graphs-button.active {
+.voting-button.active {
     background-color: white;
     border-radius: 5px 5px 0 0;
 
@@ -73,8 +63,17 @@
     transform-style: preserve-3d;
 }
 
-.team-button.active::after, 
-.graphs-button.active::after {
+.lower-voting-buttons {
+    margin: auto;
+    width: max-content;
+    border-radius: 0 0 5px 5px;
+}
+
+#in-team-voting-button {
+    border-radius: 0 0 5px 5px;
+}
+
+.voting-button.active::after {
     position: absolute;
     content: " ";
     color: transparent;
@@ -85,11 +84,23 @@
     z-index: -1;
     transform: translateZ(-1px);
     filter: blur(8px);
+    
+}
+
+.team-button.active::after {
+    clip-path: polygon(-100% -100%, 200% -100%, 200% 100%,-100% 100%);
+}
+
+.team-button.active:first-child::after {
     clip-path: polygon(-100% -100%, 200% -100%, 200% 100%, 0 100%, 0% 200%, -100% 200%);
 }
 
-.team-button.active:not(:first-child)::after {
-    clip-path: polygon(-100% -100%, 200% -100%, 200% 100%,-100% 100%);
+.graphs-button.active::after {
+    clip-path: polygon(-100% -100%, 200% -100%, 200% 200%, 100% 200%, 100% 100%, -100% 100%);
+}
+
+#in-team-voting-button.active::after {
+    clip-path: polygon(-100% 0%, 200% 0%, 200% 200%, -100% 200%);
 }
 
 /* Voting Cards */
@@ -104,8 +115,7 @@
     z-index: 1;
 }
 
-.voting-card,
-.graphs-card {
+.card {
     position: absolute;
     inset: 0 auto auto 0;
     margin: auto;
@@ -121,11 +131,10 @@
     transition: none;
 }
 
-.voting-card.active,
-.graphs-card.active {
+.card.active {
     position: relative;
-    opacity: 1;
-    z-index: 3;
+    opacity: 1 !important;
+    z-index: 3 !important;
     transition: opacity 1s;
 }
 
@@ -136,6 +145,11 @@
 .voting-card h3 {
     margin-top: .3rem;
     margin-bottom: .5rem;
+}
+
+.voting-card p {
+    margin-top: .5rem;
+    margin-bottom: 1rem;
 }
 
 .voting-card label {

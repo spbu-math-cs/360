@@ -10,22 +10,22 @@ $(document).ready(function() {
     getTeamsOnDemo(parseInt(eventId));
 })
 
-function lockVoteCard(teamId) {
-    $(`#voting-card-team${teamId} input, #voting-card-team${teamId} textarea`).prop("disabled", true);
-    $(`#voting-card-team${teamId}`).addClass("voted");
-    $(`#vote-button-team${teamId}`).hide();
-    $(`#revote-button-team${teamId}`).show();
+function lockVoteCard(cardId, buttonId) {
+    $(`${cardId} input, ${cardId} textarea`).prop("disabled", true);
+    $(`${cardId}`).addClass("voted");
+    $(`${cardId} .vote-button`).hide();
+    $(`${cardId} .revote-button`).show();
 
-    $(`#voting-button-team${teamId}`).addClass("voted");
+    $(`${buttonId}`).addClass("voted");
 }
 
-function unlockVoteCard(teamId) {
-    $(`#voting-card-team${teamId} input, #voting-card-team${teamId} textarea`).prop("disabled", false);
-    $(`#voting-card-team${teamId}`).removeClass("voted");
-    $(`#vote-button-team${teamId}`).show();
-    $(`#revote-button-team${teamId}`).hide();
+function unlockVoteCard(cardId, buttonId) {
+    $(`${cardId} input, ${cardId} textarea`).prop("disabled", false);
+    $(`${cardId}`).removeClass("voted");
+    $(`${cardId} .vote-button`).show();
+    $(`${cardId} .revote-button`).hide();
 
-    $(`#voting-button-team${teamId}`).removeClass("voted");
+    $(`${buttonId}`).removeClass("voted");
 }
 
 function getTeamsOnDemo(eventId) {
@@ -55,7 +55,7 @@ function vote(teamId, eventId) {
     var grade_4 = parseInt($(`#grade-input-team${teamId}-4`).val());
     var comment = $(`#grade-comment-team${teamId}`).val();
 
-    lockVoteCard(teamId);
+    lockVoteCard(`#voting-card-team${teamId}`, `#voting-button-team${teamId}`);
 
     // fetch('/demo/vote', {
     //     method: 'POST',
@@ -77,7 +77,7 @@ function vote(teamId, eventId) {
     // })
     // .then(response => {
     //     if (response.ok) {
-    //         lockVoteCard(teamId);
+    //         lockVoteCard(`#voting-card-team${teamId}`, `#voting-button-team${teamId}`);
     //     } else {
     //         response.text().then(text => alert(text));
     //     }
@@ -93,7 +93,7 @@ function addVoteCards(teams, eventId) {
 
         $("#voting-cards").append(
         `
-<div id="voting-card-team${teamId}" class="voting-card">
+<div id="voting-card-team${teamId}" class="voting-card card">
     <h1>Team ${teamNum}</h1>
     <h3>${projectName}</h3>
     <label for="grade-input-team${teamId}-1">Сложность спринта</label>
@@ -106,17 +106,14 @@ function addVoteCards(teams, eventId) {
     <input class="bonus-grade" type="range" id="grade-input-team${teamId}-4" min="0" max="3" value="0">
     <label for="grade-comment-team${teamId}">Комментарий</label>
     <textarea id="grade-comment-team${teamId}" rows="2"></textarea>
-    <button id="vote-button-team${teamId}" class="black-button" type="button" onclick="vote(${teamId}, ${eventId})">Vote</button>
-    <button id="revote-button-team${teamId}" class="white-button" type="button" onclick="unlockVoteCard(${teamId})">Revote</button>
+    <button class="vote-button black-button" type="button" onclick="vote(${teamId}, ${eventId})">Vote</button>
+    <button class="revote-button white-button" type="button" onclick="unlockVoteCard('#voting-card-team${teamId}', '#voting-button-team${teamId}')">Revote</button>
 </div>
         `
         );
 
-        $(`#vote-card-team${teamId}`).css({"opacity": "0", "z-index" : "0"});
-        $(`#revote-button-team${teamId}`).hide();
-
-        $(`#voting-buttons`).append(`
-            <div class="team-button" id="voting-button-team${teamId}" onclick="showCard('voting-card-team${teamId}', 'voting-button-team${teamId}')">${teamNum}</div>
+        $(`#upper-voting-buttons`).append(`
+            <div class="voting-button team-button" id="voting-button-team${teamId}" onclick="showCard('voting-card-team${teamId}', 'voting-button-team${teamId}')">${teamNum}</div>
         `);
 
         $("#graph").append(`
@@ -127,11 +124,14 @@ function addVoteCards(teams, eventId) {
         `);
     });
 
-    $(`#voting-buttons`).append(`
-        <div class="graphs-button" id="graphs-button" onclick="updateGraph();showCard('graphs-card', 'graphs-button')">
+    $(`#upper-voting-buttons`).append(`
+        <div class="voting-button graphs-button" id="graphs-button" onclick="updateGraph();showCard('graphs-card', 'graphs-button')">
             <img src="../img/chart.png" alt="Graphs">
         </div>
     `);
+
+    $(`.card`).css({"opacity": "0", "z-index" : "0"});
+    $(`.revote-button`).hide();
 
     $(`#voting-card-team1`).addClass("active");
     $(`#voting-button-team1`).addClass("active");
@@ -184,4 +184,18 @@ function updateGraph() {
         $(this).attr("style", `--val: ${ratio * 100}; --clr: #${color};`);
         $(this).children(".value").html(`${Math.round(grade * 10) / 10}`);
     });
+}
+
+function inTeamVote(eventId) {
+    var voteResult = [];
+    $(`#in-team-voting-card > input`).each(function() {
+        var grade = $(this).val();
+        var UID = $(this).attr("-data-UID");
+        voteResult.push({"UID": UID, "grade": grade});
+    });
+    
+    console.log(voteResult);
+    // TODO: send POST request
+
+    lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
 }
