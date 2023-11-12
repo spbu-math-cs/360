@@ -9,37 +9,52 @@
 
 /* Menu buttons */
 
-.voting-buttons {
+.upper-voting-buttons,
+.lower-voting-buttons {
     background-color: #ddd;
     border-radius: 5px 5px 0 0;
     display: flex;
 }
 
+.voting-button {
+    padding: .5rem 1rem;
+}
+
 .team-button, 
 .graphs-button {
-    padding: .5rem 1rem;
+    width: 3rem;
+}
+
+.voting-button {
     box-sizing: border-box;
     text-align: center;
-    width: 3rem;
     cursor: pointer;
+    z-index: 0;
 
     transition: background-color .1s;
 }
 
+.voting-button.voted { background-color: #cceecc; }
+
+.voting-button.voted:hover { background-color: #dcf1dc; }
+
+.voting-button.voted.active:hover { background-color: white; }
+
 .graphs-button {
     margin-left: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.team-button:hover,
-.graphs-button:hover {
-    background-color: #eee;
+.graphs-button > img {
+    max-width: auto;
+    max-height: 1rem;
 }
 
-.team-button {
-    z-index: 0;
-}
+.voting-button:hover { background-color: #eee; }
 
-.team-button.active {
+.voting-button.active {
     background-color: white;
     border-radius: 5px 5px 0 0;
 
@@ -48,7 +63,17 @@
     transform-style: preserve-3d;
 }
 
-.team-button.active::after {
+.lower-voting-buttons {
+    margin: auto;
+    width: max-content;
+    border-radius: 0 0 5px 5px;
+}
+
+#in-team-voting-button {
+    border-radius: 0 0 5px 5px;
+}
+
+.voting-button.active::after {
     position: absolute;
     content: " ";
     color: transparent;
@@ -59,11 +84,23 @@
     z-index: -1;
     transform: translateZ(-1px);
     filter: blur(8px);
+    
+}
+
+.team-button.active::after {
+    clip-path: polygon(-100% -100%, 200% -100%, 200% 100%,-100% 100%);
+}
+
+.team-button.active:first-child::after {
     clip-path: polygon(-100% -100%, 200% -100%, 200% 100%, 0 100%, 0% 200%, -100% 200%);
 }
 
-.team-button.active:not(:first-child)::after {
-    clip-path: polygon(-100% -100%, 200% -100%, 200% 100%,-100% 100%);
+.graphs-button.active::after {
+    clip-path: polygon(-100% -100%, 200% -100%, 200% 200%, 100% 200%, 100% 100%, -100% 100%);
+}
+
+#in-team-voting-button.active::after {
+    clip-path: polygon(-100% 0%, 200% 0%, 200% 200%, -100% 200%);
 }
 
 /* Voting Cards */
@@ -71,30 +108,33 @@
 .voting-cards {
     padding: 2rem .5rem;
     border: 1px solid transparent;
-    border-radius: 0 5px 5px 5px;
+    border-radius: 0 0 5px 5px;
     background-color: white;
     filter: drop-shadow(5px 5px 10px rgb(0, 0, 0, 50%));
     position: relative;
     z-index: 1;
 }
 
-.voting-card {
-    display: grid;
-    grid-template-columns: 1fr;
-    text-align: center;
+.card {
     position: absolute;
     inset: 0 auto auto 0;
     margin: auto;
     opacity: 0;
     z-index: 0;
+}
+
+.voting-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    text-align: center;
 
     transition: none;
 }
 
-.voting-card.active {
+.card.active {
     position: relative;
-    opacity: 1;
-    z-index: 3;
+    opacity: 1 !important;
+    z-index: 3 !important;
     transition: opacity 1s;
 }
 
@@ -105,6 +145,11 @@
 .voting-card h3 {
     margin-top: .3rem;
     margin-bottom: .5rem;
+}
+
+.voting-card p {
+    margin-top: .5rem;
+    margin-bottom: 1rem;
 }
 
 .voting-card label {
@@ -132,4 +177,60 @@
     width: 50%;
     justify-self: center;
     margin-top: 1rem;
+}
+
+.voting-card.voted {
+    color: #666;
+}
+
+/* Graphs */
+
+.graphs-card > h2 {
+    text-align: center;
+    margin: 0 0 2rem 0;
+}
+
+.grades-graph{    
+    --item-gap: 5%;
+    --item-default-color: #060606;
+    
+    height: 20rem;
+    margin-top: auto;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: 1fr 0fr;
+    gap: var(--item-gap);
+    align-items: end;
+    padding-inline: var(--item-gap);
+    --padding-block: 1rem; /* space for labels */
+    padding-block: var(--padding-block);
+    position: relative;
+    isolation: isolate;
+
+    transition: none;
+}
+
+.graphs-card.active .grades-graph {
+    grid-template-rows: 0fr 1fr;
+
+    transition: grid-template-rows 1s ease;
+}
+
+.grades-graph > .item{
+    grid-row: 2 / -1;
+    height: calc(1% * var(--val));
+    background-color: var(--clr);
+    position: relative;
+}
+
+.grades-graph > .item > * { 
+    position: absolute; text-align: center 
+}
+
+.grades-graph > .item > .label { 
+    inset: calc(100% + .2rem) 0 auto 0 
+}
+
+.grades-graph > .item > .value { 
+    inset: auto 0 100% 0 
 }

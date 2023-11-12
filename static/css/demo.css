@@ -5,11 +5,6 @@
 }
 
 .demo-list {
-    border: 1px solid transparent;
-    border-radius: 5px;
-    background-color: white;
-    filter: drop-shadow(5px 5px 8px rgb(0, 0, 0, 20%));
-
     margin: 0 auto;
     padding: 1rem 2rem;
     max-width: 700px;

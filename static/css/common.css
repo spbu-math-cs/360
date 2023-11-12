@@ -12,7 +12,7 @@ body {
 button.black-button {
     padding: 1rem 0;
     border-radius: 5px;
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     background-color: black;
     color: white;
     font-weight: bold;
@@ -24,3 +24,26 @@ button.black-button:hover {
     background-color: #333;
     text-shadow: #ddd 0px 0px 5px;
 }
+
+button.white-button {
+    padding: 1rem 0;
+    border-radius: 5px;
+    border: 2px solid black;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+
+button.white-button:hover {
+    background-color: #eee;
+    text-shadow: #777 0px 0px 5px;
+}
+
+.white-card {
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 5px 5px 15px rgb(0, 0, 0, 20%);
+}
+
