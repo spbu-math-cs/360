@@ -1,0 +1,74 @@
++ Страницы:
+    GET /                           - home.html
+    GET /demo                       - demo.html
+    GET /about                      - about.html
+    GET /login                      - login.html
+    GET /register                   - register.html
+    GET /profile                    - profile.hbs (с подставленными именем, фамилией и отчеством)
+    GET /demo/vote?eventId=${id}    - voting.html (вернуть ошибку, если демо не в тех временных рамках)
+
+
++ GET /demo/list 
+    - получить список демо в виде 
+        [{"eventId": ..., "date": yyyy-MM-dd, "start", hh:mm, "end": hh:mm}, ...]
+
++- GET /demo/vote/teams?eventId=${eventId}
+    - получить список команд, доступных для голосования в демо eventId
+        [{"teamId": ..., "number": ..., "name": ..., "projectName": ...}, ...]
+
++ POST /demo/vote
+    - проголосовать в демо (либо же переголосовать, если голос уже есть)
+        {
+            "eventId": ...,
+            "teamId": ...,
+            "level": ...,
+            "grade": ...,
+            "presentation": ...,
+            "additional": ...,
+            "comment": ...
+        }
+
+POST /demo/vote/inteam
+    - проголосовать во внутренне-командном голосовании (либо же переголосовать, если голос уже есть)
+{
+    "eventId": ...,
+    "grades": [
+        {
+            "UID": ...,
+            "grade": ...
+        }, ...
+    ]
+}
+
+GET /profile/team/info
+    - получить информацию о команде текущего пользователя
+{
+    "id": ..., 
+    members: [
+        {"first_name": ..., 
+        "last_name": ..., 
+        "father_name": ..., 
+        "UID": ...}, ...
+    ]
+}
+
+POST /profile/team/leave
+    - выйти из команды
+
+POST /profile/team/invite {"UID": ...}
+    - отправить приглашение пользователю с UID
+
+GET /profile/team/invite
+    - получить список приглашений для текущего пользователя в виде
+        [
+            {
+                "inviteId": ...,
+                "teamNum": ...,
+                "inviter_first_name": ...,
+                "inviter_last_name": ...,
+                "inviter_UID": ...
+            }, ...
+        ]
+
+POST /profile/team/invite {"inviteId": ..., "action": 0/1} // 0 - отклонить, 1 - принять
+    - ответить на приглашение (отклонить или принять) по inviteId
