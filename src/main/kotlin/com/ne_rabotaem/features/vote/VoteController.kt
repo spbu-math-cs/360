@@ -3,16 +3,21 @@ package com.ne_rabotaem.features.vote
 import com.ne_rabotaem.database.event.Event
 import com.ne_rabotaem.database.grade.Demo_grade
 import com.ne_rabotaem.database.grade.GradeDTO
+import com.ne_rabotaem.database.person_team.InteamGrade
+import com.ne_rabotaem.database.person_team.Invite
+import com.ne_rabotaem.database.person_team.InteamGradeDTO
 import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.features.demo.GradeReceiveRemote
 import com.ne_rabotaem.utils.TokenCheck
+import com.ne_rabotaem.utils.UserId
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.mustache.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
+import java.time.LocalTime
 
 class VoteController(val call: ApplicationCall) {
     suspend fun getPage() {
@@ -38,13 +43,16 @@ class VoteController(val call: ApplicationCall) {
             return
         }
 
-        // var event = Event.fetch(eventId)
-        // NOT WORKING! (fetch(1) returns null, but event with id == 1 is in table)
-
-        if (Event.fetchAll().filter { it.eventId == eventId }.size == 0) {
+        var eventDTO = Event.fetch(eventId)
+        if (eventDTO == null) {
             call.respond(HttpStatusCode.BadRequest, "No such event!")
             return;
-        } // TODO: check, if current time not in [start, finish] (and date doesn't match), than send BadRequest
+        }
+
+        if (eventDTO.start > LocalTime.now() || eventDTO.finish < LocalTime.now()) {
+            call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
+            return
+        }
 
         call.respond(Team.fetchAll());
     }
@@ -69,8 +77,21 @@ class VoteController(val call: ApplicationCall) {
             Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login
         )!!
 
-        if (Demo_grade.fetch(grade.eventId, userId, grade.teamId) != null) {
-            call.respond(HttpStatusCode.Conflict, "You have already rated!")
+        var gradeId = Demo_grade.getId(grade.eventId, userId, grade.teamId);
+        if (gradeId != null) {
+            Demo_grade.update(
+                gradeId,
+                GradeDTO(
+                    eventId = grade.eventId,
+                    personId = userId,
+                    teamId = grade.teamId,
+                    level = grade.level,
+                    grade = grade.grade,
+                    presentation = grade.presentation,
+                    additional = grade.additional,
+                    comment = grade.comment
+                )
+            )
             return
         }
 
@@ -88,5 +109,24 @@ class VoteController(val call: ApplicationCall) {
         )
 
         call.respond(HttpStatusCode.OK)
+    }
+
+    suspend fun inteamVote() {
+        if (!TokenCheck.isTokenValid(call)) {
+            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
+            return
+        }
+
+        val inteamGradeReceiveRemote = call.receive<InteamGradeReceiveRemote>()
+
+        inteamGradeReceiveRemote.grades.forEach {
+            InteamGrade.insert(
+                InteamGradeDTO(
+                    eventId = inteamGradeReceiveRemote.eventId,
+                    evaluatorId = inteamGradeReceiveRemote.personId,
+                    assessedId = UserId.getId(TokenCheck.getToken(call)!!)!!
+                )
+            )
+        }
     }
 }

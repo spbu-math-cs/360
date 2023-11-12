@@ -49,9 +49,13 @@ object User : IntIdTable("Person") {
     }
 
     fun fetch(login: String): UserDTO? {
+        return getUserId(login)?.let { fetch(it) }
+    }
+
+    fun fetch(id: Int): UserDTO? {
         return try {
             transaction {
-                val userModel = select { User.login.eq(login) }.single()
+                val userModel = select { User.id eq id }.single()
                 UserDTO(
                     first_name = userModel[first_name],
                     last_name = userModel[last_name],
