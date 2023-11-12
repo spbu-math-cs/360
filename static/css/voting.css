@@ -22,7 +22,8 @@
 
 .team-button, 
 .graphs-button {
-    width: 3rem;
+    max-width: 3rem;
+    width: 100%;
 }
 
 .voting-button {

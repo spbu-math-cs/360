@@ -55,33 +55,33 @@ function vote(teamId, eventId) {
     var grade_4 = parseInt($(`#grade-input-team${teamId}-4`).val());
     var comment = $(`#grade-comment-team${teamId}`).val();
 
-    lockVoteCard(`#voting-card-team${teamId}`, `#voting-button-team${teamId}`);
+    // lockVoteCard(`#voting-card-team${teamId}`, `#voting-button-team${teamId}`);
 
-    // fetch('/demo/vote', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(
-    //         {
-    //             eventId: eventId,
-    //             teamId: teamId,
-    //             level: grade_1,
-    //             grade: grade_2,
-    //             presentation: grade_3,
-    //             additional: grade_4,
-    //             comment: comment
-    //         }
-    //     )
-    // })
-    // .then(response => {
-    //     if (response.ok) {
-    //         lockVoteCard(`#voting-card-team${teamId}`, `#voting-button-team${teamId}`);
-    //     } else {
-    //         response.text().then(text => alert(text));
-    //     }
-    // });
+    fetch('/demo/vote', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+            {
+                eventId: eventId,
+                teamId: teamId,
+                level: grade_1,
+                grade: grade_2,
+                presentation: grade_3,
+                additional: grade_4,
+                comment: comment
+            }
+        )
+    })
+    .then(response => {
+        if (response.ok) {
+            lockVoteCard(`#voting-card-team${teamId}`, `#voting-button-team${teamId}`);
+        } else {
+            response.text().then(text => alert(text));
+        }
+    });
 }
 
 function addVoteCards(teams, eventId) {
@@ -197,7 +197,26 @@ function inTeamVote(eventId) {
     });
     
     console.log(voteResult);
-    // TODO: send POST request
+    // lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
 
-    lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
+    fetch('/demo/vote', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+            {
+                eventId: eventId,
+                grades: voteResult
+            }
+        )
+    })
+    .then(response => {
+        if (response.ok) {
+            lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
+        } else {
+            response.text().then(text => alert(text));
+        }
+    });
 }
