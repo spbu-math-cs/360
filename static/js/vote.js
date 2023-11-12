@@ -195,7 +195,26 @@ function inTeamVote(eventId) {
     });
     
     console.log(voteResult);
-    // TODO: send POST request
-
     lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
+
+    // fetch('/demo/vote', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Accept': 'application/json',
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(
+    //         {
+    //             eventId: eventId,
+    //             grades: voteResult
+    //         }
+    //     )
+    // })
+    // .then(response => {
+    //     if (response.ok) {
+    //         lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
+    //     } else {
+    //         response.text().then(text => alert(text));
+    //     }
+    // });
 }
