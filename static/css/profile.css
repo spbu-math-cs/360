@@ -105,6 +105,13 @@ h1, h2, h3 {
     justify-self: end;
 }
 
+.invitations-card > p {
+    margin: 1rem 0 .5rem 0;
+    text-align: center;
+    font-style: italic;
+    color: #888;
+}
+
 .profile-content button {
     transition: filter .1s;
     filter: brightness(100%);
