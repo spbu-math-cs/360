@@ -51,7 +51,7 @@
             <button class="invite-button" type="button" onclick="openPopup()">Invite Members</button>
             <div class="popup">
                 <div class="search-form">
-                    <button class="round-button" type="button" onclick="closePopup();resetSearch()">⤫</button>
+                    <button class="round-button exit-button" type="button" onclick="closePopup();resetSearch()">⤫</button>
 
                     <h3>Search by ID</h3>
 
@@ -60,13 +60,7 @@
                         <input type="text" name="ID" id="id-input" placeholder="0000">
                     </div>
 
-                    <div id="search-result" class="search-result">
-                        <p id="search-result-last-name">.</p>
-                        <p id="search-result-first-name">.</p>
-                        <p id="search-result-father-name">.</p>
-                        <p id="search-result-id">.</p>
-                        <button class="round-button">+</button>
-                    </div>
+                    <button type="button" class="send-invite-button">Invite</button>
                 </div>
             </div>
 

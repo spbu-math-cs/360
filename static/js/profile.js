@@ -11,35 +11,7 @@ function closePopup() {
     $(".popup").removeClass("active");
 }
 
-function searchUser() {
-    var id = $("#id-input").val();
-    // TODO: ... GET request ...
-    var firstName = "Василий";
-    var lastName = "Можаев";
-    var fatherName = "Михайлович";
-    var id = "0002";
-    $("#search-result-last-name").html(lastName);
-    $("#search-result-first-name").html(firstName);
-    $("#search-result-father-name").html(fatherName);
-    $("#search-result-id").html("#" + id);
-    $("#search-result").children().css("visibility", "visible");          
-}
-
-function resetSearch() {
-    $("#search-result-last-name").html('.');
-    $("#search-result-first-name").html('.');
-    $("#search-result-father-name").html('.');
-    $("#search-result-id").html('.');
-    $("#search-result").children().css("visibility", "hidden");
-}
-
 $(function() {
-    $("#id-input").keypress(function(event) {
-        if(event.which == 13) {
-            searchUser();
-        }
-    });
-
     $("#id-input").inputFilter(function(value) {
         return /^\d{0,4}$/.test(value);    // Allow digits only, using a RegExp
     }, "Only digits allowed");

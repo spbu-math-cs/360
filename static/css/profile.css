@@ -176,7 +176,7 @@ h1, h2, h3 {
     font-weight: normal;
 }
 
-.search-form > button {
+.search-form > .exit-button {
     position: absolute;
     inset: .5rem .5rem auto auto;
 }
@@ -239,28 +239,30 @@ h1, h2, h3 {
     --active-border: rgb(46, 197, 91);
 }
 
-.search-result {
-    margin: 0 1rem 1rem 1rem;
+.search-form .send-invite-button {
+    display: block;
     border-radius: 5px;
-    border: 1px solid #999;
+    border: 1px solid hsl(0, 0%, 80%);
+    background-color: hsl(0, 0%, 96%);
+    color: hsl(0, 0%, 80%);
 
-    position: relative;
+    cursor: default;
+    pointer-events: none;
+
+    outline: 0px;
+    padding: .5rem 1rem;
+    margin: 1rem auto;
 }
 
-.search-result > * {
-    visibility: hidden;
-}
+.search-form:has(.search-bar.complete) .send-invite-button {
+    background-color: #75df8c;
+    border: 1px solid rgb(46, 197, 91);
+    color: white;
 
-.search-result > p {
-    margin: .5rem auto .5rem 1rem;
-}
+    cursor: pointer;
+    pointer-events: all;
 
-.search-result > button {
-    position: absolute;
-    inset: 0 1rem 0 auto;
-    margin: auto 0;
-
-    background-color: #bceaff;
+    transition: all .2s;
 }
 
 @media (min-width: 750px) {
