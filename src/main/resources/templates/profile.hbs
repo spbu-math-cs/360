@@ -29,9 +29,8 @@
             {{!-- <button type="button" disabled>Change Password</button> --}}
             <button type="button" class="log-out-button" onclick="logOut()">Log Out</button>
         </div>
-        <div class="invitations-card white-card">
+        <div id="invitations-card" class="invitations-card white-card">
             <h2>Team Invitations</h2>
-            {{!-- <p>No invitations</p> --}}
             <div class="invitation">
                 <h3>Team 4</h3>
                 <p>by Дмитрий Сидоркин</p>
@@ -41,9 +40,9 @@
         </div>
 
         {{!-- if no team, delete card --}}
-        <div class="team-card white-card">
-            <h1>Team 7</h1>
-            <ul class="team-members">
+        <div id="team-card" class="team-card white-card">
+            <h1 id="team-id">Team 7</h1>
+            <ul id="team-members" class="team-members">
                 <li>Можаев Василий #0002</li>
                 <li>Сидоркин Дмитрий #0003</li>
                 <li>Горячкин Андрей #0004</li>
@@ -67,7 +66,7 @@
                 </div>
             </div>
 
-            <button class="leave-button" type="button">Leave Team</button>
+            <button class="leave-button" type="button" onclick="leaveTeam()">Leave Team</button>
         </div>
     </div>
 
