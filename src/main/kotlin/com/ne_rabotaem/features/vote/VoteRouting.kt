@@ -29,8 +29,13 @@ fun Application.configureVoteRouting() {
             }
             else call.respond(HttpStatusCode.BadRequest, "BadRequest: Request must contain eventId.")
         }
+
         post("/demo/vote") {
             VoteController(call).vote()
+        }
+
+        post("/demo/vote/inteam") {
+            VoteController(call).inteamVote()
         }
     }
 }
