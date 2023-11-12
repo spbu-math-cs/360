@@ -52,3 +52,18 @@ $(function() {
         });
     };
 }(jQuery));
+
+function resetInput() {
+    $("#id-input").val("");
+    $(".search-bar").removeClass("complete");
+}
+
+function inviteMember() {
+    if ($(".search-bar").hasClass("complete")) {
+        var inputId = $("#id-input").val();
+        console.log(inputId);
+        // TODO: send POST request
+        resetInput();
+        closePopup();
+    }
+}

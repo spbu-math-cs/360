@@ -190,8 +190,10 @@ h1, h2, h3 {
 
     --active-background: #678EFE;
     --active-border: #275EFE;
+    --active-color: white;
     --background: hsl(0, 0%, 96%);
     --border: hsl(0, 0%, 80%);
+    --color: var(--border);
 
     margin: 1rem 0 1rem 0;
     justify-content: center;
@@ -203,7 +205,7 @@ h1, h2, h3 {
     display: block;
     line-height: 1.6rem;
     background-color: var(--background);
-    color: hsl(0, 0%, 60%);
+    color: var(--color);
     border: 1px solid var(--border);
     border-right: 0px;
     border-radius: 5px 0 0 5px;
@@ -229,7 +231,7 @@ h1, h2, h3 {
 .search-bar:has(input:focus) > span {
     background-color: var(--active-background);
     border-color: var(--active-border);
-    color: white;
+    color: var(--active-color);
 
     transition: all .2s;
 }
@@ -237,6 +239,9 @@ h1, h2, h3 {
 .search-bar.complete {
     --active-background: #75df8c;
     --active-border: rgb(46, 197, 91);
+    --background: var(--active-background);
+    --border: var(--active-border);
+    --color: var(--active-color);
 }
 
 .search-form .send-invite-button {
