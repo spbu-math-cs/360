@@ -55,10 +55,10 @@ GET /profile/team/info
 POST /profile/team/leave
     - выйти из команды
 
-POST /profile/team/invite {"UID": ...}
+POST /profile/team/invite/send {"UID": ...}
     - отправить приглашение пользователю с UID
 
-GET /profile/team/invite
+GET /profile/team/invite/list
     - получить список приглашений для текущего пользователя в виде
         [
             {
@@ -70,5 +70,5 @@ GET /profile/team/invite
             }, ...
         ]
 
-POST /profile/team/invite {"inviteId": ..., "action": 0/1} // 0 - отклонить, 1 - принять
+POST /profile/team/invite/answer {"inviteId": ..., "action": 0/1} // 0 - отклонить, 1 - принять
     - ответить на приглашение (отклонить или принять) по inviteId
