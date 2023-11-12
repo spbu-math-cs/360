@@ -47,3 +47,6 @@ button.white-button:hover {
     box-shadow: 5px 5px 15px rgb(0, 0, 0, 20%);
 }
 
+.hidden {
+    display: none !important;
+}
