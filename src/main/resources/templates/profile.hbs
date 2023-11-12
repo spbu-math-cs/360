@@ -25,30 +25,18 @@
             <h1>{{last_name}}</h1>
             <h1>{{first_name}}</h1>
             <h1>{{father_name}}</h1>
-            <p>ID: #<i>0002</i></p>
+            <p>ID: #<i>{{id}}</i></p>
             {{!-- <button type="button" disabled>Change Password</button> --}}
             <button type="button" class="log-out-button" onclick="logOut()">Log Out</button>
         </div>
         <div id="invitations-card" class="invitations-card white-card">
             <h2>Team Invitations</h2>
-            <div class="invitation">
-                <h3>Team 4</h3>
-                <p>by Дмитрий Сидоркин</p>
-                <button class="round-button accept-button" type="button">✓</button>
-                <button class="round-button decline-button" type="button">⤫</button>
-            </div>
         </div>
 
         {{!-- if no team, delete card --}}
         <div id="team-card" class="team-card white-card">
-            <h1 id="team-id">Team 7</h1>
-            <ul id="team-members" class="team-members">
-                <li>Можаев Василий #0002</li>
-                <li>Сидоркин Дмитрий #0003</li>
-                <li>Горячкин Андрей #0004</li>
-                <li>Смайт Роберт #0005</li>
-                <li>Андриянов Александр #0006</li>
-            </ul>
+            <h1 id="team-id"></h1>
+            <ul id="team-members" class="team-members"></ul>
 
             <button class="invite-button" type="button" onclick="openPopup()">Invite Members</button>
             <div class="popup">
