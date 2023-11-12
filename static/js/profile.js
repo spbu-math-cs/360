@@ -6,17 +6,16 @@ $(function() {
 });
 
 function fetchInvitations() {
-    fetch('/profile/team/invite/list', {
+    fetch('/profile/team/invite', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
     })
-    .then(response => response.json())
     .then(response => {
         if (response.ok) {
-            setInvitations(response);
+            setInvitations(response.json());
         } else {
             $("#invitations-card").append(
                 `<p>No invitations</p>`
@@ -26,6 +25,7 @@ function fetchInvitations() {
 }
 
 function setInvitations(invitations) {
+    console.log(invitations);
     invitations.forEach(invitation => {
         $("#invitations-card").append(
         `
@@ -48,10 +48,10 @@ function fetchTeamInfo() {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => response.json())
     .then(response => {
         if (response.ok) {
-            setTeamInfo(response);
+            $("#team-card").removeClass("hidden");
+            setTeamInfo(response.json());
         } else {
             $("#team-card").remove();
         }
