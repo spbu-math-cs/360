@@ -188,6 +188,11 @@ h1, h2, h3 {
     --padding-left: .8rem;
     --padding-right: .6rem;
 
+    --active-background: #678EFE;
+    --active-border: #275EFE;
+    --background: hsl(0, 0%, 96%);
+    --border: hsl(0, 0%, 80%);
+
     margin: 1rem 0 1rem 0;
     justify-content: center;
     display: flex;
@@ -197,9 +202,9 @@ h1, h2, h3 {
 .search-bar > span {
     display: block;
     line-height: 1.6rem;
-    background-color: hsl(0, 0%, 96%);
+    background-color: var(--background);
     color: hsl(0, 0%, 60%);
-    border: 1px solid hsl(0, 0%, 80%);
+    border: 1px solid var(--border);
     border-right: 0px;
     border-radius: 5px 0 0 5px;
     padding: var(--padding-top) var(--padding-right) var(--padding-bottom) var(--padding-left);
@@ -209,24 +214,29 @@ h1, h2, h3 {
     display: block;
     padding: var(--padding-top);
     width: 4rem;
-    border: 1px solid hsl(0, 0%, 80%);
+    border: 1px solid var(--border);
     border-radius: 0 5px 5px 0;
     font-variant-numeric: tabular-nums;
 }
 
 .search-bar > input:focus {
     outline: none;
-    border-color: #275EFE;
+    border-color: var(--active-border);
 
     transition: all .2s;
 }
 
 .search-bar:has(input:focus) > span {
-    background-color: #678EFE;
-    border-color: #275EFE;
+    background-color: var(--active-background);
+    border-color: var(--active-border);
     color: white;
 
     transition: all .2s;
+}
+
+.search-bar.complete {
+    --active-background: #75df8c;
+    --active-border: rgb(46, 197, 91);
 }
 
 .search-result {
