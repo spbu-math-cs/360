@@ -153,14 +153,28 @@ function fetchInteamVoting(eventId) {
     });
 }
 
-function addInteamVotingCard(team, eventId) {
+async function fetchId() {
+    return await fetch(`/profile/get_id`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    }).json()["id"];
+    
+}
+
+async function addInteamVotingCard(team, eventId) {
     var i = 1;
+    var currentUserId = 3;// await fetchId();
     team["members"].forEach(member => {
-        $("#in-team-voting-card").append(`
-            <label for="grade-member-${i}">${member["last_name"]} ${member["first_name"]}</label>
-            <input class="grade" type="range" -data-UID="${member["user_id"]}" id="grade-member-${i}" min="1" max="5">
-        `);
-        i += 1;
+        if (member["user_id"] != currentUserId) {
+            $("#in-team-voting-card").append(`
+                <label for="grade-member-${i}">${member["last_name"]} ${member["first_name"]}</label>
+                <input class="grade" type="range" -data-UID="${member["user_id"]}" id="grade-member-${i}" min="0" max="10" value="5">
+            `);
+            i += 1;
+        }
     });
 
     $("#in-team-voting-card").append(`
@@ -177,6 +191,14 @@ function preparePage() {
 
     $(`#voting-card-team1`).addClass("active");
     $(`#voting-button-team1`).addClass("active");
+
+    $(`input[type="range"]`).each(function() {
+        $(this).css("--_value", `"${$(this).val()}"`)
+    });
+    
+    $(`input[type="range"]`).on("input", function() {
+        $(this).css("--_value", `"${$(this).val()}"`);
+    });
 }
 
 var selectedCardId = "voting-card-team1";
@@ -326,27 +348,27 @@ function inTeamVote(eventId) {
         voteResult.push({"UID": UID, "grade": grade});
     });
     
-    console.log(voteResult);
-    lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
+    // console.log(voteResult);
+    // lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
 
-    // fetch('/demo/vote', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(
-    //         {
-    //             eventId: eventId,
-    //             grades: voteResult
-    //         }
-    //     )
-    // })
-    // .then(response => {
-    //     if (response.ok) {
-    //         lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
-    //     } else {
-    //         response.text().then(text => alert(text));
-    //     }
-    // });
+    fetch('/demo/vote', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+            {
+                eventId: eventId,
+                grades: voteResult
+            }
+        )
+    })
+    .then(response => {
+        if (response.ok) {
+            lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
+        } else {
+            response.text().then(text => alert(text));
+        }
+    });
 }
