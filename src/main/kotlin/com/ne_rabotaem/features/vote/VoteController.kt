@@ -89,8 +89,18 @@ class VoteController(val call: ApplicationCall) {
             call.respond(HttpStatusCode.PayloadTooLarge, "Comment length must be less than 500 symbols!")
             return
         }
-        if (grade.grade < 0 || grade.grade > 10) {
-            call.respond(HttpStatusCode.PreconditionFailed, "Grade must be in range from 0 to 10!")
+        if (grade.grade < 1 || grade.grade > 5) {
+            call.respond(HttpStatusCode.PreconditionFailed, "Grade must be in range from 1 to 5!")
+            return
+        }
+
+        var eventDTO = Event.fetch(grade.eventId)
+        if (eventDTO == null) {
+            call.respond(HttpStatusCode.BadRequest, "No such event!")
+            return;
+        }
+        if (!isDemoValid(eventDTO)) {
+            call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
             return
         }
 
@@ -113,6 +123,7 @@ class VoteController(val call: ApplicationCall) {
                     comment = grade.comment
                 )
             )
+            call.respond(HttpStatusCode.OK)
             return
         }
 
@@ -147,5 +158,7 @@ class VoteController(val call: ApplicationCall) {
                 )
             }
         }
+
+        call.respond(HttpStatusCode.OK)
     }
 }

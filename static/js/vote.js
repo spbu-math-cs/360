@@ -345,13 +345,13 @@ function inTeamVote(eventId) {
     $(`#in-team-voting-card > input`).each(function() {
         var grade = $(this).val();
         var UID = $(this).attr("-data-UID");
-        voteResult.push({"UID": UID, "grade": grade});
+        voteResult.push({"personId": UID, "grade": grade});
     });
     
     // console.log(voteResult);
     // lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
 
-    fetch('/demo/vote', {
+    fetch('/demo/vote/inteam', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

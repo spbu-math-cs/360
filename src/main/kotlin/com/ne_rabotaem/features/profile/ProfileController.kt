@@ -74,7 +74,6 @@ class ProfileController(val call: ApplicationCall) {
             return
         }
 
-        call.respond(HttpStatusCode.OK)
         PersonTeam.delete(userId!!)
         call.respond(HttpStatusCode.OK)
     }
