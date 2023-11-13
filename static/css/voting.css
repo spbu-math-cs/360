@@ -225,13 +225,25 @@
 }
 
 .grades-graph > .item > * { 
-    position: absolute; text-align: center 
+    position: absolute; text-align: center;
 }
 
 .grades-graph > .item > .label { 
-    inset: calc(100% + .2rem) 0 auto 0 
+    inset: calc(100% + .2rem) 0 auto 0;
 }
 
 .grades-graph > .item > .value { 
-    inset: auto 0 100% 0 
+    inset: auto 0 100% 0 ;
+}
+
+input[type="range"] {
+    position: relative;
+}
+
+input[type="range"]::after {
+    content: var(--_value, "0");
+    position: absolute;
+    left: calc(100% + .5rem);
+    top: 50%;
+    transform: translateY(-50%);
 }
