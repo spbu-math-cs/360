@@ -17,7 +17,7 @@ data class InviteResponceRemote(
 )
 
 @Serializable
-data class TemmatesResponseRemote(
+data class TeammatesResponseRemote(
     val teamId: Int,
     val members: List<TeammateResponseRemote>
 )

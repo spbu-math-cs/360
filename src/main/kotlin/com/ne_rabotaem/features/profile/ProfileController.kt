@@ -75,7 +75,7 @@ class ProfileController(val call: ApplicationCall) {
         //     "members" to Json.encodeToString(members)
         // )))
 
-       call.respond(Json.encodeToString(teammatesResponseRemote(teamId!!, members)))
+       call.respond(Json.encodeToString(TeammatesResponseRemote(teamId!!, members)))
         // println(Json.encodeToString(mapOf<String, String>(
         //     "teamId" to teamId!!.toString(),
         //     "members" to Json.encodeToString(members)
