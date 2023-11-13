@@ -4,6 +4,7 @@ import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -39,11 +40,7 @@ object PersonTeam : IntIdTable("Person_team") {
     fun delete(personId: Int) {
         transaction {
             val teamId: Int = select { PersonTeam.personId eq personId }.single()[teamId].value
-            deleteWhere { PersonTeam.personId eq personId }
-
-            if (select { PersonTeam.teamId eq teamId }.count() == 0L) {
-                Team.delete(teamId)
-            }
+            deleteWhere { PersonTeam.personId eq personId and (PersonTeam.teamId eq teamId) }
         }
     }
 }

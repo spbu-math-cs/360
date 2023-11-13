@@ -21,8 +21,12 @@ fun Application.configureProfileRouting() {
             ProfileController(call).getInvites()
         }
 
-        post("profile/team/invite") {
+        post("profile/team/invite/send") {
             ProfileController(call).invite()
+        }
+
+        post("profile/team/invite/answer") {
+            ProfileController(call).answer()
         }
     }
 }

@@ -3,6 +3,7 @@ package com.ne_rabotaem.features.profile
 import com.ne_rabotaem.database.person_team.Invite
 import com.ne_rabotaem.database.person_team.InviteDTO
 import com.ne_rabotaem.database.person_team.PersonTeam
+import com.ne_rabotaem.database.person_team.PersonTeamDTO
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.user.User
@@ -16,15 +17,6 @@ import io.ktor.server.response.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class Member(
-    val first_name: String,
-    val last_name: String,
-    val father_name: String,
-    val user_id: Int,
-)
 
 class ProfileController(val call: ApplicationCall) {
     private val isTokenValid: Boolean = TokenCheck.isTokenValid(call)
@@ -59,7 +51,6 @@ class ProfileController(val call: ApplicationCall) {
     suspend fun getTeam() {
         if (!isTokenValid)
             return
-        println("SUCCCCCEEESSSSSSSSS!")
 
         val teamId = PersonTeam.getTeam(userId!!)
         println("teamId $teamId, personId $userId")
@@ -68,10 +59,15 @@ class ProfileController(val call: ApplicationCall) {
             return
         }
 
-        val members = mutableListOf<Member>()
-        PersonTeam.getMembers(teamId).forEach {
-            val user = User.fetch(it)!!;
-            members += Member(user.first_name, user.last_name, user.father_name, it)
+        val members: List<TeammateResponseRemote> = PersonTeam.getMembers(teamId).map {
+            User.fetch(it)!!.run {
+                TeammateResponseRemote(
+                    user_id = it,
+                    first_name = this.first_name,
+                    last_name = this.last_name,
+                    father_name = this.father_name
+                )
+            }
         }
 
         // call.respond(Json.encodeToString(mapOf<String, String>(
@@ -91,6 +87,11 @@ class ProfileController(val call: ApplicationCall) {
         if (!isTokenValid)
             return
 
+        if (PersonTeam.getTeam(userId!!) == null) {
+            call.respond(HttpStatusCode.BadRequest, "You have not team!")
+            return
+        }
+
         PersonTeam.delete(userId!!)
         call.respond(HttpStatusCode.OK)
     }
@@ -99,7 +100,7 @@ class ProfileController(val call: ApplicationCall) {
         if (!isTokenValid)
             return
 
-        val userIdRemote = call.receive<InviteReceiveRemote>()
+        val invitedId = call.receive<InviteReceiveRemote>().UID.toInt()
         val teamId = PersonTeam.getTeam(userId!!)
 
         if (teamId == null) {
@@ -107,19 +108,43 @@ class ProfileController(val call: ApplicationCall) {
             return
         }
 
+        if (PersonTeam.getTeam(invitedId) != null) {
+            call.respond(HttpStatusCode.Conflict, "Invited man already on the team!")
+            return
+        }
+
+        if (Invite.haveInvite(teamId, invitedId)) {
+            call.respond(HttpStatusCode.BadRequest, "This man has already been invited!")
+            return
+        }
+
         Invite.insert(
             InviteDTO(
                 teamId = teamId,
                 fromWhom = userId!!,
-                toWhom = userIdRemote.userId
+                toWhom = invitedId
             )
         )
+
+        call.respond(HttpStatusCode.OK)
     }
 
     suspend fun getInvites() {
         if (!isTokenValid)
             return
 
+        println(Json.encodeToString(
+            Invite.getInvites(userId!!).map {
+                val userDTO = User.fetch(it.fromWhom)!!
+                InviteResponceRemote(
+                    inviteId = it.id,
+                    teamNum = Team.fetch(it.teamId)!!.number,
+                    inviterFirstName = userDTO.first_name,
+                    inviterLastName = userDTO.last_name,
+                    inviterUserId = it.fromWhom
+                )
+            }
+        ))
         call.respond(
             Json.encodeToString(
                 Invite.getInvites(userId!!).map {
@@ -134,5 +159,27 @@ class ProfileController(val call: ApplicationCall) {
                 }
             )
         )
+    }
+
+    suspend fun answer() {
+        val ans = call.receive<InviteAnswerReceiveRemote>()
+
+        val teamId = Invite.fetch(ans.inviteId)!!.teamId
+        Invite.delete(userId!!, teamId)
+
+        if (ans.action == 0)
+            return
+
+        if (PersonTeam.getTeam(userId!!) == null) {
+            PersonTeam.insert(
+                PersonTeamDTO(
+                    personId = userId!!,
+                    teamId = teamId
+                )
+            )
+            return
+        }
+
+        call.respond(HttpStatusCode.BadRequest, "You already have a team!")
     }
 }
