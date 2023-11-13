@@ -58,12 +58,19 @@ class ProfileController(val call: ApplicationCall) {
             return
         }
 
-        val members = mutableMapOf<Int, String>()
-        PersonTeam.getMembers(teamId).forEach {
-            members[it] = User.fetch(it)!!.run { this.last_name + " " + this.first_name + " " + this.father_name }
+        val members: List<teammateResponseRemote> = PersonTeam.getMembers(teamId).map {
+            User.fetch(it)!!.run {
+                teammateResponseRemote(
+                    userId = it,
+                    firstName = this.first_name,
+                    lastName = this.last_name,
+                    fatherName = this.father_name
+                )
+            }
         }
 
-        call.respond(Json.encodeToString(members))
+        println(Json.encodeToString(temmatesResponseRemote(userId!!, members)))
+        call.respond(Json.encodeToString(temmatesResponseRemote(userId!!, members)))
     }
 
     fun leave() {
