@@ -1,6 +1,7 @@
 package com.ne_rabotaem.features.vote
 
 import com.ne_rabotaem.database.event.Event
+import com.ne_rabotaem.database.event.EventDTO
 import com.ne_rabotaem.database.grade.Demo_grade
 import com.ne_rabotaem.database.grade.GradeDTO
 import com.ne_rabotaem.database.person_team.InteamGrade
@@ -20,11 +21,28 @@ import io.ktor.server.response.*
 import java.time.LocalTime
 
 class VoteController(val call: ApplicationCall) {
-    suspend fun getPage() {
+    
+    fun isDemoValid(eventDTO: EventDTO): Boolean {
+        return eventDTO.start < LocalTime.now() && eventDTO.finish > LocalTime.now()
+    }
+
+    suspend fun getPage(eventId: Int) {
         if (!TokenCheck.isTokenValid(call)) {
             call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
             return
         }
+
+        var eventDTO = Event.fetch(eventId)
+        if (eventDTO == null) {
+            call.respond(HttpStatusCode.BadRequest, "No such event!")
+            return;
+        }
+
+        if (!isDemoValid(eventDTO)) {
+            call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
+            return
+        }
+
         call.respond(MustacheContent("voting.html", mapOf<String, String>()))
     }
 
@@ -49,7 +67,7 @@ class VoteController(val call: ApplicationCall) {
             return;
         }
 
-        if (eventDTO.start > LocalTime.now() || eventDTO.finish < LocalTime.now()) {
+        if (!isDemoValid(eventDTO)) {
             call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
             return
         }
