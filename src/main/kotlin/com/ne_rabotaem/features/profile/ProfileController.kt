@@ -33,9 +33,6 @@ class ProfileController(val call: ApplicationCall) {
     }
 
     suspend fun getProfile() {
-        if (!isTokenValid)
-            return
-
         val userDTO = User.fetch(Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login)
         if (userDTO == null) {
             call.respond(HttpStatusCode.BadRequest, "User not found")
@@ -50,9 +47,6 @@ class ProfileController(val call: ApplicationCall) {
     }
 
     suspend fun getTeam() {
-        if (!isTokenValid)
-            return
-
         val teamId = PersonTeam.getTeam(userId!!)
         println("teamId $teamId, personId $userId")
         if (teamId == null) {
@@ -71,23 +65,10 @@ class ProfileController(val call: ApplicationCall) {
             }
         }
 
-        // call.respond(Json.encodeToString(mapOf<String, String>(
-        //     "teamId" to teamId!!.toString(),
-        //     "members" to Json.encodeToString(members)
-        // )))
-
        call.respond(Json.encodeToString(TeammatesResponseRemote(teamId!!, members)))
-        // println(Json.encodeToString(mapOf<String, String>(
-        //     "teamId" to teamId!!.toString(),
-        //     "members" to Json.encodeToString(members)
-        // )))
-        // println(Json.encodeToString(TemmatesResponseRemote(teamId!!, members)))
     }
 
     suspend fun leave() {
-        if (!isTokenValid)
-            return
-
         if (PersonTeam.getTeam(userId!!) == null) {
             call.respond(HttpStatusCode.BadRequest, "You have not team!")
             return
@@ -99,9 +80,6 @@ class ProfileController(val call: ApplicationCall) {
     }
 
     suspend fun invite() {
-        if (!isTokenValid)
-            return
-
         val invitedId = call.receive<InviteReceiveRemote>().UID.toInt()
         val teamId = PersonTeam.getTeam(userId!!)
 
@@ -136,9 +114,6 @@ class ProfileController(val call: ApplicationCall) {
     }
 
     suspend fun getInvites() {
-        if (!isTokenValid)
-            return
-
         println(Json.encodeToString(
             Invite.getInvites(userId!!).map {
                 val userDTO = User.fetch(it.fromWhom)!!
@@ -168,9 +143,6 @@ class ProfileController(val call: ApplicationCall) {
     }
 
     suspend fun answer() {
-        if (!isTokenValid)
-            return
-
         val ans = call.receive<InviteAnswerReceiveRemote>()
 
         val teamId = Invite.fetch(ans.inviteId)!!.teamId
@@ -196,9 +168,6 @@ class ProfileController(val call: ApplicationCall) {
     }
 
     suspend fun changePassword() {
-        if (!isTokenValid)
-            return
-
         val passwordReceiveRemote = call.receive<NewPasswordReceiveRemote>()
 
         if (PasswordCheck.isPasswordValid(userId!!, passwordReceiveRemote.oldPassword)!!) {
