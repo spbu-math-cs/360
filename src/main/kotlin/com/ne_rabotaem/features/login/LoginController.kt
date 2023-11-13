@@ -3,6 +3,7 @@ package com.ne_rabotaem.features.login
 import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.token.TokenDTO
 import com.ne_rabotaem.database.user.User
+import com.ne_rabotaem.utils.PasswordCheck
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.mustache.*
@@ -16,7 +17,6 @@ class LoginController(val call: ApplicationCall) {
     }
     suspend fun performLogin() {
         val loginReceiveRemote = call.receive<LoginReceiveRemote>()
-        print(loginReceiveRemote.login)
 
         val userDTO = User.fetch(loginReceiveRemote.login)
         if (userDTO == null) {

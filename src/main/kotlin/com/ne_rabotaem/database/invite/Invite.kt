@@ -64,7 +64,7 @@ object Invite : IntIdTable("Invite") {
 
     fun haveInvite(teamId: Int, personId: Int): Boolean {
         return transaction {
-            select { Invite.teamId eq teamId and (Invite.toWhom eq personId) }.count() > 0
+            select { Invite.teamId eq teamId and (toWhom eq personId) }.count() > 0
         }
     }
 
