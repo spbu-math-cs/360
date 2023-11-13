@@ -66,8 +66,7 @@ function fetchTeamInfo() {
 function setTeamInfo(team) {
     var teamId = team["teamId"];
     $("#team-id").html(`Team ${teamId}`);
-    var members = JSON.parse(team["members"]);
-    members.forEach(member => {
+    team["members"].forEach(member => {
         $("#team-members").append(
             `<li>${member["last_name"]} ${member["first_name"]} #${member["user_id"].toString().padStart(4, '0')}</li>`
         );

@@ -74,10 +74,17 @@ class ProfileController(val call: ApplicationCall) {
             members += Member(user.first_name, user.last_name, user.father_name, it)
         }
 
-        call.respond(Json.encodeToString(mapOf<String, String>(
-            "teamId" to teamId!!.toString(),
-            "members" to Json.encodeToString(members)
-        )))
+        // call.respond(Json.encodeToString(mapOf<String, String>(
+        //     "teamId" to teamId!!.toString(),
+        //     "members" to Json.encodeToString(members)
+        // )))
+
+       call.respond(Json.encodeToString(temmatesResponseRemote(teamId!!, members)))
+        // println(Json.encodeToString(mapOf<String, String>(
+        //     "teamId" to teamId!!.toString(),
+        //     "members" to Json.encodeToString(members)
+        // )))
+        // println(Json.encodeToString(TemmatesResponseRemote(teamId!!, members)))
     }
 
     fun leave() {
@@ -85,6 +92,7 @@ class ProfileController(val call: ApplicationCall) {
             return
 
         PersonTeam.delete(userId!!)
+        call.respond(HttpStatusCode.OK)
     }
 
     suspend fun invite() {

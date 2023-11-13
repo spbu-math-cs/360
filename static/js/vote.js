@@ -152,7 +152,7 @@ function fetchInteamVoting(eventId) {
 
 function addInteamVotingCard(team, eventId) {
     var i = 1;
-    JSON.parse(team["members"]).forEach(member => {
+    team["members"].forEach(member => {
         $("#in-team-voting-card").append(`
             <label for="grade-member-${i}">${member["last_name"]} ${member["first_name"]}</label>
             <input class="grade" type="range" -data-UID="${member["user_id"]}" id="grade-member-${i}" min="1" max="5">
