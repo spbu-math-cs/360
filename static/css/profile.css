@@ -166,7 +166,7 @@ h1, h2, h3 {
     display: block;
 }
 
-.popup .search-form {
+.popup > * {
     margin: auto;
     position: absolute;
     inset: 0;
@@ -183,7 +183,7 @@ h1, h2, h3 {
     font-weight: normal;
 }
 
-.search-form > .exit-button {
+.popup .exit-button {
     position: absolute;
     inset: .5rem .5rem auto auto;
 }
@@ -275,6 +275,44 @@ h1, h2, h3 {
     pointer-events: all;
 
     transition: all .2s;
+}
+
+#change-password-popup > * {
+    display: grid;
+    padding: 1rem;
+}
+
+#change-password-popup > * > h3 {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: normal;
+}
+
+#change-password-popup > * > label {
+    margin: 1rem 0 .5rem .5rem;
+}
+
+#change-password-popup > * > input {
+    padding: .5rem;
+    border: 1px solid hsl(0, 0%, 80%);
+    border-radius: 5px;
+}
+
+#change-password-submit-button {
+    display: block;
+    border-radius: 5px;
+    border: 1px solid hsl(0, 0%, 25%);
+    background-color: hsl(0, 0%, 96%);
+    color: hsl(0, 0%, 25%);
+
+    outline: 0px;
+    padding: .5rem 1rem;
+    margin: 1.5rem auto 0 auto;
+}
+
+#change-password-button {
+    background-color: #beffbc;
 }
 
 @media (min-width: 750px) {

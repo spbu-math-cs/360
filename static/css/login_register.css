@@ -56,11 +56,6 @@ form input {
     transition: background-color 2s ease;
 }
 
-form input[type="password"]{
-    font-family: caption;
-    letter-spacing: 3px;
-}
-
 label {
     margin-bottom: .4rem;
     margin-left: .5rem;

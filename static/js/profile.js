@@ -106,13 +106,13 @@ function logOut() {
     window.location.href = "/";
 }
 
-function openPopup() {
-    $(".popup").addClass("active");
-    $("#id-input").focus();
+function openPopup(popupId) {
+    $(`${popupId}`).addClass("active");
+    $(`${popupId} input`)[0].focus();
 }
 
-function closePopup() {
-    $(".popup").removeClass("active");
+function closePopup(popupId) {
+    $(`${popupId}`).removeClass("active");
 }
 
 $(function() {
@@ -165,9 +165,9 @@ $(function() {
     };
 }(jQuery));
 
-function resetInput() {
-    $("#id-input").val("");
-    $(".search-bar").removeClass("complete");
+function resetInput(popupId) {
+    $(`${popupId} > input`).val("");
+    $(`${popupId} .search-bar`).removeClass("complete");
 }
 
 function inviteMember() {
