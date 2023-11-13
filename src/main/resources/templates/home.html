@@ -13,11 +13,29 @@
     <script src="../js/cookie.js"></script>
     <script src="../js/navbar.js"></script>
 	<script src="../js/redirects.js"></script>
-
+	
 </head>
 
 <body class="body-home-page with-nav-bar">
     <nav> <!-- will be loaded by navbar.js --> </nav>
+	<div class="joebiden">
+		<div class="login100-pic js-tilt" style="margin: 100px" data-tilt>
+			<center>
+				<img src="img/logo.png" class="js-tilt" alt="IMG">
+			</center>
+		</div>
+	</div>
+	
+	<style>
+		.joebiden {
+			transition: 2s;
+			transform: rotate(0deg);
+		}
+		.joebiden:active {
+			transform: rotate(720deg);
+			transition: 2s;
+		}
+	</style>
 </body>
 
 </html>
