@@ -29,7 +29,7 @@ fun Application.configureProfileRouting() {
             ProfileController(call).answer()
         }
 
-        post("profile/team/change/password") {
+        post("profile/change/password") {
             ProfileController(call).changePassword()
         }
     }

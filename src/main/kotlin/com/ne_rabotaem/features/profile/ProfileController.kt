@@ -172,6 +172,7 @@ class ProfileController(val call: ApplicationCall) {
 
         if (PasswordCheck.isPasswordValid(userId!!, passwordReceiveRemote.oldPassword)!!) {
             User.updatePassword(userId!!, passwordReceiveRemote.newPassword)
+            call.respond(HttpStatusCode.OK)    
             return
         }
 

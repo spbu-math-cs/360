@@ -215,3 +215,45 @@ function leaveTeam() {
         }
     });
 }
+
+function setPasswordMessage(message, status) {
+    if (status) {
+        $("#password-status").addClass("success");
+    } else {
+        $("#password-status").removeClass("success");
+    }
+
+    $("#password-status").html(message);
+}
+
+function changePassword() {
+    console.log("123");
+    var oldPassword = $("#old-password").val();
+    var newPassword = $("#new-password").val();
+    if (oldPassword == newPassword) {
+        setPasswordMessage("The new password cannot be the same as the old password", false);
+        return;
+    }
+    fetch('/profile/change/password', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+            {
+                oldPassword: oldPassword,
+                newPassword: newPassword
+            }
+        )
+    })
+    .then(response => {
+        if (response.ok) {
+            setPasswordMessage("You have successfully changed your password", true);
+        } else if (response.status == 400) {
+            setPasswordMessage("Wrong password!", false);
+        } else {
+            response.text().then(text => alert(text));
+        }
+    });
+}

@@ -29,7 +29,7 @@
             <button id="change-password-button" onclick="openPopup('#change-password-popup')" type="button">Change Password</button>
             <div id="change-password-popup" class="popup">
                 <div>
-                    <button class="round-button exit-button" type="button" onclick="closePopup('#change-password-popup');resetInput('#change-password-popup')">⤫</button>
+                    <button class="round-button exit-button" type="button" onclick="closePopup('#change-password-popup');resetInput('#change-password-popup');setPasswordMessage('',false)">⤫</button>
 
                     <h3>Change Password</h3>
 
@@ -39,6 +39,8 @@
                     <label for="old-password">New Password</label>
                     <input type="password" name="New Password" id="new-password">
 
+                    <p id="password-status" class="success"></p>
+    
                     <button id="change-password-submit-button" type="button" onclick="changePassword()">Change Password</button>
                 </div>
             </div>
