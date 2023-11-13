@@ -167,8 +167,10 @@ class ProfileController(val call: ApplicationCall) {
         val teamId = Invite.fetch(ans.inviteId)!!.teamId
         Invite.delete(userId!!, teamId)
 
-        if (ans.action == 0)
+        if (ans.action == 0) {
+            call.respond(HttpStatusCode.OK)
             return
+        }
 
         if (PersonTeam.getTeam(userId!!) == null) {
             PersonTeam.insert(
@@ -177,6 +179,7 @@ class ProfileController(val call: ApplicationCall) {
                     teamId = teamId
                 )
             )
+            call.respond(HttpStatusCode.OK)
             return
         }
 

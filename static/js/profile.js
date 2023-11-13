@@ -89,12 +89,12 @@ function answerInvitation(inviteId, action) {
     })
     .then(response => {
         if (response.ok) {
-            location.reload();
-            // if (action == 1) {
-            //     location.reload();
-            // } else {
-            //     $(`#invitation-${inviteId}`).remove();
-            // }
+            // location.reload();
+            if (action == 1) {
+                location.reload();
+            } else {
+                $(`#invitation-${inviteId}`).remove();
+            }
         } else {
             response.text().then(text => alert(text));
         }
@@ -127,6 +127,14 @@ $(function() {
             $(".search-bar").removeClass("complete");
         }
     })
+
+    $("#id-input").on("keypress", function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            // Trigger the button element with a click
+           $("#send-invite-button").click();
+          }
+    });
 });
 
 // Restricts input for the set of matched elements to the given inputFilter function.

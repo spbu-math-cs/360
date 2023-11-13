@@ -42,6 +42,9 @@ function fetchTeams(eventId) {
             response.json().then(responseJson => {
                 addVoteCards(responseJson, eventId);
             })
+        } else if (response.status == 409) {
+            alert("You must be on a team to vote.");
+            location.href = "/demo";
         } else {
             response.text().then(text => alert(text));
         }
