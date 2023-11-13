@@ -31,7 +31,7 @@ function setInvitations(invitations) {
         `
         <div class="invitation">
             <h3>Team ${invitation["teamNum"]}</h3>
-            <p>by ${invitation["inviter_first_name"]} ${invitation["inviter_last_name"]}</p>
+            <p>by ${invitation["inviterFirstName"]} ${invitation["inviterLastName"]}</p>
             <button class="round-button accept-button" onclick="answerInvitation(${invitation["inviteId"]}, 1)" type="button">✓</button>
             <button class="round-button decline-button" onclick="answerInvitation(${invitation["inviteId"]}, 0)" type="button">⤫</button>
         </div>    
