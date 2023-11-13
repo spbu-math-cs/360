@@ -86,6 +86,9 @@ truncate Token restart identity cascade;
 truncate Event restart identity cascade;
 truncate Team restart identity cascade;
 truncate Demo_grade restart identity cascade;
+truncate Person_team restart identity cascade;
+truncate Invite restart identity cascade;
+truncate Inteam_grade restart identity cascade;
 
 -- SHOW TABLES
 select * from Person;
@@ -116,4 +119,4 @@ insert into Team (number, name, project_name, teacher_id) values
 (6, 'Team 6', 'GiveGift', 1),
 (7, 'Team 7', '360', 1);
 
-insert into Event values (1, event_type 'demo', date '17-10-2023', time '11:15', time '12:50');
+insert into Event values (2, event_type 'demo', date '13-11-2023', time '11:15', time '12:50');

@@ -83,9 +83,14 @@ class ProfileController(val call: ApplicationCall) {
         println(Json.encodeToString(TemmatesResponseRemote(teamId!!, members)))
     }
 
-    fun leave() {
+    suspend fun leave() {
         if (!isTokenValid)
             return
+
+        if (PersonTeam.getTeam(userId!!) == null) {
+            call.respond(HttpStatusCode.BadRequest, "You have not team!")
+            return
+        }
 
         PersonTeam.delete(userId!!)
     }
@@ -94,8 +99,7 @@ class ProfileController(val call: ApplicationCall) {
         if (!isTokenValid)
             return
 
-        val userIdStr = call.receive<InviteReceiveRemote>()
-        println(userIdStr.UID.toInt())
+        val invitedId = call.receive<InviteReceiveRemote>().UID.toInt()
         val teamId = PersonTeam.getTeam(userId!!)
 
         if (teamId == null) {
@@ -103,13 +107,25 @@ class ProfileController(val call: ApplicationCall) {
             return
         }
 
+        if (PersonTeam.getTeam(invitedId) != null) {
+            call.respond(HttpStatusCode.Conflict, "Invited man already on the team!")
+            return
+        }
+
+        if (Invite.haveInvite(teamId, invitedId)) {
+            call.respond(HttpStatusCode.BadRequest, "This man has already been invited!")
+            return
+        }
+
         Invite.insert(
             InviteDTO(
                 teamId = teamId,
                 fromWhom = userId!!,
-                toWhom = userIdStr.UID.toInt()
+                toWhom = invitedId
             )
         )
+
+        call.respond(HttpStatusCode.OK)
     }
 
     suspend fun getInvites() {
