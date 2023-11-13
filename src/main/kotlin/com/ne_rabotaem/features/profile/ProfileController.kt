@@ -16,6 +16,15 @@ import io.ktor.server.response.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class Member(
+    val first_name: String,
+    val last_name: String,
+    val father_name: String,
+    val user_id: Int,
+)
 
 class ProfileController(val call: ApplicationCall) {
     private val isTokenValid: Boolean = TokenCheck.isTokenValid(call)
@@ -42,7 +51,8 @@ class ProfileController(val call: ApplicationCall) {
         call.respond(MustacheContent("profile.hbs", mapOf<String, String>(
             "first_name" to userDTO!!.first_name,
             "last_name" to userDTO!!.last_name,
-            "father_name" to userDTO!!.father_name
+            "father_name" to userDTO!!.father_name,
+            "user_id" to User.getUserId(userDTO!!.login)!!.toString().padStart(4, '0')
         )))
     }
 
@@ -58,12 +68,16 @@ class ProfileController(val call: ApplicationCall) {
             return
         }
 
-        val members = mutableMapOf<Int, String>()
+        val members = mutableListOf<Member>()
         PersonTeam.getMembers(teamId).forEach {
-            members[it] = User.fetch(it)!!.run { this.last_name + " " + this.first_name + " " + this.father_name }
+            val user = User.fetch(it)!!;
+            members += Member(user.first_name, user.last_name, user.father_name, it)
         }
 
-        call.respond(Json.encodeToString(members))
+        call.respond(Json.encodeToString(mapOf<String, String>(
+            "teamId" to teamId!!.toString(),
+            "members" to Json.encodeToString(members)
+        )))
     }
 
     fun leave() {
