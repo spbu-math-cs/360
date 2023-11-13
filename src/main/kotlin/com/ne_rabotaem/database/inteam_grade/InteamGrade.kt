@@ -40,7 +40,7 @@ object InteamGrade : IntIdTable("Inteam_grade") {
         return transaction {
             select { InteamGrade.eventId eq evendId and
                     (InteamGrade.evaluatorId eq evaluatorId) and
-                    (InteamGrade.assessedId eq assessedId) }.single()[InteamGrade.id].value
+                    (InteamGrade.assessedId eq assessedId) }.singleOrNull()?.get(InteamGrade.id)?.value
         }
     }
 
