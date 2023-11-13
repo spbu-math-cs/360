@@ -7,7 +7,8 @@ $(document).ready(function() {
         window.location.href = "/demo";
         return;
     }
-    getTeamsOnDemo(parseInt(eventId));
+
+    fetchTeams(parseInt(eventId));
 })
 
 function lockVoteCard(cardId, buttonId) {
@@ -28,8 +29,7 @@ function unlockVoteCard(cardId, buttonId) {
     $(`${buttonId}`).removeClass("voted");
 }
 
-function getTeamsOnDemo(eventId) {
-    console.log("demoId = " + eventId);
+function fetchTeams(eventId) {
     fetch(`/demo/vote/teams?eventId=${eventId}`, {
         method: 'GET',
         headers: {
@@ -54,8 +54,6 @@ function vote(teamId, eventId) {
     var grade_3 = parseInt($(`#grade-input-team${teamId}-3`).val());
     var grade_4 = parseInt($(`#grade-input-team${teamId}-4`).val());
     var comment = $(`#grade-comment-team${teamId}`).val();
-
-    // lockVoteCard(`#voting-card-team${teamId}`, `#voting-button-team${teamId}`);
 
     fetch('/demo/vote', {
         method: 'POST',
@@ -85,9 +83,7 @@ function vote(teamId, eventId) {
 }
 
 function addVoteCards(teams, eventId) {
-    console.log(teams);
     teams.forEach(team => {
-        console.log(team);
         var teamId = team["teamId"];
         var teamNum = team["number"];
         var teamName = team["name"];
@@ -132,12 +128,52 @@ function addVoteCards(teams, eventId) {
         </div>
     `);
 
+    fetchInteamVoting(parseInt(eventId));
+}
+
+function fetchInteamVoting(eventId) {
+    fetch(`/profile/team/info`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            response.json().then(responseJson => {
+                addInteamVotingCard(responseJson, eventId);
+            })
+        } else {
+            response.text().then(text => alert(text));
+        }
+    });
+}
+
+function addInteamVotingCard(team, eventId) {
+    var i = 1;
+    JSON.parse(team["members"]).forEach(member => {
+        $("#in-team-voting-card").append(`
+            <label for="grade-member-${i}">${member["last_name"]} ${member["first_name"]}</label>
+            <input class="grade" type="range" -data-UID="${member["user_id"]}" id="grade-member-${i}" min="1" max="5">
+        `);
+        i += 1;
+    });
+
+    $("#in-team-voting-card").append(`
+        <button class="vote-button black-button" type="button" onclick="inTeamVote(${eventId})">Vote</button>
+        <button class="revote-button white-button" type="button" onclick="unlockVoteCard('#in-team-voting-card', '#in-team-voting-button')">Revote</button>
+    `);
+
+    preparePage();
+}
+
+function preparePage() {
     $(`.card`).css({"opacity": "0", "z-index" : "0"});
     $(`.revote-button`).hide();
 
     $(`#voting-card-team1`).addClass("active");
     $(`#voting-button-team1`).addClass("active");
-
 }
 
 var selectedCardId = "voting-card-team1";
@@ -195,9 +231,6 @@ function inTeamVote(eventId) {
         var UID = $(this).attr("-data-UID");
         voteResult.push({"UID": UID, "grade": grade});
     });
-    
-    console.log(voteResult);
-    // lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
 
     fetch('/demo/vote', {
         method: 'POST',
