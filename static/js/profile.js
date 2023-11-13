@@ -13,9 +13,9 @@ function fetchInvitations() {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
+    .then(async (response) => {
         if (response.ok) {
-            setInvitations(response.json());
+            setInvitations(await response.json());
         } else {
             $("#invitations-card").append(
                 `<p>No invitations</p>`
@@ -48,10 +48,10 @@ function fetchTeamInfo() {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
+    .then(async (response) => {
         if (response.ok) {
             $("#team-card").removeClass("hidden");
-            setTeamInfo(response.json());
+            setTeamInfo(await response.json());
         } else {
             $("#team-card").remove();
         }
@@ -59,11 +59,12 @@ function fetchTeamInfo() {
 }
 
 function setTeamInfo(team) {
-    var teamId = team["id"];
+    var teamId = team["teamId"];
     $("#team-id").html(`Team ${teamId}`);
-    team.members.forEach(member => {
+    var members = JSON.parse(team["members"]);
+    members.forEach(member => {
         $("#team-members").append(
-            `<li>${member["last_name"]} ${member["first_name"]}} #${member["UID"]}}</li>`
+            `<li>${member["last_name"]} ${member["first_name"]} #${member["user_id"].toString().padStart(4, '0')}</li>`
         );
     });
 }

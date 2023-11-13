@@ -11,6 +11,9 @@ drop table if exists Token;
 drop table if exists Event;
 drop table if exists Team;
 drop table if exists Demo_grade;
+drop table if exists Person_team;
+drop table if exists Invite;
+drop table if exists Inteam_grade;
 
 -- CREATE TABLES
 create table if not exists Person(
@@ -57,6 +60,26 @@ create table if not exists Demo_grade(
 	comment varchar(500)
 );
 
+create table if not exists Person_team(
+	id serial primary key,
+	person_id serial references Person(id),
+	team_id serial references Team(id)
+);
+
+create table if not exists Invite(
+	id serial primary key,
+	team_id serial references Team(id),
+	from_whom serial references Person(id),
+	to_whom serial references Person(id)
+);
+
+create table if not exists Inteam_grade(
+	id serial primary key,
+	event_id serial references Event(id),
+	evaluator_id serial references Person(id),
+	assessed_id serial references Person(id)
+);
+
 -- CLEAR TABLES
 truncate Person restart identity cascade;
 truncate Token restart identity cascade;
@@ -70,6 +93,9 @@ select * from Token;
 select * from Event;
 select * from Team;
 select * from Demo_grade;
+select * from Person_team;
+select * from Invite;
+select * from Inteam_grade;
 
 SELECT SESSION_USER, CURRENT_USER;
 

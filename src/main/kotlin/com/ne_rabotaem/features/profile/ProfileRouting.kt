@@ -6,8 +6,23 @@ import io.ktor.server.routing.*
 fun Application.configureProfileRouting() {
     routing {
         get("/profile") {
-            val profileController = ProfileController(call)
-            profileController.getProfile(call)
+            ProfileController(call).getProfile()
+        }
+
+        get("/profile/team/info") {
+            ProfileController(call).getTeam()
+        }
+
+        post("profile/team/leave") {
+            ProfileController(call).leave()
+        }
+
+        get("profile/team/invite") {
+            ProfileController(call).getInvites()
+        }
+
+        post("profile/team/invite") {
+            ProfileController(call).invite()
         }
     }
 }

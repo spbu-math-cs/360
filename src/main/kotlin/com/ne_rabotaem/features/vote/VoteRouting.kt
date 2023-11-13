@@ -8,7 +8,10 @@ import io.ktor.server.routing.*
 fun Application.configureVoteRouting() {
     routing {
         get("/demo/vote") {
-            VoteController(call).getPage()
+            if (call.request.queryParameters.contains("eventId")) {
+                VoteController(call).getPage(Integer.parseInt(call.request.queryParameters["eventId"]!!))
+            }
+            else call.respond(HttpStatusCode.BadRequest, "BadRequest: Request must contain eventId.")
         }
 
         // get("/demo/vote/grades") {
@@ -29,8 +32,13 @@ fun Application.configureVoteRouting() {
             }
             else call.respond(HttpStatusCode.BadRequest, "BadRequest: Request must contain eventId.")
         }
+
         post("/demo/vote") {
             VoteController(call).vote()
+        }
+
+        post("/demo/vote/inteam") {
+            VoteController(call).inteamVote()
         }
     }
 }

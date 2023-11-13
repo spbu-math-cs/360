@@ -9,6 +9,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 object Demo_grade : IntIdTable("Demo_grade") {
     private val eventId = reference("event_id", Event.id)
@@ -52,7 +53,8 @@ object Demo_grade : IntIdTable("Demo_grade") {
         }
     }
 
-    fun fetch(eventId: Int, userId: Int, teamId: Int): GradeDTO? {
+    // needs a test
+    fun getId(eventId: Int, userId: Int, teamId: Int): Int? {
         return transaction {
             val query = Demo_grade.select {
                 Demo_grade.eventId.eq(eventId) and Demo_grade.personId.eq(userId) and Demo_grade.teamId.eq(teamId)
@@ -61,16 +63,19 @@ object Demo_grade : IntIdTable("Demo_grade") {
                 return@transaction null
 
             query.single().run {
-                GradeDTO(
-                    eventId,
-                    userId,
-                    teamId,
-                    this[level],
-                    this[grade],
-                    this[presentation],
-                    this[additional],
-                    this[comment]
-                )
+                this[Demo_grade.id].value
+            }
+        }
+    }
+
+    fun update(gradeId: Int, gradeDTO: GradeDTO) {
+        transaction {
+            update( { Demo_grade.id eq gradeId } ) {
+                it[level] = gradeDTO.level
+                it[grade] = gradeDTO.grade
+                it[presentation] = gradeDTO.presentation
+                it[additional] = gradeDTO.additional
+                it[comment] = gradeDTO.comment.orEmpty()
             }
         }
     }
