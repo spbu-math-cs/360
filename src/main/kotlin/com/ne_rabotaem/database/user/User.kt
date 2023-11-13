@@ -82,4 +82,12 @@ object User : IntIdTable("Person") {
             userModel[User.id].value
         }
     }
+
+    fun updatePassword(userId: Int, password: String) {
+        transaction {
+            update ({ User.id eq userId }) {
+                it[User.password] = password
+            }
+        }
+    }
 }

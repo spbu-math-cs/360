@@ -34,3 +34,9 @@ data class InviteAnswerReceiveRemote(
     val inviteId: Int,
     val action: Int
 )
+
+@Serializable
+data class NewPasswordReceiveRemote(
+    val oldPassword: String,
+    val newPassword: String
+)
