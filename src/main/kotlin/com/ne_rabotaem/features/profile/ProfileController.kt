@@ -7,6 +7,7 @@ import com.ne_rabotaem.database.person_team.PersonTeamDTO
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.user.User
+import com.ne_rabotaem.utils.PasswordCheck
 import com.ne_rabotaem.utils.TokenCheck
 import com.ne_rabotaem.utils.UserId
 import io.ktor.http.*
@@ -19,7 +20,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class ProfileController(val call: ApplicationCall) {
-    private val isTokenValid: Boolean = TokenCheck.isTokenValid(call)
+    private val isTokenValid get() = TokenCheck.isTokenValid(call)
     private var userId: Int? = UserId.getId(call)
 
     init {
@@ -32,9 +33,6 @@ class ProfileController(val call: ApplicationCall) {
     }
 
     suspend fun getProfile() {
-        if (!isTokenValid)
-            return
-
         val userDTO = User.fetch(Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login)
         if (userDTO == null) {
             call.respond(HttpStatusCode.BadRequest, "User not found")
@@ -49,9 +47,6 @@ class ProfileController(val call: ApplicationCall) {
     }
 
     suspend fun getTeam() {
-        if (!isTokenValid)
-            return
-
         val teamId = PersonTeam.getTeam(userId!!)
         println("teamId $teamId, personId $userId")
         if (teamId == null) {
@@ -70,38 +65,27 @@ class ProfileController(val call: ApplicationCall) {
             }
         }
 
-        // call.respond(Json.encodeToString(mapOf<String, String>(
-        //     "teamId" to teamId!!.toString(),
-        //     "members" to Json.encodeToString(members)
-        // )))
-
        call.respond(Json.encodeToString(TeammatesResponseRemote(teamId!!, members)))
-        // println(Json.encodeToString(mapOf<String, String>(
-        //     "teamId" to teamId!!.toString(),
-        //     "members" to Json.encodeToString(members)
-        // )))
-        // println(Json.encodeToString(TemmatesResponseRemote(teamId!!, members)))
     }
 
     suspend fun leave() {
-        if (!isTokenValid)
-            return
-
         if (PersonTeam.getTeam(userId!!) == null) {
             call.respond(HttpStatusCode.BadRequest, "You have not team!")
             return
         }
 
+        call.respond(HttpStatusCode.OK)
         PersonTeam.delete(userId!!)
         call.respond(HttpStatusCode.OK)
     }
 
     suspend fun invite() {
-        if (!isTokenValid)
-            return
-
         val invitedId = call.receive<InviteReceiveRemote>().UID.toInt()
         val teamId = PersonTeam.getTeam(userId!!)
+
+        if (userId!! == invitedId) {
+            call.respond(HttpStatusCode(403, "Self-invitation"), "You can not invite yourself!")
+        }
 
         if (teamId == null) {
             call.respond(HttpStatusCode.BadRequest, "You must have a team!")
@@ -114,7 +98,7 @@ class ProfileController(val call: ApplicationCall) {
         }
 
         if (Invite.haveInvite(teamId, invitedId)) {
-            call.respond(HttpStatusCode.BadRequest, "This man has already been invited!")
+            call.respond(HttpStatusCode(402, "Double invite"), "This man has already been invited!")
             return
         }
 
@@ -130,9 +114,6 @@ class ProfileController(val call: ApplicationCall) {
     }
 
     suspend fun getInvites() {
-        if (!isTokenValid)
-            return
-
         println(Json.encodeToString(
             Invite.getInvites(userId!!).map {
                 val userDTO = User.fetch(it.fromWhom)!!
@@ -184,5 +165,16 @@ class ProfileController(val call: ApplicationCall) {
         }
 
         call.respond(HttpStatusCode.BadRequest, "You already have a team!")
+    }
+
+    suspend fun changePassword() {
+        val passwordReceiveRemote = call.receive<NewPasswordReceiveRemote>()
+
+        if (PasswordCheck.isPasswordValid(userId!!, passwordReceiveRemote.oldPassword)!!) {
+            User.updatePassword(userId!!, passwordReceiveRemote.newPassword)
+            return
+        }
+
+        call.respond(HttpStatusCode.BadRequest, "Wrong password!")
     }
 }

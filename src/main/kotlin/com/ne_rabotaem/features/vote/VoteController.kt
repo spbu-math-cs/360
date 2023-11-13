@@ -20,20 +20,26 @@ import io.ktor.server.application.*
 import io.ktor.server.mustache.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
+import kotlinx.coroutines.runBlocking
 import java.time.LocalTime
 
 class VoteController(val call: ApplicationCall) {
-    
+    private val isTokenValid get() = TokenCheck.isTokenValid(call)
+    private var userId: Int? = UserId.getId(call)
+
+    init {
+        runBlocking {
+            if (!isTokenValid) {
+                call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
+                return@runBlocking
+            }
+        }
+    }
     fun isDemoValid(eventDTO: EventDTO): Boolean {
         return eventDTO.start < LocalTime.now() && eventDTO.finish > LocalTime.now()
     }
 
     suspend fun getPage(eventId: Int) {
-        if (!TokenCheck.isTokenValid(call)) {
-            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
-            return
-        }
-
         var eventDTO = Event.fetch(eventId)
         if (eventDTO == null) {
             call.respond(HttpStatusCode.BadRequest, "No such event!")
@@ -49,20 +55,10 @@ class VoteController(val call: ApplicationCall) {
     }
 
     suspend fun getDemo(id: Int) {
-        if (!TokenCheck.isTokenValid(call)) {
-            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
-            return
-        }
-
         call.respond(Demo_grade.fetch(id).groupBy { it.teamId })
     }
 
     suspend fun getTeams(eventId: Int) {
-        if (!TokenCheck.isTokenValid(call)) {
-            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
-            return
-        }
-
         val userId = User.getUserId(
             Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login
         )!!
@@ -88,11 +84,6 @@ class VoteController(val call: ApplicationCall) {
     }
 
     suspend fun vote() {
-        if (!TokenCheck.isTokenValid(call)) {
-            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
-            return
-        }
-
         val grade = call.receive<GradeReceiveRemote>()
         if (grade.comment.length > 500) {
             call.respond(HttpStatusCode.PayloadTooLarge, "Comment length must be less than 500 symbols!")
@@ -142,21 +133,19 @@ class VoteController(val call: ApplicationCall) {
     }
 
     suspend fun inteamVote() {
-        if (!TokenCheck.isTokenValid(call)) {
-            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
-            return
-        }
-
         val inteamGradeReceiveRemote = call.receive<InteamGradeReceiveRemote>()
 
         inteamGradeReceiveRemote.grades.forEach {
-            InteamGrade.insert(
-                InteamGradeDTO(
-                    eventId = inteamGradeReceiveRemote.eventId,
-                    evaluatorId = inteamGradeReceiveRemote.personId,
-                    assessedId = UserId.getId(TokenCheck.getToken(call)!!)!!
+            if (userId!! != it.personId) {
+                InteamGrade.insertOrUpdate(
+                    InteamGradeDTO(
+                        eventId = inteamGradeReceiveRemote.eventId,
+                        evaluatorId = userId!!,
+                        assessedId = it.personId,
+                        grade = it.grade
+                    )
                 )
-            )
+            }
         }
     }
 }
