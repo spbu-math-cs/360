@@ -37,7 +37,7 @@ class ProfileController(val call: ApplicationCall) {
 
         val userDTO = User.fetch(Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login)
         if (userDTO == null) {
-            call.respond(HttpStatusCode.BadRequest, "User not found")
+            call.respond(HttpStatusCode.BadRequest, "User was not found")
         }
 
         call.respond(MustacheContent("profile.hbs", mapOf<String, String>(
@@ -55,7 +55,7 @@ class ProfileController(val call: ApplicationCall) {
         val teamId = PersonTeam.getTeam(userId!!)
         println("teamId $teamId, personId $userId")
         if (teamId == null) {
-            call.respond(HttpStatusCode.BadRequest, "Your team not found!")
+            call.respond(HttpStatusCode.BadRequest, "Your team was not found!")
             return
         }
 
@@ -88,7 +88,7 @@ class ProfileController(val call: ApplicationCall) {
             return
 
         if (PersonTeam.getTeam(userId!!) == null) {
-            call.respond(HttpStatusCode.BadRequest, "You have not team!")
+            call.respond(HttpStatusCode.BadRequest, "You're not a member of any team!")
             return
         }
 
@@ -104,17 +104,17 @@ class ProfileController(val call: ApplicationCall) {
         val teamId = PersonTeam.getTeam(userId!!)
 
         if (teamId == null) {
-            call.respond(HttpStatusCode.BadRequest, "You must have a team!")
+            call.respond(HttpStatusCode.BadRequest, "You must be a member of the team!")
             return
         }
 
         if (PersonTeam.getTeam(invitedId) != null) {
-            call.respond(HttpStatusCode.Conflict, "Invited man already on the team!")
+            call.respond(HttpStatusCode.Conflict, "This user is already a member of the team!")
             return
         }
 
         if (Invite.haveInvite(teamId, invitedId)) {
-            call.respond(HttpStatusCode.BadRequest, "This man has already been invited!")
+            call.respond(HttpStatusCode.BadRequest, "This user has already been invited to your team!")
             return
         }
 
@@ -183,6 +183,6 @@ class ProfileController(val call: ApplicationCall) {
             return
         }
 
-        call.respond(HttpStatusCode.BadRequest, "You already have a team!")
+        call.respond(HttpStatusCode.BadRequest, "You're already a member of the team!")
     }
 }

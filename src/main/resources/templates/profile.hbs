@@ -26,7 +26,22 @@
             <h1>{{first_name}}</h1>
             <h1>{{father_name}}</h1>
             <p>ID: #<i>{{user_id}}</i></p>
-            {{!-- <button type="button" disabled>Change Password</button> --}}
+            <button id="change-password-button" onclick="openPopup('#change-password-popup')" type="button">Change Password</button>
+            <div id="change-password-popup" class="popup">
+                <div>
+                    <button class="round-button exit-button" type="button" onclick="closePopup('#change-password-popup');resetInput('#change-password-popup')">⤫</button>
+
+                    <h3>Change Password</h3>
+
+                    <label for="old-password">Old Password</label>
+                    <input type="password" name="Old Password" id="old-password">
+
+                    <label for="old-password">New Password</label>
+                    <input type="password" name="New Password" id="new-password">
+
+                    <button id="change-password-submit-button" type="button" onclick="changePassword()">Change Password</button>
+                </div>
+            </div>
             <button type="button" class="log-out-button" onclick="logOut()">Log Out</button>
         </div>
         <div id="invitations-card" class="invitations-card white-card">
@@ -38,10 +53,10 @@
             <h1 id="team-id"></h1>
             <ul id="team-members" class="team-members"></ul>
 
-            <button class="invite-button" type="button" onclick="openPopup()">Invite Members</button>
-            <div class="popup">
+            <button class="invite-button" type="button" onclick="openPopup('#invite-popup')">Invite Members</button>
+            <div id="invite-popup" class="popup">
                 <div class="search-form">
-                    <button class="round-button exit-button" type="button" onclick="closePopup();resetInput()">⤫</button>
+                    <button class="round-button exit-button" type="button" onclick="closePopup('#invite-popup');resetInput('#invite-popup')">⤫</button>
 
                     <h3>Search by ID</h3>
 

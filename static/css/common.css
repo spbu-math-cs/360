@@ -50,3 +50,8 @@ button.white-button:hover {
 .hidden {
     display: none !important;
 }
+
+input[type="password"]{
+    font-family: caption;
+    letter-spacing: 3px;
+}
