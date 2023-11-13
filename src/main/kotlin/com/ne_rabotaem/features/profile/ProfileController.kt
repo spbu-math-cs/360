@@ -177,4 +177,10 @@ class ProfileController(val call: ApplicationCall) {
 
         call.respond(HttpStatusCode.BadRequest, "Wrong password!")
     }
+
+    suspend fun getId() {
+        val login = Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login
+
+        call.respond("{ \"userId\": ${User.getUserId(login)!!.toString()} }")
+    }
 }

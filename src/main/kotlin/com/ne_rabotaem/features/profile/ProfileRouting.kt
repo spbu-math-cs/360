@@ -32,5 +32,9 @@ fun Application.configureProfileRouting() {
         post("profile/change/password") {
             ProfileController(call).changePassword()
         }
+
+        get("profile/id") {
+             ProfileController(call).getId()
+        }
     }
 }

@@ -189,8 +189,8 @@ function inviteMember() {
         })
         .then(response => {
             if (response.ok) {
-                resetInput();
-                closePopup();
+                resetInput("#invite-popup");
+                closePopup("#invite-popup");
             } else {
                 response.text().then(text => alert(text));
             }

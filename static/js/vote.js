@@ -145,7 +145,7 @@ function fetchInteamVoting(eventId) {
     .then(response => {
         if (response.ok) {
             response.json().then(responseJson => {
-                addInteamVotingCard(responseJson, eventId);
+                fetchId(responseJson, eventId);
             })
         } else {
             response.text().then(text => alert(text));
@@ -153,20 +153,27 @@ function fetchInteamVoting(eventId) {
     });
 }
 
-async function fetchId() {
-    return await fetch(`/profile/get_id`, {
+function fetchId(team, eventId) {
+    fetch(`/profile/id`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
-    }).json()["id"];
+    })
+    .then(async (response) => {
+        if (response.ok) {
+            addInteamVotingCard(team, eventId, await response.json());
+        } else {
+            alert(await response.text());
+        }
+    });
     
 }
 
-async function addInteamVotingCard(team, eventId) {
+async function addInteamVotingCard(team, eventId, response) {
     var i = 1;
-    var currentUserId = 3;// await fetchId();
+    var currentUserId = response["userId"];
     team["members"].forEach(member => {
         if (member["user_id"] != currentUserId) {
             $("#in-team-voting-card").append(`
