@@ -2,6 +2,7 @@ package com.ne_rabotaem.database.person_team
 
 import com.ne_rabotaem.database.event.Event
 import com.ne_rabotaem.database.team.Team
+import com.ne_rabotaem.database.team.TeamDTO
 import com.ne_rabotaem.database.user.User
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -37,6 +38,33 @@ object Invite : IntIdTable("Invite") {
                     fromWhom = it[fromWhom].value
                 )
             }
+        }
+    }
+
+    fun fetch(inviteId: Int): InviteDTO? {
+        return try {
+            transaction {
+                select { Invite.id eq inviteId }.single().run {
+                    InviteDTO(
+                        teamId = this[teamId].value,
+                        fromWhom =this[fromWhom].value,
+                        toWhom = this[toWhom].value
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is NoSuchElementException, is IllegalArgumentException -> null
+                else -> {
+                    throw e
+                }
+            }
+        }
+    }
+
+    fun haveInvite(teamId: Int, personId: Int): Boolean {
+        return transaction {
+            select { Invite.teamId eq teamId and (Invite.toWhom eq personId) }.count() > 0
         }
     }
 

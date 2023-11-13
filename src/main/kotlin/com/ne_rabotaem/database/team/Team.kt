@@ -5,6 +5,7 @@ import com.ne_rabotaem.features.demo.TeamResponseRemote
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -20,7 +21,16 @@ object Team : IntIdTable("Team") {
 
     fun fetch(teamId: Int): TeamDTO? {
         return try {
-            throw NotImplementedError()
+            transaction {
+                Team.select { Team.id eq teamId }.single().run {
+                    TeamDTO(
+                        number = this[number],
+                        name = this[name],
+                        projectName = this[projectName],
+                        teacherId = this[teacherId].value
+                    )
+                }
+            }
         } catch (e: Exception) {
             when (e) {
                 is NoSuchElementException, is IllegalArgumentException -> null

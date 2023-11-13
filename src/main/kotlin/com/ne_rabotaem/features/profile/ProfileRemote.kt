@@ -1,11 +1,10 @@
 package com.ne_rabotaem.features.profile
 
 import kotlinx.serialization.Serializable
-import java.util.Dictionary
 
 @Serializable
 data class InviteReceiveRemote(
-    val userId: Int
+    val UID: String
 )
 
 @Serializable
@@ -15,4 +14,23 @@ data class InviteResponceRemote(
     val inviterFirstName: String,
     val inviterLastName: String,
     val inviterUserId: Int
+)
+
+@Serializable
+data class TemmatesResponseRemote(
+    val teamId: Int,
+    val members: List<TeammateResponseRemote>
+)
+@Serializable
+data class TeammateResponseRemote(
+    val user_id: Int,
+    val first_name: String,
+    val last_name: String,
+    val father_name: String
+)
+
+@Serializable
+data class InviteAnswerReceiveRemote(
+    val inviteId: Int,
+    val action: Int
 )
