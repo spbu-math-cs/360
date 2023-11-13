@@ -7,6 +7,8 @@ import com.ne_rabotaem.database.grade.GradeDTO
 import com.ne_rabotaem.database.person_team.InteamGrade
 import com.ne_rabotaem.database.person_team.Invite
 import com.ne_rabotaem.database.person_team.InteamGradeDTO
+import com.ne_rabotaem.database.person_team.PersonTeam
+import com.ne_rabotaem.database.person_team.PersonTeamDTO
 import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
@@ -61,6 +63,16 @@ class VoteController(val call: ApplicationCall) {
             return
         }
 
+        val userId = User.getUserId(
+            Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login
+        )!!
+
+        val userTeam = PersonTeam.getTeam(userId!!);
+        if (userTeam == null) {
+            call.respond(HttpStatusCode.Conflict, "You're not on any of the teams")
+            return
+        }
+
         var eventDTO = Event.fetch(eventId)
         if (eventDTO == null) {
             call.respond(HttpStatusCode.BadRequest, "No such event!")
@@ -72,7 +84,7 @@ class VoteController(val call: ApplicationCall) {
             return
         }
 
-        call.respond(Team.fetchAll());
+        call.respond(Team.fetchAll().filter {it.teamId != userTeam});
     }
 
     suspend fun vote() {

@@ -27,6 +27,7 @@ fun Application.configureVoteRouting() {
 
         get("/demo/vote/teams") {
             // Get a list of all the teams you can vote for
+
             if (call.request.queryParameters.contains("eventId")) {
                 VoteController(call).getTeams(Integer.parseInt(call.request.queryParameters["eventId"]!!))
             }
