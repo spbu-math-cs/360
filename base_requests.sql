@@ -53,10 +53,10 @@ create table if not exists Demo_grade(
 	event_id serial references Event(id),
 	person_id serial references Person(id),
 	team_id serial references Team(id),
-    level int,
-    grade int,
-    presentation int,
-    additional int,
+    level int check(level >= 1 and level <= 5),
+    grade int check(grade >= 1 and grade <= 5),
+    presentation int check(presentation >= 1 and presentation <= 5),
+    additional int check(level >= 0 and level <= 3),
 	comment varchar(500)
 );
 
@@ -77,7 +77,8 @@ create table if not exists Inteam_grade(
 	id serial primary key,
 	event_id serial references Event(id),
 	evaluator_id serial references Person(id),
-	assessed_id serial references Person(id)
+	assessed_id serial references Person(id),
+	grade int check(grade >= 0 and grade <= 10)
 );
 
 -- CLEAR TABLES
