@@ -1,7 +1,6 @@
 $(function() {
     if (getPageName() == "profile") {
         fetchTeamInfo();
-        fetchInvitations();
     }
 });
 
@@ -29,7 +28,7 @@ function setInvitations(invitations) {
     invitations.forEach(invitation => {
         $("#invitations-card").append(
         `
-        <div class="invitation">
+        <div id="invitation-${invitation["inviteId"]}" class="invitation">
             <h3>Team ${invitation["teamNum"]}</h3>
             <p>by ${invitation["inviter_first_name"]} ${invitation["inviter_last_name"]}</p>
             <button class="round-button accept-button" onclick="answerInvitation(${invitation["inviteId"]}, 1)" type="button">✓</button>
@@ -38,6 +37,10 @@ function setInvitations(invitations) {
         `
         )
     });
+}
+
+function removeInvitations() {
+    $("#invitations-card").remove();
 }
 
 function fetchTeamInfo() {
@@ -50,10 +53,12 @@ function fetchTeamInfo() {
     })
     .then(async (response) => {
         if (response.ok) {
+            removeInvitations();
             $("#team-card").removeClass("hidden");
             setTeamInfo(await response.json());
         } else {
             $("#team-card").remove();
+            fetchInvitations();
         }
     });
 }
@@ -86,6 +91,11 @@ function answerInvitation(inviteId, action) {
     .then(response => {
         if (response.ok) {
             location.reload();
+            // if (action == 1) {
+            //     location.reload();
+            // } else {
+            //     $(`#invitation-${inviteId}`).remove();
+            // }
         } else {
             response.text().then(text => alert(text));
         }
@@ -99,6 +109,7 @@ function logOut() {
 
 function openPopup() {
     $(".popup").addClass("active");
+    $("#id-input").focus();
 }
 
 function closePopup() {
