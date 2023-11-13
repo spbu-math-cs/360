@@ -79,7 +79,7 @@ class ProfileController(val call: ApplicationCall) {
         //     "members" to Json.encodeToString(members)
         // )))
 
-       call.respond(Json.encodeToString(temmatesResponseRemote(teamId!!, members)))
+       call.respond(Json.encodeToString(teammatesResponseRemote(teamId!!, members)))
         // println(Json.encodeToString(mapOf<String, String>(
         //     "teamId" to teamId!!.toString(),
         //     "members" to Json.encodeToString(members)
@@ -87,7 +87,7 @@ class ProfileController(val call: ApplicationCall) {
         // println(Json.encodeToString(TemmatesResponseRemote(teamId!!, members)))
     }
 
-    fun leave() {
+    suspend fun leave() {
         if (!isTokenValid)
             return
 
