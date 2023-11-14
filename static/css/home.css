@@ -1,0 +1,38 @@
+.spinner {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.joebiden {
+    display: inline-block;
+    max-width: min(80%, 400px);
+    margin: 5rem auto 0 auto;
+}
+
+@media (min-width: 750px) {
+    .joebiden {
+        transform: rotate(0deg);
+        transition: transform 2s ease;
+    }
+    
+    .joebiden.counterclockwise {
+        transform: rotate(-720deg);
+    }
+    
+    .joebiden.clockwise {
+        transform: rotate(720deg);   
+    }
+}
+
+@media (max-width: 750px) {
+    .joebiden.zero {
+        transform: rotate(0deg);
+        transition: transform 2s ease;
+    }
+
+    .joebiden.seven {
+        transform: rotate(-720deg);
+        transition: transform 2s ease;
+    }
+}
