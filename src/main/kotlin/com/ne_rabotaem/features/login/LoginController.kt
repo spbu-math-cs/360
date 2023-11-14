@@ -24,6 +24,8 @@ class LoginController(val call: ApplicationCall) {
             return
         }
 
+        println(userDTO.last_name)
+
         if (userDTO.password != loginReceiveRemote.password) {
             call.respond(HttpStatusCode.BadRequest, "Wrong password!")
             return
