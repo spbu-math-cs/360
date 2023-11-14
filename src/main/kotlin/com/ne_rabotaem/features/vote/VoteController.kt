@@ -89,7 +89,8 @@ class VoteController(val call: ApplicationCall) {
             call.respond(HttpStatusCode.PayloadTooLarge, "Comment length must be less than 500 symbols!")
             return
         }
-        if (grade.grade < 1 || grade.grade > 5) {
+        if (grade.grade < 1 || grade.grade > 5 || grade.level < 1 || grade.level > 5 ||
+            grade.presentation < 1 || grade.presentation > 5 || grade.additional < 0 || grade.additional > 3) {
             call.respond(HttpStatusCode.PreconditionFailed, "Grade must be in range from 1 to 5!")
             return
         }

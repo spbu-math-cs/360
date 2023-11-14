@@ -209,7 +209,7 @@ function preparePage() {
 }
 
 var selectedCardId = "voting-card-team1";
-var selectedButton = "voting-button-team1"; 
+var selectedButton = "voting-button-team1";
 
 function showCard(cardId, buttonId) {
     $('#' + selectedCardId).removeClass("active");
@@ -294,23 +294,15 @@ function inTeamVote(eventId) {
     $(`.card`).css({"opacity": "0", "z-index" : "0"});
     $(`.revote-button`).hide();
 
-    $(`#voting-card-team1`).addClass("active");
-    $(`#voting-button-team1`).addClass("active");
-
+    showCard(`#voting-card-team1`, `#voting-button-team1`);
 }
 
-var selectedCardId = "voting-card-team1";
-var selectedButton = "voting-button-team1"; 
-
 function showCard(cardId, buttonId) {
-    $('#' + selectedCardId).removeClass("active");
+    $('.card').removeClass("active");
+    $('.voting-button').removeClass("active");
+
     $('#' + cardId).addClass("active");
-
-    $('#' + selectedButton).removeClass("active");
     $('#' + buttonId).addClass("active");
-
-    selectedCardId = cardId;
-    selectedButton = buttonId;
 }
 
 function calcColorBetween(color1, color2, ratio) {
