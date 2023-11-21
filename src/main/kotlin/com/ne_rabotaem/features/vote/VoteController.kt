@@ -20,20 +20,26 @@ import io.ktor.server.application.*
 import io.ktor.server.mustache.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
+import kotlinx.coroutines.runBlocking
 import java.time.LocalTime
 
 class VoteController(val call: ApplicationCall) {
-    
+    private val isTokenValid get() = TokenCheck.isTokenValid(call)
+    private var userId: Int? = UserId.getId(call)
+
+    init {
+        runBlocking {
+            if (!isTokenValid) {
+                call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
+                return@runBlocking
+            }
+        }
+    }
     fun isDemoValid(eventDTO: EventDTO): Boolean {
         return eventDTO.start < LocalTime.now() && eventDTO.finish > LocalTime.now()
     }
 
     suspend fun getPage(eventId: Int) {
-        if (!TokenCheck.isTokenValid(call)) {
-            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
-            return
-        }
-
         var eventDTO = Event.fetch(eventId)
         if (eventDTO == null) {
             call.respond(HttpStatusCode.BadRequest, "No such event!")
@@ -49,20 +55,10 @@ class VoteController(val call: ApplicationCall) {
     }
 
     suspend fun getDemo(id: Int) {
-        if (!TokenCheck.isTokenValid(call)) {
-            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
-            return
-        }
-
         call.respond(Demo_grade.fetch(id).groupBy { it.teamId })
     }
 
     suspend fun getTeams(eventId: Int) {
-        if (!TokenCheck.isTokenValid(call)) {
-            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
-            return
-        }
-
         val userId = User.getUserId(
             Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login
         )!!
@@ -88,18 +84,24 @@ class VoteController(val call: ApplicationCall) {
     }
 
     suspend fun vote() {
-        if (!TokenCheck.isTokenValid(call)) {
-            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
-            return
-        }
-
         val grade = call.receive<GradeReceiveRemote>()
         if (grade.comment.length > 500) {
             call.respond(HttpStatusCode.PayloadTooLarge, "Comment length must be less than 500 symbols!")
             return
         }
-        if (grade.grade < 0 || grade.grade > 10) {
-            call.respond(HttpStatusCode.PreconditionFailed, "Grade must be in range from 0 to 10!")
+        if (grade.grade < 1 || grade.grade > 5 || grade.level < 1 || grade.level > 5 ||
+            grade.presentation < 1 || grade.presentation > 5 || grade.additional < 0 || grade.additional > 3) {
+            call.respond(HttpStatusCode.PreconditionFailed, "Grade must be in range from 1 to 5!")
+            return
+        }
+
+        var eventDTO = Event.fetch(grade.eventId)
+        if (eventDTO == null) {
+            call.respond(HttpStatusCode.BadRequest, "No such event!")
+            return;
+        }
+        if (!isDemoValid(eventDTO)) {
+            call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
             return
         }
 
@@ -122,6 +124,7 @@ class VoteController(val call: ApplicationCall) {
                     comment = grade.comment
                 )
             )
+            call.respond(HttpStatusCode.OK)
             return
         }
 
@@ -142,21 +145,21 @@ class VoteController(val call: ApplicationCall) {
     }
 
     suspend fun inteamVote() {
-        if (!TokenCheck.isTokenValid(call)) {
-            call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
-            return
-        }
-
         val inteamGradeReceiveRemote = call.receive<InteamGradeReceiveRemote>()
 
         inteamGradeReceiveRemote.grades.forEach {
-            InteamGrade.insert(
-                InteamGradeDTO(
-                    eventId = inteamGradeReceiveRemote.eventId,
-                    evaluatorId = inteamGradeReceiveRemote.personId,
-                    assessedId = UserId.getId(TokenCheck.getToken(call)!!)!!
+            if (userId!! != it.personId) {
+                InteamGrade.insertOrUpdate(
+                    InteamGradeDTO(
+                        eventId = inteamGradeReceiveRemote.eventId,
+                        evaluatorId = userId!!,
+                        assessedId = it.personId,
+                        grade = it.grade
+                    )
                 )
-            )
+            }
         }
+
+        call.respond(HttpStatusCode.OK)
     }
 }

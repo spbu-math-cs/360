@@ -13,11 +13,55 @@
     <script src="../js/cookie.js"></script>
     <script src="../js/navbar.js"></script>
 	<script src="../js/redirects.js"></script>
-
+	
 </head>
 
 <body class="body-home-page with-nav-bar">
     <nav> <!-- will be loaded by navbar.js --> </nav>
+	<div class="donaldtrump">
+	<div class="jimcarrey">
+		<div class="login100-pic js-tilt" style="margin: 100px" data-tilt>
+			<center>
+				<img src="img/logo.png" class="js-tilt" alt="IMG">
+			</center>
+		</div>
+	</div>
+	</div>
+	
+	<script>
+		$('.jimcarrey').mouseover(function() {
+			if ($(this).hasClass('joebiden')) return
+			setTimeout(() => $(this).removeClass('joebiden'), 2000)
+			$(this).addClass('joebiden')
+		})
+	</script>
+	
+	<style>
+		.donaldtrump {
+			overflow: hidden;
+		}
+		.donaldtrump > * {
+			display: flex;
+			justify-content: center;
+			max-width: fit-content;
+			margin: 0 auto;
+		}
+		.login100-pic {
+			
+			max-width: min(80%, 400px);
+		}
+		img {
+			max-width: 100%;
+		}
+		.jimcarrey {
+			transform: rotate(0deg);
+			transition: 0s;
+		}
+		.joebiden {
+			transform: rotate(1080deg);
+			transition: 2s;
+		}
+	</style>
 </body>
 
 </html>

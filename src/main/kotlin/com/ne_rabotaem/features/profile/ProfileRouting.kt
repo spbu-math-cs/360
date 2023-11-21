@@ -28,5 +28,13 @@ fun Application.configureProfileRouting() {
         post("profile/team/invite/answer") {
             ProfileController(call).answer()
         }
+
+        post("profile/change/password") {
+            ProfileController(call).changePassword()
+        }
+
+        get("profile/id") {
+             ProfileController(call).getId()
+        }
     }
 }

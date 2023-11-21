@@ -145,7 +145,7 @@ function fetchInteamVoting(eventId) {
     .then(response => {
         if (response.ok) {
             response.json().then(responseJson => {
-                addInteamVotingCard(responseJson, eventId);
+                fetchId(responseJson, eventId);
             })
         } else {
             response.text().then(text => alert(text));
@@ -153,20 +153,27 @@ function fetchInteamVoting(eventId) {
     });
 }
 
-async function fetchId() {
-    return await fetch(`/profile/get_id`, {
+function fetchId(team, eventId) {
+    fetch(`/profile/id`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
-    }).json()["id"];
+    })
+    .then(async (response) => {
+        if (response.ok) {
+            addInteamVotingCard(team, eventId, await response.json());
+        } else {
+            alert(await response.text());
+        }
+    });
     
 }
 
-async function addInteamVotingCard(team, eventId) {
+async function addInteamVotingCard(team, eventId, response) {
     var i = 1;
-    var currentUserId = 3;// await fetchId();
+    var currentUserId = response["userId"];
     team["members"].forEach(member => {
         if (member["user_id"] != currentUserId) {
             $("#in-team-voting-card").append(`
@@ -202,7 +209,7 @@ function preparePage() {
 }
 
 var selectedCardId = "voting-card-team1";
-var selectedButton = "voting-button-team1"; 
+var selectedButton = "voting-button-team1";
 
 function showCard(cardId, buttonId) {
     $('#' + selectedCardId).removeClass("active");
@@ -287,23 +294,15 @@ function inTeamVote(eventId) {
     $(`.card`).css({"opacity": "0", "z-index" : "0"});
     $(`.revote-button`).hide();
 
-    $(`#voting-card-team1`).addClass("active");
-    $(`#voting-button-team1`).addClass("active");
-
+    showCard(`#voting-card-team1`, `#voting-button-team1`);
 }
 
-var selectedCardId = "voting-card-team1";
-var selectedButton = "voting-button-team1"; 
-
 function showCard(cardId, buttonId) {
-    $('#' + selectedCardId).removeClass("active");
+    $('.card').removeClass("active");
+    $('.voting-button').removeClass("active");
+
     $('#' + cardId).addClass("active");
-
-    $('#' + selectedButton).removeClass("active");
     $('#' + buttonId).addClass("active");
-
-    selectedCardId = cardId;
-    selectedButton = buttonId;
 }
 
 function calcColorBetween(color1, color2, ratio) {
@@ -345,13 +344,13 @@ function inTeamVote(eventId) {
     $(`#in-team-voting-card > input`).each(function() {
         var grade = $(this).val();
         var UID = $(this).attr("-data-UID");
-        voteResult.push({"UID": UID, "grade": grade});
+        voteResult.push({"personId": UID, "grade": grade});
     });
     
     // console.log(voteResult);
     // lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
 
-    fetch('/demo/vote', {
+    fetch('/demo/vote/inteam', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
