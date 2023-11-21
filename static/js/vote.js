@@ -171,7 +171,7 @@ function fetchId(team, eventId) {
     
 }
 
-async function addInteamVotingCard(team, eventId, response) {
+function addInteamVotingCard(team, eventId, response) {
     var i = 1;
     var currentUserId = response["userId"];
     team["members"].forEach(member => {
@@ -189,10 +189,10 @@ async function addInteamVotingCard(team, eventId, response) {
         <button class="revote-button white-button" type="button" onclick="unlockVoteCard('#in-team-voting-card', '#in-team-voting-button')">Revote</button>
     `);
 
-    preparePage();
+    preparePage(eventId);
 }
 
-function preparePage() {
+function preparePage(eventId) {
     $(`.card`).css({"opacity": "0", "z-index" : "0"});
     $(`.revote-button`).hide();
 
@@ -205,6 +205,57 @@ function preparePage() {
     
     $(`input[type="range"]`).on("input", function() {
         $(this).css("--_value", `"${$(this).val()}"`);
+    });
+
+    fetchPreviousGrades(eventId);
+    // fillPreviousGrades([
+    //     {
+    //         eventId: 6,
+    //         teamId: 4,
+    //         level: 4,
+    //         grade: 2,
+    //         presentation: 5,
+    //         additional: 0,
+    //         comment: "неплохо"
+    //     }, {
+    //         eventId: 6,
+    //         teamId: 2,
+    //         level: 1,
+    //         grade: 2,
+    //         presentation: 5,
+    //         additional: 0,
+    //         comment: "да"
+    //     }
+    // ]);
+}
+
+function fetchPreviousGrades(eventId) {
+    fetch(`/demo/vote/grades?eventId=${eventId}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(async (response) => {
+        if (response.ok) {
+            fillPreviousGrades(await response.json());
+        } else {
+            alert(await response.text());
+        }
+    });
+}
+
+function fillPreviousGrades(grades) {
+    grades.forEach(grade => {
+        var teamId = grade["teamId"];
+        $(`#voting-button-team${teamId}`).addClass('voted');
+        $(`#grade-input-team${teamId}-1`).val(grade["level"]);
+        $(`#grade-input-team${teamId}-2`).val(grade["grade"]);
+        $(`#grade-input-team${teamId}-3`).val(grade["presentation"]);
+        $(`#grade-input-team${teamId}-4`).val(grade["additional"]);
+        $(`#grade-comment-team${teamId}`).val(grade["comment"]);
+        lockVoteCard(`#voting-card-team${teamId}`, `#voting-button-team${teamId}`);
     });
 }
 
