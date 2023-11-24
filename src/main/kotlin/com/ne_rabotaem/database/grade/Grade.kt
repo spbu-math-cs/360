@@ -4,6 +4,7 @@ import com.ne_rabotaem.database.event.Event
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.features.demo.GradeResponseRemote
+import com.ne_rabotaem.features.vote.PersonDemoGradeResponseRemote
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
@@ -76,6 +77,23 @@ object Demo_grade : IntIdTable("Demo_grade") {
                 it[presentation] = gradeDTO.presentation
                 it[additional] = gradeDTO.additional
                 it[comment] = gradeDTO.comment.orEmpty()
+            }
+        }
+    }
+
+    fun getGrades(personId: Int, eventId: Int): List<PersonDemoGradeResponseRemote> {
+        return transaction {
+            select {
+                Demo_grade.personId eq personId and (Demo_grade.eventId eq eventId)
+            }.toList().map {
+                PersonDemoGradeResponseRemote(
+                    it[teamId].value,
+                    it[level],
+                    it[grade],
+                    it[presentation],
+                    it[additional],
+                    it[comment],
+                )
             }
         }
     }
