@@ -90,4 +90,10 @@ object User : IntIdTable("Person") {
             }
         }
     }
+
+    fun checkSuperUser(userId: Int): Boolean {
+        return transaction {
+            select { User.id eq userId }.single()[rank_]
+        } == rank.teacher
+    }
 }

@@ -108,7 +108,7 @@ object Demo_grade : IntIdTable("Demo_grade") {
     fun getAverage(eventId: Int, teamId: Int): StatisticsResponseRemote {
         return transaction {
             slice(level.avg(), grade.avg(), presentation.avg(), additional.avg())
-                .select {Demo_grade.eventId eq eventId and (Demo_grade.teamId eq teamId)}
+                .select { Demo_grade.eventId eq eventId and (Demo_grade.teamId eq teamId) }
                 .single().run {
                     StatisticsResponseRemote(
                         avgLevel = (this[level.avg()] ?: 0).toFloat(),
@@ -116,6 +116,23 @@ object Demo_grade : IntIdTable("Demo_grade") {
                         avgPresentation = (this[presentation.avg()] ?: 0).toFloat(),
                         avgAdditional = (this[additional.avg()] ?: 0).toFloat()
                     )
+                }
+        }
+    }
+
+    fun getAverage(eventId: Int): Map<Int, StatisticsResponseRemote> {
+        return transaction {
+            slice(teamId, level.avg(), grade.avg(), presentation.avg(), additional.avg())
+                .select { Demo_grade.eventId eq eventId }
+                .groupBy(teamId)
+                .associate {
+                    it[teamId].value to
+                            StatisticsResponseRemote(
+                                avgLevel = (it[level.avg()] ?: 0).toFloat(),
+                                avgGrade = (it[grade.avg()] ?: 0).toFloat(),
+                                avgPresentation = (it[presentation.avg()] ?: 0).toFloat(),
+                                avgAdditional = (it[additional.avg()] ?: 0).toFloat()
+                            )
                 }
         }
     }
@@ -137,5 +154,34 @@ object Demo_grade : IntIdTable("Demo_grade") {
                     )
                 }
         }
+    }
+
+    fun getComments(eventId: Int): Map<Int, List<CommentReceiveRemote>> {
+        val res = mutableMapOf<Int, MutableList<CommentReceiveRemote>>()
+
+        transaction {
+            Join(Demo_grade,
+                User,
+                onColumn = personId,
+                otherColumn = User.id)
+                .slice(teamId, User.first_name, User.last_name, User.father_name, comment)
+                .select { Demo_grade.eventId eq eventId }
+                .forEach {
+                    if (!res.containsKey(it[teamId].value)) {
+                        res[it[teamId].value] = mutableListOf()
+                    }
+
+                    res[it[teamId].value]!!.add(
+                        CommentReceiveRemote(
+                            firstName = it[User.first_name],
+                            lastName = it[User.last_name],
+                            fatherName = it[User.father_name],
+                            comment = it[comment]
+                        )
+                    )
+                }
+        }
+
+        return res
     }
 }
