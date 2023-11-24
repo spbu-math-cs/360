@@ -95,6 +95,11 @@ data class StatisticsReceiveRemote(
 )
 
 @Serializable
+data class AllStatisticsReceiveRemote(
+    val eventId: Int
+)
+
+@Serializable
 data class CommentReceiveRemote(
     val firstName: String,
     val lastName: String,
