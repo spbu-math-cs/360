@@ -15,7 +15,7 @@ import org.jetbrains.exposed.sql.Database
 
 fun main() {
     Database.connect(
-        "jdbc:postgresql://localhost:5432/DEV_ne_rabotaem",
+        "jdbc:postgresql://localhost:5432/ne_rabotaem",
         driver = "org.postgresql.Driver",
         user = "postgres",
         password = "dubchuk",

@@ -21,6 +21,8 @@ import io.ktor.server.mustache.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.time.LocalTime
 
 class VoteController(val call: ApplicationCall) {
@@ -58,7 +60,14 @@ class VoteController(val call: ApplicationCall) {
         call.respond(Demo_grade.fetch(id).groupBy { it.teamId })
     }
 
-    suspend fun getTeams(eventId: Int) {
+    suspend fun getTeams() {
+        if (!call.request.queryParameters.contains("eventId")) {
+            call.respond(HttpStatusCode.BadRequest, "Request must contain eventId!")
+            return
+        }
+
+        val eventId = Integer.parseInt(call.request.queryParameters["eventId"]!!)
+
         val userId = User.getUserId(
             Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login
         )!!
@@ -89,8 +98,19 @@ class VoteController(val call: ApplicationCall) {
             call.respond(HttpStatusCode.PayloadTooLarge, "Comment length must be less than 500 symbols!")
             return
         }
-        if (grade.grade < 0 || grade.grade > 10) {
-            call.respond(HttpStatusCode.PreconditionFailed, "Grade must be in range from 0 to 10!")
+        if (grade.grade < 1 || grade.grade > 5 || grade.level < 1 || grade.level > 5 ||
+            grade.presentation < 1 || grade.presentation > 5 || grade.additional < 0 || grade.additional > 3) {
+            call.respond(HttpStatusCode.PreconditionFailed, "Grade must be in range from 1 to 5!")
+            return
+        }
+
+        var eventDTO = Event.fetch(grade.eventId)
+        if (eventDTO == null) {
+            call.respond(HttpStatusCode.BadRequest, "No such event!")
+            return;
+        }
+        if (!isDemoValid(eventDTO)) {
+            call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
             return
         }
 
@@ -113,6 +133,7 @@ class VoteController(val call: ApplicationCall) {
                     comment = grade.comment
                 )
             )
+            call.respond(HttpStatusCode.OK)
             return
         }
 
@@ -147,5 +168,21 @@ class VoteController(val call: ApplicationCall) {
                 )
             }
         }
+
+        call.respond(HttpStatusCode.OK)
+    }
+
+    suspend fun getDemoGrades() {
+        val eventId = call.parameters["eventId"]?.toInt()
+
+        if (eventId == null) {
+            call.respond(HttpStatusCode.BadRequest, "Request must contain int eventId!")
+            return
+        }
+
+        val userId = UserId.getId(call)!!
+        val grades = Demo_grade.getGrades(userId, eventId)
+
+        call.respond(Json.encodeToString(grades))
     }
 }

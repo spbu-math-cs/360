@@ -13,3 +13,13 @@ data class InteamGradeReceiveRemote(
     val eventId: Int,
     val grades: List<PersonGrade>
 )
+
+@Serializable
+data class PersonDemoGradeResponseRemote(
+    val teamId: Int,
+    val level: Int,
+    val grade: Int,
+    val presentation: Int,
+    val additional: Int,
+    val comment: String
+)

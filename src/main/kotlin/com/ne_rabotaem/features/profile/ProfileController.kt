@@ -74,7 +74,6 @@ class ProfileController(val call: ApplicationCall) {
             return
         }
 
-        call.respond(HttpStatusCode.OK)
         PersonTeam.delete(userId!!)
         call.respond(HttpStatusCode.OK)
     }
@@ -172,9 +171,16 @@ class ProfileController(val call: ApplicationCall) {
 
         if (PasswordCheck.isPasswordValid(userId!!, passwordReceiveRemote.oldPassword)!!) {
             User.updatePassword(userId!!, passwordReceiveRemote.newPassword)
+            call.respond(HttpStatusCode.OK)    
             return
         }
 
         call.respond(HttpStatusCode.BadRequest, "Wrong password!")
+    }
+
+    suspend fun getId() {
+        val login = Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login
+
+        call.respond("{ \"userId\": ${User.getUserId(login)!!.toString()} }")
     }
 }
