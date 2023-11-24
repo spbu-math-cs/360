@@ -79,3 +79,25 @@ data class GradeResponseRemote(
     val additional: Int,
     val comment: String
 )
+
+@Serializable
+data class StatisticsResponseRemote(
+    val avgLevel: Float,
+    val avgGrade: Float,
+    val avgPresentation: Float,
+    val avgAdditional: Float
+)
+
+@Serializable
+data class StatisticsReceiveRemote(
+    val teamId: Int,
+    val eventId: Int
+)
+
+@Serializable
+data class CommentReceiveRemote(
+    val firstName: String,
+    val lastName: String,
+    val fatherName: String,
+    val comment: String
+)

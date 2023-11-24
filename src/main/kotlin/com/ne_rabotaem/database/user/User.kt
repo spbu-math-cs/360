@@ -27,9 +27,9 @@ object User : IntIdTable("Person") {
     val login_max_length = 20
     val password_max_length = 20
 
-    private val first_name = varchar("first_name", first_name_max_length)
-    private val last_name = varchar("last_name", last_name_max_length)
-    private val father_name = varchar("father_name", father_name_max_length)
+    val first_name = varchar("first_name", first_name_max_length)
+    val last_name = varchar("last_name", last_name_max_length)
+    val father_name = varchar("father_name", father_name_max_length)
     private val login = varchar("login", login_max_length)
     private val password = varchar("password", password_max_length)
     private val rank_ = customEnumeration("rank", "rank", { value -> rank.valueOf(value as String) }, { PGEnum("rank", it) })
