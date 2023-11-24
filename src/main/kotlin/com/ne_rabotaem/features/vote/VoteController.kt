@@ -21,6 +21,8 @@ import io.ktor.server.mustache.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.time.LocalTime
 
 class VoteController(val call: ApplicationCall) {
@@ -58,7 +60,14 @@ class VoteController(val call: ApplicationCall) {
         call.respond(Demo_grade.fetch(id).groupBy { it.teamId })
     }
 
-    suspend fun getTeams(eventId: Int) {
+    suspend fun getTeams() {
+        if (!call.request.queryParameters.contains("eventId")) {
+            call.respond(HttpStatusCode.BadRequest, "Request must contain eventId!")
+            return
+        }
+
+        val eventId = Integer.parseInt(call.request.queryParameters["eventId"]!!)
+
         val userId = User.getUserId(
             Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login
         )!!
@@ -161,5 +170,19 @@ class VoteController(val call: ApplicationCall) {
         }
 
         call.respond(HttpStatusCode.OK)
+    }
+
+    suspend fun getDemoGrades() {
+        val eventId = call.parameters["eventId"]?.toInt()
+
+        if (eventId == null) {
+            call.respond(HttpStatusCode.BadRequest, "Request must contain int eventId!")
+            return
+        }
+
+        val userId = UserId.getId(call)!!
+        val grades = Demo_grade.getGrades(userId, eventId)
+
+        call.respond(Json.encodeToString(grades))
     }
 }
