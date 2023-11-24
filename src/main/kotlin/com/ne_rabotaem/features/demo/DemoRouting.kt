@@ -1,5 +1,6 @@
 package com.ne_rabotaem.features.demo
 
+import com.ne_rabotaem.database.grade.Demo_grade
 import com.ne_rabotaem.database.team.Team
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
@@ -9,10 +10,17 @@ fun Application.configureDemoRouting() {
         get("/demo") {
             DemoController(call).getPage()
         }
-        get("/demo_list") {
-            val demoController = DemoController(call)
 
-            demoController.getDemos()
+        get("/demo_list") {
+            DemoController(call).getDemos()
+        }
+
+        get("/demo/statistics/average") {
+            DemoController(call).getTeamStatistics()
+        }
+
+        get("demo/statistics/comments") {
+            DemoController(call).getComments()
         }
     }
 }
