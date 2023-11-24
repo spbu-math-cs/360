@@ -13,37 +13,16 @@ $(function() {
 });
 
 function setDemosInPage(demosJson) {
-    demosJson.sort(function(d1, d2) {
-        // Order:
-        //  1. Active demos
-        //  2. Future demos
-        //  3. Past demos
-        // If in same category, sort by eventId ascending
-        function sign(x) {
-            return (x > 0) ? 1 : ((x < 0) ? -1 : 0);
-        }
-
-        function f(x) {
-            return (x == 0) ? 2 : ((x > 0) ? 1 : 0);
-        }
-
-        let a = calcTimeToDemo(d1), b = calcTimeToDemo(d2);
-        if (sign(a) == sign(b)) {
-            return sign(parseInt(d1["eventId"]) - parseInt(d2["eventId"]));
-        } else {
-            return sign(f(sign(b)) - f(sign(a)));
-        }
-    })
-
     demosJson.forEach(demo => {
         let id = demo["eventId"];
         let date = demo["date"]
         let timeToDemo = calcTimeToDemo(demo);
         let demoStatus = (timeToDemo < 0) ? "disabled" : ((timeToDemo > 0) ? "locked" : "unlocked");
+        let demoContainer = (timeToDemo < 0) ? "#past-demos" : ((timeToDemo > 0) ? "#future-demos" : "#available-demos");
         
-        $("#demo-container").append(
+        $(demoContainer).append(
         `
-        <div class="demo-card ${demoStatus}" ${demoStatus == "unlocked" ? `onclick="location.href='/demo/vote?eventId=${id}'"` : ""}>
+        <div class="demo-card ${demoStatus}" ${demoStatus == "unlocked" ? `onclick="location.href='/demo/vote?eventId=${id}'"` : (demoStatus == "disabled" ? `onclick="location.href='/demo/statistics?eventId=${id}'"` : "")}>
             <h2 class="demo-card-title">Demo ${id}</h2>
             <p class="demo-card-date">${dateToHumanFormat(date)}</p>
         </div>

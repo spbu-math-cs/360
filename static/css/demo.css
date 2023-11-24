@@ -1,13 +1,19 @@
-.demo-content h1 {
-    margin-top: 2rem;
-    margin-bottom: 3rem;
+h1 {
+    margin: 0;
+    margin-bottom: 2rem;
     text-align: center;
 }
 
-.demo-list {
-    margin: 0 auto;
-    padding: 1rem 2rem;
+.demo-outer-container {
+    margin: 2rem auto;
     max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.demo-outer-container > div {
+    padding: 1rem 2rem;
 }
 
 .demo-card {
@@ -23,10 +29,13 @@
 .demo-card.unlocked {
     background-color: #78d6c6;
     color: #F5FCFF;
-    cursor: pointer;
-    transition: all .2s ease-in-out;
     text-shadow: 0 0 10px #78d6c6;
-    
+}
+
+.demo-card.unlocked,
+.demo-card.disabled {
+    cursor: pointer;
+    transition: all .15s ease-in-out;
 }
 
 .demo-card.unlocked:hover {
@@ -37,6 +46,10 @@
 .demo-card.locked {
     background-color: #97C3BC;
     color: #70838E;
+}
+
+.demo-card.disabled:hover {
+    filter: brightness(85%);
 }
 
 .demo-card.disabled {
@@ -54,6 +67,20 @@
 
 .demo-card-date span {
     font-size: .8em;
+}
+
+.demo-outer-container > *::after {
+    content: "No demos";
+    color: #777;
+    font-style: italic;
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: .5rem;
+    text-align: center;
+}
+
+.demo-outer-container > *:has(.demo-card)::after {
+    display: none;
 }
 
 @media (min-width: 1280px) {

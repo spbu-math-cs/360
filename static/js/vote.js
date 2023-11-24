@@ -240,8 +240,6 @@ function fetchPreviousGrades(eventId) {
     .then(async (response) => {
         if (response.ok) {
             fillPreviousGrades(await response.json());
-        } else {
-            alert(await response.text());
         }
     });
 }

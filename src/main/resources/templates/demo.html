@@ -21,9 +21,20 @@
     <nav> <!-- will be loaded by navbar.js --> </nav>
 
     <div class="demo-content">
-        <h1>Available Demos</h1>
-
-        <div id="demo-container" class="demo-list white-card"> <!-- will be loaded by demo.js --> </div>
+        <div class="demo-outer-container">
+            <div class="white-card">
+                <h1>Available Demos</h1>
+                <div id="available-demos" class="demo-list"></div>
+            </div>
+            <div class="white-card">
+                <h1>Past Demos</h1>
+                <div id="past-demos" class="demo-list"></div>
+            </div>
+            <div class="white-card">
+                <h1>Future Demos</h1>
+                <div id="future-demos" class="demo-list"></div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
