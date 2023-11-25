@@ -10,7 +10,6 @@ import kotlinx.serialization.encoding.Encoder
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import javax.xml.stream.events.Comment
 
 object LocalDateSerializer : KSerializer<LocalDate> {
     override val descriptor = PrimitiveSerialDescriptor("LocalDate", PrimitiveKind.STRING)
@@ -78,25 +77,4 @@ data class GradeResponseRemote(
     val presentation: Int,
     val additional: Int,
     val comment: String
-)
-
-@Serializable
-data class StatisticsResponseRemote(
-    val avgLevel: Float,
-    val avgGrade: Float,
-    val avgPresentation: Float,
-    val avgAdditional: Float
-)
-
-@Serializable
-data class CommentReceiveRemote(
-    val firstName: String,
-    val lastName: String,
-    val fatherName: String,
-    val comment: String
-)
-
-data class StatisticsParameters(
-    val eventId: Int,
-    val teamId: Int
 )

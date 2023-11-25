@@ -33,8 +33,12 @@ fun Application.configureProfileRouting() {
             ProfileController(call).changePassword()
         }
 
-        get("profile/id") {
-             ProfileController(call).getId()
+        get("profile/info") {
+             ProfileController(call).getInfo()
+        }
+
+        post("profile/image/load") {
+            ProfileController(call).loadImage()
         }
     }
 }

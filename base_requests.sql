@@ -23,12 +23,13 @@ create table if not exists Person(
 	father_name varchar(24),
 	login varchar(20) unique,
 	password varchar(20),
-	rank rank
+	rank rank,
+	image_src varchar(100)
 );
 
 create table if not exists Token(
 	id serial primary key,
-	login varchar(20),
+	login varchar(20) references Person(login),
 	token varchar(128) 
 );
 
