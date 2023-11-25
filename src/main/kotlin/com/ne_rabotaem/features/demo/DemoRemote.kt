@@ -89,14 +89,14 @@ data class StatisticsResponseRemote(
 )
 
 @Serializable
-data class StatisticsReceiveRemote(
-    val eventId: Int
-)
-
-@Serializable
 data class CommentReceiveRemote(
     val firstName: String,
     val lastName: String,
     val fatherName: String,
     val comment: String
+)
+
+data class StatisticsParameters(
+    val eventId: Int,
+    val teamId: Int
 )
