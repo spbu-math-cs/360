@@ -17,6 +17,7 @@ $(function() {
                 break;
             case "demo":
             case "voting":
+            case "statistics":
                 selectedClassDict["demo"] = selected;
                 break;
             case "about":

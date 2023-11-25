@@ -33,17 +33,22 @@ function fetchStatictics(eventId) {
     });
 }
 
+
+function normalize(value, lBound, rBound) {
+    return Math.min(Math.max((value - lBound) / (rBound - lBound), 0), 1);
+}
+
 function setStatistics(statistics, eventId) {
     $(`.statistics-content > h1`).html(`Demo ${eventId}`);
     
-    $(`#ratio-1`).attr("style", `--ratio: ${statistics["level"]}`);
-    $(`#ratio-1 > p`).html(Math.floor(statistics["level"] * 10) / 10);
-    $(`#ratio-2`).attr("style", `--ratio: ${statistics["grade"]}`);
-    $(`#ratio-2 > p`).html(Math.floor(statistics["grade"] * 10) / 10);
-    $(`#ratio-3`).attr("style", `--ratio: ${statistics["presentation"]}`);
-    $(`#ratio-3 > p`).html(Math.floor(statistics["presentation"] * 10) / 10);
-    $(`#ratio-4`).attr("style", `--ratio: ${statistics["additional"]}`);
-    $(`#ratio-4 > p`).html(Math.floor(statistics["additional"] * 10) / 10);
+    $(`#ratio-1`).attr("style", `--ratio: ${normalize(statistics["avgLevel"], 1, 5)}`);
+    $(`#ratio-1 > p`).html(Math.floor(statistics["avgLevel"] * 10) / 10);
+    $(`#ratio-2`).attr("style", `--ratio: ${normalize(statistics["avgGrade"], 1, 5)}`);
+    $(`#ratio-2 > p`).html(Math.floor(statistics["avgGrade"] * 10) / 10);
+    $(`#ratio-3`).attr("style", `--ratio: ${normalize(statistics["avgPresentation"], 1, 5)}`);
+    $(`#ratio-3 > p`).html(Math.floor(statistics["avgPresentation"] * 10) / 10);
+    $(`#ratio-4`).attr("style", `--ratio: ${normalize(statistics["avgAdditional"], 0, 3)}`);
+    $(`#ratio-4 > p`).html(Math.floor(statistics["avgAdditional"] * 10) / 10);
 
     fetchComments(eventId);
 }
@@ -69,7 +74,7 @@ function setComments(comments) {
     comments.forEach(comment => {
         $(`#comments-container`).append(`
         <div class="comment">
-            <h3>${htmlEncode(comment["firstName"])} ${htmlEncode(comment["secondName"])} ${htmlEncode(comment["lastName"])}</h3>
+            <h3>${htmlEncode(comment["lastName"])} ${htmlEncode(comment["firstName"])} ${htmlEncode(comment["fatherName"])}</h3>
             <p>${htmlEncode(comment["comment"])}</p>
         </div>
         `);

@@ -207,7 +207,8 @@ function preparePage(eventId) {
         $(this).css("--_value", `"${$(this).val()}"`);
     });
 
-    setInterval(function() { updateRealTimeStatistics(eventId) }, 4000);
+    updateRealTimeStatistics(eventId);
+    setInterval(function() { updateRealTimeStatistics(eventId) }, 10000);
 
     fetchPreviousGrades(eventId);
 }
@@ -230,14 +231,18 @@ function updateRealTimeStatistics(eventId) {
 }
 
 function normalize(value, lBound, rBound) {
-    return (value - lBound) / (rBound - lBound);
+    return Math.min(Math.max((value - lBound) / (rBound - lBound), 0), 1);
 }
 
 function setRealTimeStatistics(statistics) {
-    $(`#ratio-1`).attr("style", `--ratio: ${normalize(statistics["level"], 1, 5)}`);
-    $(`#ratio-2`).attr("style", `--ratio: ${normalize(statistics["grade"], 1, 5)}`);
-    $(`#ratio-3`).attr("style", `--ratio: ${normalize(statistics["presentation"], 1, 5)}`);
-    $(`#ratio-4`).attr("style", `--ratio: ${normalize(statistics["additional"], 0, 3)}`);
+    $(`#ratio-1`).attr("style", `--ratio: ${normalize(statistics["avgLevel"], 1, 5)}`);
+    $(`#ratio-1 > p`).html(Math.floor(statistics["avgLevel"] * 10) / 10);
+    $(`#ratio-2`).attr("style", `--ratio: ${normalize(statistics["avgGrade"], 1, 5)}`);
+    $(`#ratio-2 > p`).html(Math.floor(statistics["avgGrade"] * 10) / 10);
+    $(`#ratio-3`).attr("style", `--ratio: ${normalize(statistics["avgPresentation"], 1, 5)}`);
+    $(`#ratio-3 > p`).html(Math.floor(statistics["avgPresentation"] * 10) / 10);
+    $(`#ratio-4`).attr("style", `--ratio: ${normalize(statistics["avgAdditional"], 0, 3)}`);
+    $(`#ratio-4 > p`).html(Math.floor(statistics["avgAdditional"] * 10) / 10);
 } 
 
 function fetchPreviousGrades(eventId) {
