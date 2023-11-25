@@ -14,6 +14,7 @@ import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.features.demo.GradeReceiveRemote
 import com.ne_rabotaem.utils.TokenCheck
+import com.ne_rabotaem.utils.UserCheck
 import com.ne_rabotaem.utils.UserId
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -26,17 +27,20 @@ import kotlinx.serialization.json.Json
 import java.time.LocalTime
 
 class VoteController(val call: ApplicationCall) {
-    private val isTokenValid get() = TokenCheck.isTokenValid(call)
-    private var userId: Int? = UserId.getId(call)
+    private val isUserValid get() = UserCheck.isUserExists(call)
+    private val userId: Int
 
     init {
         runBlocking {
-            if (!isTokenValid) {
+            if (!isUserValid) {
                 call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
                 return@runBlocking
             }
         }
+
+        userId = UserId.getId(call)!!
     }
+
     fun isDemoValid(eventDTO: EventDTO): Boolean {
         return eventDTO.start < LocalTime.now() && eventDTO.finish > LocalTime.now()
     }

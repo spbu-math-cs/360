@@ -2,6 +2,7 @@ package com.ne_rabotaem
 
 import com.ne_rabotaem.database.DatabaseFactory.configureDataBaseInitialization
 import com.ne_rabotaem.features.demo.configureDemoRouting
+import com.ne_rabotaem.features.demo.statistics.configureStatisticsRouting
 import com.ne_rabotaem.features.home.configureAboutRouting
 import com.ne_rabotaem.features.home.configureHomeRouting
 import com.ne_rabotaem.features.login.configureLoginRouting
@@ -27,6 +28,7 @@ fun Application.module() {
     configureLoginRouting()
     configureRegisterRouting()
     configureDemoRouting()
+    configureStatisticsRouting()
     configureVoteRouting()
     configureAboutRouting()
     configureProfileRouting()

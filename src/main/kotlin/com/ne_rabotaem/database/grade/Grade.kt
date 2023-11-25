@@ -3,9 +3,9 @@ package com.ne_rabotaem.database.grade
 import com.ne_rabotaem.database.event.Event
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
-import com.ne_rabotaem.features.demo.CommentReceiveRemote
 import com.ne_rabotaem.features.demo.GradeResponseRemote
-import com.ne_rabotaem.features.demo.StatisticsResponseRemote
+import com.ne_rabotaem.features.demo.statistics.CommentReceiveRemote
+import com.ne_rabotaem.features.demo.statistics.StatisticsResponseRemote
 import com.ne_rabotaem.features.vote.PersonDemoGradeResponseRemote
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Join
@@ -164,6 +164,9 @@ object Demo_grade : IntIdTable("Demo_grade") {
                 .slice(teamId, User.first_name, User.last_name, User.father_name, comment)
                 .select { Demo_grade.eventId eq eventId }
                 .forEach {
+                    if (it[comment].isEmpty()) {
+                        return@forEach
+                    }
                     if (!res.containsKey(it[teamId].value)) {
                         res[it[teamId].value] = mutableListOf()
                     }

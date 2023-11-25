@@ -40,3 +40,14 @@ data class NewPasswordReceiveRemote(
     val oldPassword: String,
     val newPassword: String
 )
+
+@Serializable
+data class UserInfoResponseRemote(
+    val id: Int,
+    val rank: String
+)
+
+@Serializable
+data class ImageNameReceiveRemote(
+    val name: String
+)
