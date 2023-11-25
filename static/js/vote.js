@@ -234,10 +234,10 @@ function normalize(value, lBound, rBound) {
 }
 
 function setRealTimeStatistics(statistics) {
-    $(`#scale-grade-1`).attr("style", `--ratio: ${normalize(statistics["level"], 1, 5)}`);
-    $(`#scale-grade-2`).attr("style", `--ratio: ${normalize(statistics["grade"], 1, 5)}`);
-    $(`#scale-grade-3`).attr("style", `--ratio: ${normalize(statistics["presentation"], 1, 5)}`);
-    $(`#scale-grade-4`).attr("style", `--ratio: ${normalize(statistics["additional"], 0, 3)}`);
+    $(`#ratio-1`).attr("style", `--ratio: ${normalize(statistics["level"], 1, 5)}`);
+    $(`#ratio-2`).attr("style", `--ratio: ${normalize(statistics["grade"], 1, 5)}`);
+    $(`#ratio-3`).attr("style", `--ratio: ${normalize(statistics["presentation"], 1, 5)}`);
+    $(`#ratio-4`).attr("style", `--ratio: ${normalize(statistics["additional"], 0, 3)}`);
 } 
 
 function fetchPreviousGrades(eventId) {
@@ -354,7 +354,7 @@ function inTeamVote(eventId) {
     $(`.card`).css({"opacity": "0", "z-index" : "0"});
     $(`.revote-button`).hide();
 
-    showCard(`#voting-card-team1`, `#voting-button-team1`);
+    showCard(`voting-card-team1`, `voting-button-team1`);
 }
 
 function showCard(cardId, buttonId) {
