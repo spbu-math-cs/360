@@ -57,31 +57,22 @@ object User : IntIdTable("Person") {
     }
 
     fun fetch(id: Int): UserDTO? {
-        return try {
-            transaction {
-                val userModel = select { User.id eq id }.single()
-                UserDTO(
-                    first_name = userModel[first_name],
-                    last_name = userModel[last_name],
-                    father_name = userModel[father_name],
-                    login = userModel[User.login],
-                    password = userModel[password],
-                    rank = userModel[rank_],
-                )
-            }
-        } catch (e: Exception) {
-            when(e) {
-                is NoSuchElementException, is IllegalArgumentException -> null
-                else -> {
-                    throw e
-                }
-            }
+        transaction {
+            val userModel = select { User.id eq id }.singleOrNull() ?: return@transaction null
+            UserDTO(
+                first_name = userModel[first_name],
+                last_name = userModel[last_name],
+                father_name = userModel[father_name],
+                login = userModel[User.login],
+                password = userModel[password],
+                rank = userModel[rank_],
+            )
         }
     }
 
     fun getUserId(login: String): Int? {
         return transaction {
-            val userModel = select { User.login.eq(login) }.firstOrNull() ?: return@transaction null
+            val userModel = select { User.login.eq(login) }.singleOrNull() ?: return@transaction null
 
             userModel[User.id].value
         }
@@ -97,7 +88,13 @@ object User : IntIdTable("Person") {
 
     fun checkSuperUser(userId: Int): Boolean {
         return transaction {
-            select { User.id eq userId }.single()[rank_]
+            select { User.id eq userId }.singleOrNull()?.get(rank_)
         } == rank.teacher
+    }
+
+    fun getImage(userId: Int): String? {
+        return transaction {
+            select { User.id eq userId }.singleOrNull()?.get(image_src)
+        }
     }
 }

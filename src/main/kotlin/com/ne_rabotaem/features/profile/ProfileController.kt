@@ -8,7 +8,6 @@ import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.utils.PasswordCheck
-import com.ne_rabotaem.utils.TokenCheck
 import com.ne_rabotaem.utils.UserCheck
 import com.ne_rabotaem.utils.UserId
 import io.ktor.http.*
@@ -46,7 +45,8 @@ class ProfileController(val call: ApplicationCall) {
             "first_name" to userDTO!!.first_name,
             "last_name" to userDTO!!.last_name,
             "father_name" to userDTO!!.father_name,
-            "user_id" to User.getUserId(userDTO!!.login)!!.toString().padStart(4, '0')
+            "user_id" to User.getUserId(userDTO!!.login)!!.toString().padStart(4, '0'),
+            "avatar_src" to (User.getImage(userId) ?: "default.jpg")
         )))
     }
 
