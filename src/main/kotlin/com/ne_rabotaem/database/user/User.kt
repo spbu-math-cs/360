@@ -2,6 +2,7 @@ package com.ne_rabotaem.database.user
 
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.postgresql.util.PGobject
 import java.lang.IllegalArgumentException
@@ -21,18 +22,13 @@ class PGEnum<T : Enum<T>>(enumTypeName: String, enumValue: T?) : PGobject() {
 }
 
 object User : IntIdTable("Person") {
-    val first_name_max_length = 24
-    val last_name_max_length = 24
-    val father_name_max_length = 24
-    val login_max_length = 20
-    val password_max_length = 20
-
-    val first_name = varchar("first_name", first_name_max_length)
-    val last_name = varchar("last_name", last_name_max_length)
-    val father_name = varchar("father_name", father_name_max_length)
-    private val login = varchar("login", login_max_length)
-    private val password = varchar("password", password_max_length)
+    val first_name = varchar("first_name", 24)
+    val last_name = varchar("last_name", 24)
+    val father_name = varchar("father_name", 24)
+    private val login = varchar("login", 20)
+    private val password = varchar("password", 20)
     private val rank_ = customEnumeration("rank", "rank", { value -> rank.valueOf(value as String) }, { PGEnum("rank", it) })
+    private val image_src = varchar("image_src", 100)
 
 
     fun insert(userDTO: UserDTO) {
@@ -44,6 +40,14 @@ object User : IntIdTable("Person") {
                 it[login] = userDTO.login
                 it[password] = userDTO.password
                 it[rank_] = userDTO.rank
+            }
+        }
+    }
+
+    fun addImage(userId: Int, imageSrc: String) {
+        transaction {
+            update({User.id eq userId}) {
+                it[image_src] = imageSrc
             }
         }
     }
