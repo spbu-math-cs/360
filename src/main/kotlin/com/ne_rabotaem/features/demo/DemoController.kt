@@ -42,37 +42,44 @@ class DemoController(val call: ApplicationCall) {
         call.respond(Json.encodeToString(Event.fetchAll()))
     }
 
+    private fun getTeamAndEvent(): StatisticsParameters? {
+        val teamId = PersonTeam.getTeam(userId) ?: return null
+        val eventId = call.parameters["eventId"]?.toInt() ?: return null
+
+        return StatisticsParameters(eventId, teamId)
+    }
+
     suspend fun getTeamStatistics() {
-        val teamId = PersonTeam.getTeam(userId)
-        if (teamId == null) {
-            call.respond(HttpStatusCode.BadRequest, "You must be on a team!")
+        val parameters = getTeamAndEvent()
+
+        if (parameters == null){
+            call.respond(HttpStatusCode.BadRequest, "Invalid team or event id!")
             return
         }
 
-        val statisticsReceiveRemote = call.receive<StatisticsReceiveRemote>()
         call.respond(
             Json.encodeToString(
                 Demo_grade.getAverage(
-                    statisticsReceiveRemote.eventId,
-                    teamId
+                    parameters.eventId,
+                    parameters.teamId
                 )
             )
         )
     }
 
     suspend fun getComments() {
-        val teamId = PersonTeam.getTeam(userId)
-        if (teamId == null) {
-            call.respond(HttpStatusCode.BadRequest, "You must be on a team!")
+        val parameters = getTeamAndEvent()
+
+        if (parameters == null){
+            call.respond(HttpStatusCode.BadRequest, "Invalid team or event id!")
             return
         }
 
-        val statisticsReceiveRemote = call.receive<StatisticsReceiveRemote>()
         call.respond(
             Json.encodeToString(
                 Demo_grade.getComments(
-                    statisticsReceiveRemote.eventId,
-                    teamId
+                    parameters.eventId,
+                    parameters.teamId
                 )
             )
         )
@@ -84,9 +91,12 @@ class DemoController(val call: ApplicationCall) {
             return
         }
 
-        val eventId = call.receive<StatisticsReceiveRemote>().eventId
+        val eventId = call.parameters["eventId"]?.toInt()
+        if (eventId == null) {
+            call.respond("Query parameters must contain event id!")
+        }
 
-        call.respond(Json.encodeToString(Demo_grade.getAverage(eventId)))
+        call.respond(Json.encodeToString(Demo_grade.getAverage(eventId!!)))
     }
 
     suspend fun getAllComments() {
@@ -95,8 +105,11 @@ class DemoController(val call: ApplicationCall) {
             return
         }
 
-        val eventId = call.receive<StatisticsReceiveRemote>().eventId
+        val eventId = call.parameters["eventId"]?.toInt()
+        if (eventId == null) {
+            call.respond("Query parameters must contain event id!")
+        }
 
-        call.respond(Json.encodeToString(Demo_grade.getComments(eventId)))
+        call.respond(Json.encodeToString(Demo_grade.getComments(eventId!!)))
     }
 }

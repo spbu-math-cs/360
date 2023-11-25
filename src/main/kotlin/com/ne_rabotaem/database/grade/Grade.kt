@@ -5,17 +5,14 @@ import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.features.demo.CommentReceiveRemote
 import com.ne_rabotaem.features.demo.GradeResponseRemote
-import com.ne_rabotaem.features.demo.StatisticsReceiveRemote
 import com.ne_rabotaem.features.demo.StatisticsResponseRemote
 import com.ne_rabotaem.features.vote.PersonDemoGradeResponseRemote
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Join
-import org.jetbrains.exposed.sql.alias
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.avg
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
