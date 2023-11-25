@@ -2,6 +2,7 @@ package com.ne_rabotaem.features.demo
 
 import com.ne_rabotaem.database.event.Event
 import com.ne_rabotaem.database.grade.Demo_grade
+import com.ne_rabotaem.database.person_team.PersonTeam
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.utils.TokenCheck
 import com.ne_rabotaem.utils.UserId
@@ -42,24 +43,36 @@ class DemoController(val call: ApplicationCall) {
     }
 
     suspend fun getTeamStatistics() {
+        val teamId = PersonTeam.getTeam(userId)
+        if (teamId == null) {
+            call.respond(HttpStatusCode.BadRequest, "You must be on a team!")
+            return
+        }
+
         val statisticsReceiveRemote = call.receive<StatisticsReceiveRemote>()
         call.respond(
             Json.encodeToString(
                 Demo_grade.getAverage(
                     statisticsReceiveRemote.eventId,
-                    statisticsReceiveRemote.teamId
+                    teamId
                 )
             )
         )
     }
 
     suspend fun getComments() {
+        val teamId = PersonTeam.getTeam(userId)
+        if (teamId == null) {
+            call.respond(HttpStatusCode.BadRequest, "You must be on a team!")
+            return
+        }
+
         val statisticsReceiveRemote = call.receive<StatisticsReceiveRemote>()
         call.respond(
             Json.encodeToString(
                 Demo_grade.getComments(
                     statisticsReceiveRemote.eventId,
-                    statisticsReceiveRemote.teamId
+                    teamId
                 )
             )
         )
@@ -71,7 +84,7 @@ class DemoController(val call: ApplicationCall) {
             return
         }
 
-        val eventId = call.receive<AllStatisticsReceiveRemote>().eventId
+        val eventId = call.receive<StatisticsReceiveRemote>().eventId
 
         call.respond(Json.encodeToString(Demo_grade.getAverage(eventId)))
     }
@@ -82,7 +95,7 @@ class DemoController(val call: ApplicationCall) {
             return
         }
 
-        val eventId = call.receive<AllStatisticsReceiveRemote>().eventId
+        val eventId = call.receive<StatisticsReceiveRemote>().eventId
 
         call.respond(Json.encodeToString(Demo_grade.getComments(eventId)))
     }

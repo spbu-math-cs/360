@@ -90,12 +90,6 @@ data class StatisticsResponseRemote(
 
 @Serializable
 data class StatisticsReceiveRemote(
-    val teamId: Int,
-    val eventId: Int
-)
-
-@Serializable
-data class AllStatisticsReceiveRemote(
     val eventId: Int
 )
 

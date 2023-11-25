@@ -19,19 +19,19 @@ fun Application.configureDemoRouting() {
             DemoController(call).getStatisticsPage()
         }
 
-        get("/demo/statistics/average") {
+        post("/demo/statistics/average") {
             DemoController(call).getTeamStatistics()
         }
 
-        get("demo/statistics/comments") {
+        post("demo/statistics/comments") {
             DemoController(call).getComments()
         }
 
-        get("demo/statistics/average/all") {
+        post("demo/statistics/average/all") {
             DemoController(call).getAllTeamStatistics()
         }
 
-        get("demo/statistics/comments/all") {
+        post("demo/statistics/comments/all") {
             DemoController(call).getAllComments()
         }
     }
