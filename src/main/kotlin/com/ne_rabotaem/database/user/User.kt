@@ -57,7 +57,7 @@ object User : IntIdTable("Person") {
     }
 
     fun fetch(id: Int): UserDTO? {
-        transaction {
+        return transaction {
             val userModel = select { User.id eq id }.singleOrNull() ?: return@transaction null
             UserDTO(
                 first_name = userModel[first_name],

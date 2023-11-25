@@ -46,7 +46,7 @@ class ProfileController(val call: ApplicationCall) {
             "last_name" to userDTO!!.last_name,
             "father_name" to userDTO!!.father_name,
             "user_id" to User.getUserId(userDTO!!.login)!!.toString().padStart(4, '0'),
-            "avatar_src" to (User.getImage(userId) ?: "default.jpg")
+            "avatar_src" to (User.getImage(userId) ?: "img/user_images/default.jpg")
         )))
     }
 
