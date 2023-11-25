@@ -22,7 +22,6 @@ h3 {
 }
 
 .ratio {
-    --ratio: 0.3;
     height: 140px;
     width: 140px;
     border-radius: 50%;
@@ -91,4 +90,10 @@ h3 {
 .comment > p {
     text-align: start;
     margin: 0;
+}
+
+.comment > h3 {
+    margin: 0 auto .5rem 0;
+    text-align: start;
+    font-size: 1.2rem;
 }

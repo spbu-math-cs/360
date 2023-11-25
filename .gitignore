@@ -36,3 +36,4 @@ out/
 .vscode/
 db_backups/
 output_log.txt
+setup.bat

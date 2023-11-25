@@ -49,13 +49,13 @@ function setStatistics(statistics, eventId) {
     $(`.statistics-content > h1`).html(`Demo ${eventId}`);
     
     $(`#ratio-1`).attr("style", `--ratio: ${statistics["level"]}`);
-    $(`#ratio-1 > p`).html(Math.floor(statistics["level"] * 100) + "%");
+    $(`#ratio-1 > p`).html(Math.floor(statistics["level"] * 10) / 10);
     $(`#ratio-2`).attr("style", `--ratio: ${statistics["grade"]}`);
-    $(`#ratio-2 > p`).html(Math.floor(statistics["grade"] * 100) + "%");
+    $(`#ratio-2 > p`).html(Math.floor(statistics["grade"] * 10) / 10);
     $(`#ratio-3`).attr("style", `--ratio: ${statistics["presentation"]}`);
-    $(`#ratio-3 > p`).html(Math.floor(statistics["presentation"] * 100) + "%");
+    $(`#ratio-3 > p`).html(Math.floor(statistics["presentation"] * 10) / 10);
     $(`#ratio-4`).attr("style", `--ratio: ${statistics["additional"]}`);
-    $(`#ratio-4 > p`).html(Math.floor(statistics["additional"] * 100) + "%");
+    $(`#ratio-4 > p`).html(Math.floor(statistics["additional"] * 10) / 10);
 
     fetchComments(eventId);
 }

@@ -126,6 +126,9 @@ function addVoteCards(teams, eventId) {
     });
 
     $(`#upper-voting-buttons`).append(`
+        <div class="voting-button statistics-button" id="statistics-button" onclick="showCard('statistics-card', 'statistics-button')">
+            <img src="../img/eye.png" alt="Statistics">
+        </div>
         <div class="voting-button graphs-button" id="graphs-button" onclick="updateGraph();showCard('graphs-card', 'graphs-button')">
             <img src="../img/chart.png" alt="Graphs">
         </div>
@@ -196,9 +199,6 @@ function preparePage(eventId) {
     $(`.card`).css({"opacity": "0", "z-index" : "0"});
     $(`.revote-button`).hide();
 
-    $(`#voting-card-team1`).addClass("active");
-    $(`#voting-button-team1`).addClass("active");
-
     $(`input[type="range"]`).each(function() {
         $(this).css("--_value", `"${$(this).val()}"`)
     });
@@ -207,27 +207,38 @@ function preparePage(eventId) {
         $(this).css("--_value", `"${$(this).val()}"`);
     });
 
+    setInterval(function() { updateRealTimeStatistics(eventId) }, 4000);
+
     fetchPreviousGrades(eventId);
-    // fillPreviousGrades([
-    //     {
-    //         eventId: 6,
-    //         teamId: 4,
-    //         level: 4,
-    //         grade: 2,
-    //         presentation: 5,
-    //         additional: 0,
-    //         comment: "неплохо"
-    //     }, {
-    //         eventId: 6,
-    //         teamId: 2,
-    //         level: 1,
-    //         grade: 2,
-    //         presentation: 5,
-    //         additional: 0,
-    //         comment: "да"
-    //     }
-    // ]);
 }
+
+function updateRealTimeStatistics(eventId) {
+    fetch(`/demo/statistics/average?eventId=${eventId}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            response.json().then(responseJson => {
+                setRealTimeStatistics(responseJson);
+            })
+        }
+    });
+}
+
+function normalize(value, lBound, rBound) {
+    return (value - lBound) / (rBound - lBound);
+}
+
+function setRealTimeStatistics(statistics) {
+    $(`#scale-grade-1`).attr("style", `--ratio: ${normalize(statistics["level"], 1, 5)}`);
+    $(`#scale-grade-2`).attr("style", `--ratio: ${normalize(statistics["grade"], 1, 5)}`);
+    $(`#scale-grade-3`).attr("style", `--ratio: ${normalize(statistics["presentation"], 1, 5)}`);
+    $(`#scale-grade-4`).attr("style", `--ratio: ${normalize(statistics["additional"], 0, 3)}`);
+} 
 
 function fetchPreviousGrades(eventId) {
     fetch(`/demo/vote/grades?eventId=${eventId}`, {
