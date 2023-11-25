@@ -126,12 +126,15 @@ function addVoteCards(teams, eventId) {
     });
 
     $(`#upper-voting-buttons`).append(`
-        <div class="voting-button statistics-button" id="statistics-button" onclick="showCard('statistics-card', 'statistics-button')">
-            <img src="../img/eye.png" alt="Statistics">
-        </div>
         <div class="voting-button graphs-button" id="graphs-button" onclick="updateGraph();showCard('graphs-card', 'graphs-button')">
             <img src="../img/chart.png" alt="Graphs">
         </div>
+    `);
+
+    $(`#lower-voting-buttons`).append(`
+        <div class="voting-button statistics-button" id="statistics-button" onclick="showCard('statistics-card', 'statistics-button')">
+            Statistics
+        </div> 
     `);
 
     fetchInteamVoting(parseInt(eventId));
@@ -196,7 +199,7 @@ function addInteamVotingCard(team, eventId, response) {
 }
 
 function preparePage(eventId) {
-    $(`.card`).css({"opacity": "0", "z-index" : "0"});
+    $(`.card`).css({"opacity": "0", "z-index" : "-1"});
     $(`.revote-button`).hide();
 
     $(`input[type="range"]`).each(function() {

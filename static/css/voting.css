@@ -41,19 +41,14 @@
 
 .voting-button.voted.active:hover { background-color: white; }
 
-.graphs-button,
-.statistics-button {
+.graphs-button {
     display: flex;
+    margin-left: auto;
     justify-content: center;
     align-items: center;
 }
 
-.statistics-button {
-    margin-left: auto;
-}
-
-.graphs-button > img,
-.statistics-button > img {
+.graphs-button > img {
     max-width: auto;
     max-height: 1rem;
 }
@@ -75,8 +70,9 @@
     border-radius: 0 0 5px 5px;
 }
 
-#in-team-voting-button {
-    border-radius: 0 0 5px 5px;
+#in-team-voting-button,
+.statistics-button {
+    border-radius: 0 0 5px 5px !important;
 }
 
 .voting-button.active::after {
@@ -93,8 +89,7 @@
     
 }
 
-.team-button.active::after,
-.statistics-button.active::after {
+.team-button.active::after {
     clip-path: polygon(-100% -100%, 200% -100%, 200% 100%,-100% 100%);
 }
 
@@ -106,7 +101,8 @@
     clip-path: polygon(-100% -100%, 200% -100%, 200% 200%, 100% 200%, 100% 100%, -100% 100%);
 }
 
-#in-team-voting-button.active::after {
+#in-team-voting-button.active::after,
+.statistics-button.active::after {
     clip-path: polygon(-100% 0%, 200% 0%, 200% 200%, -100% 200%);
 }
 
@@ -126,12 +122,16 @@
     position: absolute;
     inset: 0 auto auto 0;
     margin: auto;
+    display: none;
     opacity: 0;
-    z-index: 0;
+    z-index: -1;
+}
+
+.card.voting-card.active {
+    display: grid;
 }
 
 .voting-card {
-    display: grid;
     grid-template-columns: 1fr;
     text-align: center;
 
@@ -139,6 +139,7 @@
 }
 
 .card.active {
+    display: block;
     position: relative;
     opacity: 1 !important;
     z-index: 3 !important;

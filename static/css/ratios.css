@@ -13,7 +13,6 @@
 .ratio {
     --width: min(140px, 30vw);
 
-    /* height: var(--width); */
     margin: auto;
     width: var(--width);
     aspect-ratio: 1 / 1;
