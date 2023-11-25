@@ -1,0 +1,43 @@
+.grades-graph{    
+    --item-gap: 5%;
+    --item-default-color: #060606;
+    
+    aspect-ratio: 2 / 1;
+    margin-top: auto;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: 0fr 1fr;
+    gap: var(--item-gap);
+    align-items: end;
+    padding-inline: var(--item-gap);
+    --padding-block: 1rem; /* space for labels */
+    padding-block: var(--padding-block);
+    position: relative;
+    isolation: isolate;
+}
+
+.grades-graph > .item{
+    grid-row: 2 / -1;
+    height: calc(1% * var(--val));
+    background-color: var(--clr);
+    position: relative;
+}
+
+.grades-graph > .item > * { 
+    position: absolute; text-align: center;
+}
+
+.grades-graph > .item > .label { 
+    inset: calc(100% + .2rem) 0 auto 0;
+}
+
+.grades-graph > .item > .value { 
+    inset: auto 0 100% 0 ;
+}
+
+@media (min-width: 750px) {
+    .graphs-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}

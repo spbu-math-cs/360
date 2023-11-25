@@ -198,51 +198,6 @@
     margin: 0 0 2rem 0;
 }
 
-.grades-graph{    
-    --item-gap: 5%;
-    --item-default-color: #060606;
-    
-    height: 20rem;
-    margin-top: auto;
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-rows: 1fr 0fr;
-    gap: var(--item-gap);
-    align-items: end;
-    padding-inline: var(--item-gap);
-    --padding-block: 1rem; /* space for labels */
-    padding-block: var(--padding-block);
-    position: relative;
-    isolation: isolate;
-
-    transition: none;
-}
-
-.graphs-card.active .grades-graph {
-    grid-template-rows: 0fr 1fr;
-
-    transition: grid-template-rows 1s ease;
-}
-
-.grades-graph > .item{
-    grid-row: 2 / -1;
-    height: calc(1% * var(--val));
-    background-color: var(--clr);
-    position: relative;
-}
-
-.grades-graph > .item > * { 
-    position: absolute; text-align: center;
-}
-
-.grades-graph > .item > .label { 
-    inset: calc(100% + .2rem) 0 auto 0;
-}
-
-.grades-graph > .item > .value { 
-    inset: auto 0 100% 0 ;
-}
-
 input[type="range"] {
     position: relative;
 }
