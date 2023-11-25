@@ -18,6 +18,7 @@
 	<script src="../js/redirects.js"></script>
 	<script src="../js/vote.js"></script>
 	<script src="../js/graph.js"></script>
+    <script src="../js/statistics_loader.js"></script>
 
 </head>
 <body class="body-voting-page with-nav-bar">
@@ -29,32 +30,7 @@
             <div id="statistics-card" class="card statistics-card">
                 <h2>Real-Time Statistics</h2>
                 <p>Updated every 10 seconds</p>
-                <div class="grades-container">
-                    <div class="ratio-cell">
-                      <div id="ratio-1" class="ratio">
-                        <p>0</p>
-                      </div>
-                      <p>Сложность спринта</p>
-                    </div>
-                    <div class="ratio-cell">
-                      <div id="ratio-2" class="ratio">
-                        <p>0</p>
-                      </div>
-                      <p>Уровень выполнения</p>
-                    </div>
-                    <div class="ratio-cell">
-                      <div id="ratio-3" class="ratio">
-                        <p>0</p>
-                      </div>
-                      <p>Качество презентации</p>
-                    </div>
-                    <div class="ratio-cell">
-                      <div id="ratio-4" class="ratio">
-                        <p>0</p>
-                      </div>
-                      <p>Доп. баллы</p>
-                    </div>
-                </div>
+                <div id="statistics-container"></div>
             </div>   
 
             <div id="graphs-card" class="card graphs-card">

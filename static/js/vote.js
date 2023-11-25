@@ -42,9 +42,6 @@ function fetchTeams(eventId) {
             response.json().then(responseJson => {
                 addVoteCards(responseJson, eventId);
             })
-        } else if (response.status == 409) {
-            alert("You must be on a team to vote.");
-            location.href = "/demo";
         } else {
             response.text().then(text => alert(text));
         }
@@ -137,10 +134,11 @@ function addVoteCards(teams, eventId) {
         </div> 
     `);
 
-    fetchInteamVoting(parseInt(eventId));
+    fetchId(eventId, teams);
+    // fetchInteamVoting(parseInt(eventId));
 }
 
-function fetchInteamVoting(eventId) {
+function fetchInteamVoting(eventId, profileInfo) {
     fetch(`/profile/team/info`, {
         method: 'GET',
         headers: {
@@ -151,7 +149,7 @@ function fetchInteamVoting(eventId) {
     .then(response => {
         if (response.ok) {
             response.json().then(responseJson => {
-                fetchId(responseJson, eventId);
+                addInteamVotingCard(responseJson, eventId, profileInfo);
             })
         } else {
             response.text().then(text => alert(text));
@@ -159,27 +157,36 @@ function fetchInteamVoting(eventId) {
     });
 }
 
-function fetchId(team, eventId) {
-    fetch(`/profile/id`, {
+function fetchId(eventId, teams) {
+    fetch(`/profile/info`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
     })
-    .then(async (response) => {
+    .then(response => {
         if (response.ok) {
-            addInteamVotingCard(team, eventId, await response.json());
+            response.json().then(responseJson => {
+                fillPage("#statistics-container", responseJson, eventId, false, teams);
+                if (responseJson["rank"] == "teacher") {
+                    $(`#in-team-voting-button`).css("display", "none");
+                    setInterval(function() { updateAllStatistics(eventId, teams); }, 5000);
+                    preparePage(eventId);
+                } else {
+                    setInterval(function() { fetchStatistics(eventId, false); }, 5000);
+                    fetchInteamVoting(eventId, responseJson);
+                }
+            })
         } else {
-            alert(await response.text());
+            response.text().then(text => alert(text));
         }
     });
-    
 }
 
 function addInteamVotingCard(team, eventId, response) {
     var i = 1;
-    var currentUserId = response["userId"];
+    var currentUserId = response["id"];
     team["members"].forEach(member => {
         if (member["user_id"] != currentUserId) {
             $("#in-team-voting-card").append(`
@@ -209,9 +216,6 @@ function preparePage(eventId) {
     $(`input[type="range"]`).on("input", function() {
         $(this).css("--_value", `"${$(this).val()}"`);
     });
-
-    updateRealTimeStatistics(eventId);
-    setInterval(function() { updateRealTimeStatistics(eventId) }, 10000);
 
     fetchPreviousGrades(eventId);
 }
@@ -272,6 +276,9 @@ function fillPreviousGrades(grades) {
         $(`#grade-input-team${teamId}-3`).val(grade["presentation"]);
         $(`#grade-input-team${teamId}-4`).val(grade["additional"]);
         $(`#grade-comment-team${teamId}`).val(grade["comment"]);
+        $(`input[type="range"]`).each(function() {
+            $(this).css("--_value", `"${$(this).val()}"`)
+        });
         lockVoteCard(`#voting-card-team${teamId}`, `#voting-button-team${teamId}`);
     });
 }

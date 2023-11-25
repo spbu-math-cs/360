@@ -12,6 +12,7 @@ import com.ne_rabotaem.database.person_team.PersonTeamDTO
 import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
+import com.ne_rabotaem.database.user.User.checkSuperUser
 import com.ne_rabotaem.features.demo.GradeReceiveRemote
 import com.ne_rabotaem.utils.TokenCheck
 import com.ne_rabotaem.utils.UserCheck
@@ -77,7 +78,7 @@ class VoteController(val call: ApplicationCall) {
         )!!
 
         val userTeam = PersonTeam.getTeam(userId!!);
-        if (userTeam == null) {
+        if (userTeam == null && !checkSuperUser(userId)) {
             call.respond(HttpStatusCode.Conflict, "You're not on any of the teams")
             return
         }
