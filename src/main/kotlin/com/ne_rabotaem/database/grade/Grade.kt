@@ -164,6 +164,9 @@ object Demo_grade : IntIdTable("Demo_grade") {
                 .slice(teamId, User.first_name, User.last_name, User.father_name, comment)
                 .select { Demo_grade.eventId eq eventId }
                 .forEach {
+                    if (it[comment].isEmpty()) {
+                        return@forEach
+                    }
                     if (!res.containsKey(it[teamId].value)) {
                         res[it[teamId].value] = mutableListOf()
                     }

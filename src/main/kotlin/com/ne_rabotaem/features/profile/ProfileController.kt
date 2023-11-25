@@ -9,6 +9,7 @@ import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.utils.PasswordCheck
 import com.ne_rabotaem.utils.TokenCheck
+import com.ne_rabotaem.utils.UserCheck
 import com.ne_rabotaem.utils.UserId
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -16,20 +17,23 @@ import io.ktor.server.mustache.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.encodeToString
+import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
+import java.io.File
 
 class ProfileController(val call: ApplicationCall) {
-    private val isTokenValid get() = TokenCheck.isTokenValid(call)
-    private var userId: Int? = UserId.getId(call)
+    private val isUserValid get() = UserCheck.isUserExists(call)
+    private val userId: Int
 
     init {
         runBlocking {
-            if (!isTokenValid) {
+            if (!isUserValid) {
                 call.respond(HttpStatusCode.Unauthorized, "Wrong token!")
                 return@runBlocking
             }
         }
+
+        userId = UserId.getId(call)!!
     }
 
     suspend fun getProfile() {
@@ -178,9 +182,29 @@ class ProfileController(val call: ApplicationCall) {
         call.respond(HttpStatusCode.BadRequest, "Wrong password!")
     }
 
-    suspend fun getId() {
+    suspend fun getInfo() {
         val login = Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login
+        val userInfo = User.fetch(login)
+        if (userInfo == null) {
+            call.respond(HttpStatusCode.NotFound, "User not found!")
+            return
+        }
 
-        call.respond("{ \"userId\": ${User.getUserId(login)!!.toString()} }")
+        call.respond(Json.encodeToString(
+            UserInfoResponseRemote(
+                userId!!,
+                userInfo.rank.toString()
+            )
+        ))
+    }
+
+    suspend fun loadImage() {
+        val fileName = call.receive<ImageNameReceiveRemote>().name
+        if (!File(fileName).exists()) {
+            call.respond(HttpStatusCode.NotFound, "Image not found!")
+            return
+        }
+
+        User.addImage(userId, fileName)
     }
 }
