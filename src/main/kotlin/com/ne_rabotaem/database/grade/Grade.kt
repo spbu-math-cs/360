@@ -4,16 +4,23 @@ import com.ne_rabotaem.database.event.Event
 import com.ne_rabotaem.database.person_team.PersonTeam
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
+import com.ne_rabotaem.database.user.rank
 import com.ne_rabotaem.features.demo.GradeResponseRemote
 import com.ne_rabotaem.features.demo.statistics.CommentReceiveRemote
 import com.ne_rabotaem.features.demo.statistics.StatisticsResponseRemote
 import com.ne_rabotaem.features.vote.PersonDemoGradeResponseRemote
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Join
+import org.jetbrains.exposed.sql.JoinType
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.Union
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.avg
+import org.jetbrains.exposed.sql.count
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
@@ -107,12 +114,18 @@ object DemoGrade : IntIdTable("Demo_grade") {
         return transaction {
             Join(DemoGrade,
                 PersonTeam,
+                joinType =  JoinType.FULL,
                 onColumn = personId,
                 otherColumn = PersonTeam.id)
-                .slice(level.avg(), grade.avg(), presentation.avg(), additional.avg())
+                .join(User,
+                    joinType = JoinType.INNER,
+                    onColumn = personId,
+                    otherColumn = User.id)
+                .slice(level.count(), level.avg(), grade.avg(), presentation.avg(), additional.avg())
                 .select { DemoGrade.eventId eq eventId and
                         (DemoGrade.teamId eq teamId) and
-                        (DemoGrade.teamId neq PersonTeam.teamId) }
+                        (DemoGrade.teamId neq PersonTeam.teamId and
+                                (PersonTeam.teamId neq null) or (User.rank_ eq rank.teacher)) }
                 .single().run {
                     StatisticsResponseRemote(
                         avgLevel = (this[level.avg()] ?: 0).toFloat(),
@@ -128,11 +141,17 @@ object DemoGrade : IntIdTable("Demo_grade") {
         return transaction {
             Join(DemoGrade,
                 PersonTeam,
+                joinType =  JoinType.FULL,
                 onColumn = personId,
                 otherColumn = PersonTeam.id)
+                .join(User,
+                    joinType = JoinType.INNER,
+                    onColumn = personId,
+                    otherColumn = User.id)
                 .slice(teamId, level.avg(), grade.avg(), presentation.avg(), additional.avg())
                 .select { DemoGrade.eventId eq eventId and
-                        (teamId neq PersonTeam.teamId) }
+                        (teamId neq PersonTeam.teamId and
+                                (PersonTeam.teamId neq null) or (User.rank_ eq rank.teacher)) }
                 .groupBy(teamId)
                 .associate {
                     it[teamId].value to
