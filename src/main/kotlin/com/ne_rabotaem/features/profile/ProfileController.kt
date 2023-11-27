@@ -43,15 +43,15 @@ class ProfileController(val call: ApplicationCall) {
 
         call.respond(MustacheContent("profile.hbs", mapOf<String, String>(
             "first_name" to userDTO!!.first_name,
-            "last_name" to userDTO!!.last_name,
-            "father_name" to userDTO!!.father_name,
-            "user_id" to User.getUserId(userDTO!!.login)!!.toString().padStart(4, '0'),
-            "avatar_src" to (User.getImage(userId) ?: "img/user_images/default.jpg")
+            "last_name" to userDTO.last_name,
+            "father_name" to userDTO.father_name,
+            "user_id" to User.getUserId(userDTO.login)!!.toString().padStart(4, '0'),
+            "profile_picture" to (User.getImage(userId) ?: "img/user_images/default.jpg")
         )))
     }
 
     suspend fun getTeam() {
-        val teamId = PersonTeam.getTeam(userId!!)
+        val teamId = PersonTeam.getTeam(userId)
         println("teamId $teamId, personId $userId")
         if (teamId == null) {
             call.respond(HttpStatusCode.BadRequest, "Your team was not found!")
@@ -73,20 +73,20 @@ class ProfileController(val call: ApplicationCall) {
     }
 
     suspend fun leave() {
-        if (PersonTeam.getTeam(userId!!) == null) {
+        if (PersonTeam.getTeam(userId) == null) {
             call.respond(HttpStatusCode.BadRequest, "You're not a member of any team!")
             return
         }
 
-        PersonTeam.delete(userId!!)
+        PersonTeam.delete(userId)
         call.respond(HttpStatusCode.OK)
     }
 
     suspend fun invite() {
         val invitedId = call.receive<InviteReceiveRemote>().UID.toInt()
-        val teamId = PersonTeam.getTeam(userId!!)
+        val teamId = PersonTeam.getTeam(userId)
 
-        if (userId!! == invitedId) {
+        if (userId == invitedId) {
             call.respond(HttpStatusCode(403, "Self-invitation"), "You can not invite yourself!")
         }
 
@@ -108,7 +108,7 @@ class ProfileController(val call: ApplicationCall) {
         Invite.insert(
             InviteDTO(
                 teamId = teamId,
-                fromWhom = userId!!,
+                fromWhom = userId,
                 toWhom = invitedId
             )
         )
@@ -118,7 +118,7 @@ class ProfileController(val call: ApplicationCall) {
 
     suspend fun getInvites() {
         println(Json.encodeToString(
-            Invite.getInvites(userId!!).map {
+            Invite.getInvites(userId).map {
                 val userDTO = User.fetch(it.fromWhom)!!
                 InviteResponceRemote(
                     inviteId = it.id,
@@ -131,7 +131,7 @@ class ProfileController(val call: ApplicationCall) {
         ))
         call.respond(
             Json.encodeToString(
-                Invite.getInvites(userId!!).map {
+                Invite.getInvites(userId).map {
                     val userDTO = User.fetch(it.fromWhom)!!
                     InviteResponceRemote(
                         inviteId = it.id,
@@ -149,17 +149,17 @@ class ProfileController(val call: ApplicationCall) {
         val ans = call.receive<InviteAnswerReceiveRemote>()
 
         val teamId = Invite.fetch(ans.inviteId)!!.teamId
-        Invite.delete(userId!!, teamId)
+        Invite.delete(userId, teamId)
 
         if (ans.action == 0) {
             call.respond(HttpStatusCode.OK)
             return
         }
 
-        if (PersonTeam.getTeam(userId!!) == null) {
+        if (PersonTeam.getTeam(userId) == null) {
             PersonTeam.insert(
                 PersonTeamDTO(
-                    personId = userId!!,
+                    personId = userId,
                     teamId = teamId
                 )
             )
@@ -173,8 +173,8 @@ class ProfileController(val call: ApplicationCall) {
     suspend fun changePassword() {
         val passwordReceiveRemote = call.receive<NewPasswordReceiveRemote>()
 
-        if (PasswordCheck.isPasswordValid(userId!!, passwordReceiveRemote.oldPassword)!!) {
-            User.updatePassword(userId!!, passwordReceiveRemote.newPassword)
+        if (PasswordCheck.isPasswordValid(userId, passwordReceiveRemote.oldPassword)!!) {
+            User.updatePassword(userId, passwordReceiveRemote.newPassword)
             call.respond(HttpStatusCode.OK)    
             return
         }
@@ -192,7 +192,7 @@ class ProfileController(val call: ApplicationCall) {
 
         call.respond(Json.encodeToString(
             UserInfoResponseRemote(
-                userId!!,
+                userId,
                 userInfo.rank.toString()
             )
         ))

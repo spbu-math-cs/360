@@ -1,8 +1,11 @@
 $(function() {
-    if (getPageName() == "profile") {
-        fetchTeamInfo();
-    }
+    fetchTeamInfo();
+    resizeImage();
 });
+
+function resizeImage() {
+    $(`.profile-grid > img`).css({"width":  `${$('.account-card').width() * 0.6}`, "left": `${$('.account-card').width() * 0.2}`});
+}
 
 function fetchInvitations() {
     fetch('/profile/team/invite', {

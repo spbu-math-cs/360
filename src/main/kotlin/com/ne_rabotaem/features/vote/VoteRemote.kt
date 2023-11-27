@@ -23,3 +23,9 @@ data class PersonDemoGradeResponseRemote(
     val additional: Int,
     val comment: String
 )
+
+@Serializable
+data class PersonInTeamVotingResponseRemote(
+    val personId: Int,
+    val grade: Int
+)

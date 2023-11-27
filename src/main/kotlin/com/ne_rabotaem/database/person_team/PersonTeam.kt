@@ -11,8 +11,8 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object PersonTeam : IntIdTable("Person_team") {
-    private val personId = reference("person_id", User.id)
-    private val teamId = reference("team_id", Team.id)
+    val personId = reference("person_id", User.id)
+    val teamId = reference("team_id", Team.id)
 
     fun insert(personTeamDTO: PersonTeamDTO) {
         transaction {

@@ -34,5 +34,9 @@ fun Application.configureVoteRouting() {
         get("/demo/vote/grades") {
             VoteController(call).getDemoGrades()
         }
+
+        get("/demo/vote/inteam/grades") {
+            VoteController(call).getInTeamGrades()
+        }
     }
 }

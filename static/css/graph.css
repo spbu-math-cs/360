@@ -1,7 +1,6 @@
-.grades-graph{    
-    --item-gap: 5%;
+.grades-graph {    
+    --item-gap: 2%;
     --item-default-color: #060606;
-    
     aspect-ratio: 2 / 1;
     margin-top: auto;
     display: grid;
@@ -9,9 +8,7 @@
     grid-template-rows: 0fr 1fr;
     gap: var(--item-gap);
     align-items: end;
-    padding-inline: var(--item-gap);
-    --padding-block: 1rem; /* space for labels */
-    padding-block: var(--padding-block);
+    padding: 1.5rem 1rem 2.5rem 1rem;
     position: relative;
     isolation: isolate;
 }
@@ -35,9 +32,38 @@
     inset: auto 0 100% 0 ;
 }
 
-@media (min-width: 750px) {
+@media (min-width: 750px) { 
     .graphs-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        gap: .5rem;
+    }
+
+    .centered {
+        grid-column: 1 / -1;
+        width: 75%;
+        margin: 3rem auto 0 auto;
+        aspect-ratio: 3 / 1;
+    }
+
+    .statistics-content .grades-graph {
+        --item-gap: 5%;
+    }
+
+    .voting-content .graphs-container {
+        font-size: .8em;
+    }
+
+    .voting-content .graphs-container h3 {
+        font-size: 1em;
+    }
+
+    .voting-content .graph-inner.centered {
+        margin-top: 1rem;
+    }
+    
+    .graph-inner {
+        height: min-content;
+        margin-top: auto;
     }
 }
