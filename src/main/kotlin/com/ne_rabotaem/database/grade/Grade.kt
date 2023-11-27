@@ -171,7 +171,7 @@ object DemoGrade : IntIdTable("Demo_grade") {
                 User,
                 onColumn = personId,
                 otherColumn = User.id)
-                .slice(User.first_name, User.last_name, User.father_name, comment)
+                .slice(User.first_name, User.last_name, User.father_name, comment, User.image_src)
                 .select { DemoGrade.eventId eq eventId and (DemoGrade.teamId eq teamId) }
                 .filter { it[comment].isNotEmpty() }
                 .map {
@@ -179,7 +179,8 @@ object DemoGrade : IntIdTable("Demo_grade") {
                         firstName = it[User.first_name],
                         lastName = it[User.last_name],
                         fatherName = it[User.father_name],
-                        comment = it[comment]
+                        comment = it[comment],
+                        imageSrc = it[User.image_src] ?: "/img/user_images/default.jpg"
                     )
                 }
         }
@@ -193,7 +194,7 @@ object DemoGrade : IntIdTable("Demo_grade") {
                 User,
                 onColumn = personId,
                 otherColumn = User.id)
-                .slice(teamId, User.first_name, User.last_name, User.father_name, comment)
+                .slice(teamId, User.first_name, User.last_name, User.father_name, comment, User.image_src)
                 .select { DemoGrade.eventId eq eventId }
                 .filter { it[comment].isNotEmpty() }
                 .forEach {
@@ -206,7 +207,8 @@ object DemoGrade : IntIdTable("Demo_grade") {
                             firstName = it[User.first_name],
                             lastName = it[User.last_name],
                             fatherName = it[User.father_name],
-                            comment = it[comment]
+                            comment = it[comment],
+                            imageSrc = it[User.image_src] ?: "/img/user_images/default.jpg"
                         )
                     )
                 }

@@ -28,7 +28,7 @@ object User : IntIdTable("Person") {
     private val login = varchar("login", 20)
     private val password = varchar("password", 20)
     val rank_ = customEnumeration("rank", "rank", { value -> rank.valueOf(value as String) }, { PGEnum("rank", it) })
-    private val image_src = varchar("image_src", 100)
+    val image_src = varchar("image_src", 100).nullable()
 
 
     fun insert(userDTO: UserDTO) {

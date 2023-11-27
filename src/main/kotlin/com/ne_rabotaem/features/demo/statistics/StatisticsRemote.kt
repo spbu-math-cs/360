@@ -21,5 +21,6 @@ data class CommentReceiveRemote(
     val firstName: String,
     val lastName: String,
     val fatherName: String,
-    val comment: String
+    val comment: String,
+    val imageSrc: String
 )
