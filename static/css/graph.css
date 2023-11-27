@@ -49,4 +49,20 @@
     .statistics-content .grades-graph {
         --item-gap: 5%;
     }
+
+    .voting-content .graphs-container {
+        font-size: .8em;
+    }
+
+    .voting-content .graphs-container h3 {
+        font-size: 1em;
+    }
+
+    .voting-content .graph-inner.centered {
+        margin-top: 1rem;
+    }
+
+    .grades-graph {
+        margin-top: auto;
+    }
 }
