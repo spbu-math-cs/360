@@ -28,7 +28,7 @@ fun Application.configureVoteRouting() {
         }
 
         post("/demo/vote/inteam") {
-            VoteController(call).inteamVote()
+            VoteController(call).inTeamVote()
         }
 
         get("/demo/vote/grades") {
