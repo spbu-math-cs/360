@@ -47,7 +47,7 @@ class VoteController(val call: ApplicationCall) {
     }
 
     suspend fun getPage(eventId: Int) {
-        var eventDTO = Event.fetch(eventId)
+        val eventDTO = Event.fetch(eventId)
         if (eventDTO == null) {
             call.respond(HttpStatusCode.BadRequest, "No such event!")
             return;
@@ -77,22 +77,22 @@ class VoteController(val call: ApplicationCall) {
             Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login
         )!!
 
-        val userTeam = PersonTeam.getTeam(userId!!);
+        val userTeam = PersonTeam.getTeam(userId);
         if (userTeam == null && !checkSuperUser(userId)) {
             call.respond(HttpStatusCode.Conflict, "You're not on any of the teams")
             return
         }
 
-        var eventDTO = Event.fetch(eventId)
+        val eventDTO = Event.fetch(eventId)
         if (eventDTO == null) {
             call.respond(HttpStatusCode.BadRequest, "No such event!")
             return;
         }
 
-        if (!isDemoValid(eventDTO)) {
-            call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
-            return
-        }
+//        if (!isDemoValid(eventDTO)) {
+//            call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
+//            return
+//        }
 
         call.respond(Team.fetchAll().filter {it.teamId != userTeam});
     }
@@ -109,7 +109,7 @@ class VoteController(val call: ApplicationCall) {
             return
         }
 
-        var eventDTO = Event.fetch(grade.eventId)
+        val eventDTO = Event.fetch(grade.eventId)
         if (eventDTO == null) {
             call.respond(HttpStatusCode.BadRequest, "No such event!")
             return;
@@ -123,7 +123,7 @@ class VoteController(val call: ApplicationCall) {
             Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login
         )!!
 
-        var gradeId = Demo_grade.getId(grade.eventId, userId, grade.teamId);
+        val gradeId = Demo_grade.getId(grade.eventId, userId, grade.teamId);
         if (gradeId != null) {
             Demo_grade.update(
                 gradeId,
