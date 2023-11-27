@@ -61,13 +61,9 @@
     .voting-content .graph-inner.centered {
         margin-top: 1rem;
     }
-
+    
     .graph-inner {
-        position: relative;
-    }
-
-    .grades-graph {
-        position: absolute;
-        bottom: 0;
+        height: min-content;
+        margin-top: auto;
     }
 }
