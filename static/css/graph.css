@@ -8,9 +8,7 @@
     grid-template-rows: 0fr 1fr;
     gap: var(--item-gap);
     align-items: end;
-    padding-inline: var(--item-gap);
-    --padding-block: 1rem; /* space for labels */
-    padding-block: var(--padding-block);
+    padding: 1.5rem 1rem 2.5rem 1rem;
     position: relative;
     isolation: isolate;
 }
