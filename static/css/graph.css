@@ -62,7 +62,12 @@
         margin-top: 1rem;
     }
 
+    .graph-inner {
+        position: relative;
+    }
+
     .grades-graph {
-        margin-top: auto;
+        position: absolute;
+        bottom: 0;
     }
 }
