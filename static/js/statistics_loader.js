@@ -19,7 +19,7 @@ function fillPage(containerId, userInfo, eventId, setComments, teams, digits) {
         <h3>Дополнительные баллы</h3>
         <div class="grades-graph" id="graph-4"></div>
     </div>
-    <div class="graph-inner">
+    <div class="graph-inner centered">
         <h3>Итоговый балл</h3>
         <div class="grades-graph" id="graph-5"></div>
     </div>
@@ -62,7 +62,7 @@ function fillPage(containerId, userInfo, eventId, setComments, teams, digits) {
 <div id="comments-container"></div>
             `);
         }
-        fetchStatictics(eventId, setComments);
+        fetchStatistics(eventId, setComments);
     }
 }
 
@@ -113,7 +113,7 @@ function updateAllStatistics(eventId, teams, digits) {
     });
 }
 
-function fetchStatictics(eventId, setComments) {
+function fetchStatistics(eventId, setComments) {
     fetch(`/demo/statistics/average?eventId=${eventId}`, {
         method: 'GET',
         headers: {

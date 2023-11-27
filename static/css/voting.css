@@ -232,4 +232,9 @@ input[type="range"]::after {
 .graph-inner > h3 {
     font-size: 1rem;
     padding: 0 1rem;
+    margin:  0;
+}
+
+.graphs-container {
+    padding: 1rem;
 }

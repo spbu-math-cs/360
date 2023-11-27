@@ -134,6 +134,10 @@ function addVoteCards(teams, eventId) {
         </div> 
     `);
 
+    if ($(".card.active").length == 0) {
+        showCard(`voting-card-team1`, `voting-button-team1`);
+    }
+
     fetchId(eventId, teams);
     // fetchInteamVoting(parseInt(eventId));
 }
@@ -220,6 +224,7 @@ function preparePage(eventId) {
     });
 
     fetchPreviousGrades(eventId);
+    fetchInteamPreviousGrades(eventId);
 }
 
 function updateRealTimeStatistics(eventId) {
@@ -269,6 +274,12 @@ function fetchPreviousGrades(eventId) {
     });
 }
 
+function touchInputs() {
+    $(`input[type="range"]`).each(function() {
+        $(this).css("--_value", `"${$(this).val()}"`)
+    });
+}
+
 function fillPreviousGrades(grades) {
     grades.forEach(grade => {
         var teamId = grade["teamId"];
@@ -278,66 +289,35 @@ function fillPreviousGrades(grades) {
         $(`#grade-input-team${teamId}-3`).val(grade["presentation"]);
         $(`#grade-input-team${teamId}-4`).val(grade["additional"]);
         $(`#grade-comment-team${teamId}`).val(grade["comment"]);
-        $(`input[type="range"]`).each(function() {
-            $(this).css("--_value", `"${$(this).val()}"`)
-        });
+        touchInputs();
         lockVoteCard(`#voting-card-team${teamId}`, `#voting-button-team${teamId}`);
     });
 }
 
-var selectedCardId = "voting-card-team1";
-var selectedButton = "voting-button-team1";
-
-function showCard(cardId, buttonId) {
-    $('#' + selectedCardId).removeClass("active");
-    $('#' + cardId).addClass("active");
-
-    $('#' + selectedButton).removeClass("active");
-    $('#' + buttonId).addClass("active");
-
-    selectedCardId = cardId;
-    selectedButton = buttonId;
-}
-
-function inTeamVote(eventId) {
-    var voteResult = [];
-    $(`#in-team-voting-card > input`).each(function() {
-        var grade = $(this).val();
-        var UID = $(this).attr("-data-UID");
-        voteResult.push({"UID": UID, "grade": grade});
-    });
-
-    fetch('/demo/vote', {
-        method: 'POST',
+function fetchInteamPreviousGrades(eventId) {
+    fetch(`/demo/vote/inteam/grades?eventId=${eventId}`, {
+        method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(
-            {
-                eventId: eventId,
-                grades: voteResult
-            }
-        )
+        }
     })
-    .then(response => {
+    .then(async (response) => {
         if (response.ok) {
-            lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
-        } else {
-            response.text().then(text => alert(text));
+            fillInteamPreviousGrades(await response.json());
         }
     });
+}
 
-    $(`#upper-voting-buttons`).append(`
-        <div class="voting-button graphs-button" id="graphs-button" onclick="updateGraph();showCard('graphs-card', 'graphs-button')">
-            <img src="../img/chart.png" alt="Graphs">
-        </div>
-    `);
-
-    $(`.card`).css({"opacity": "0", "z-index" : "0"});
-    $(`.revote-button`).hide();
-
-    showCard(`voting-card-team1`, `voting-button-team1`);
+function fillInteamPreviousGrades(grades) {
+    $(`#in-team-voting-card > input`).each(function() {
+        var UID = $(this).attr("-data-UID");
+        grades.filter(grade => grade["personId"] == UID).forEach(grade => {
+            $(this).val(grade["grade"]);
+        });
+    });
+    touchInputs();
+    lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
 }
 
 function showCard(cardId, buttonId) {
@@ -355,9 +335,6 @@ function inTeamVote(eventId) {
         var UID = $(this).attr("-data-UID");
         voteResult.push({"personId": UID, "grade": grade});
     });
-    
-    // console.log(voteResult);
-    // lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
 
     fetch('/demo/vote/inteam', {
         method: 'POST',
