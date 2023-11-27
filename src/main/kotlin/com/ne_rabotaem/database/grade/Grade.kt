@@ -1,6 +1,7 @@
 package com.ne_rabotaem.database.grade
 
 import com.ne_rabotaem.database.event.Event
+import com.ne_rabotaem.database.person_team.PersonTeam
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.features.demo.GradeResponseRemote
@@ -9,6 +10,8 @@ import com.ne_rabotaem.features.demo.statistics.StatisticsResponseRemote
 import com.ne_rabotaem.features.vote.PersonDemoGradeResponseRemote
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Join
+import org.jetbrains.exposed.sql.JoinType
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.neq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.avg
 import org.jetbrains.exposed.sql.insert
@@ -104,8 +107,14 @@ object Demo_grade : IntIdTable("Demo_grade") {
 
     fun getAverage(eventId: Int, teamId: Int): StatisticsResponseRemote {
         return transaction {
-            slice(level.avg(), grade.avg(), presentation.avg(), additional.avg())
-                .select { Demo_grade.eventId eq eventId and (Demo_grade.teamId eq teamId) }
+            Join(Demo_grade,
+                PersonTeam,
+                onColumn = personId,
+                otherColumn = PersonTeam.id)
+                .slice(level.avg(), grade.avg(), presentation.avg(), additional.avg())
+                .select { Demo_grade.eventId eq eventId and
+                        (Demo_grade.teamId eq teamId) and
+                        (Demo_grade.teamId neq PersonTeam.teamId) }
                 .single().run {
                     StatisticsResponseRemote(
                         avgLevel = (this[level.avg()] ?: 0).toFloat(),
@@ -119,8 +128,13 @@ object Demo_grade : IntIdTable("Demo_grade") {
 
     fun getAverage(eventId: Int): Map<Int, StatisticsResponseRemote> {
         return transaction {
-            slice(teamId, level.avg(), grade.avg(), presentation.avg(), additional.avg())
-                .select { Demo_grade.eventId eq eventId }
+            Join(Demo_grade,
+                PersonTeam,
+                onColumn = personId,
+                otherColumn = PersonTeam.id)
+                .slice(teamId, level.avg(), grade.avg(), presentation.avg(), additional.avg())
+                .select { Demo_grade.eventId eq eventId and
+                        (teamId neq PersonTeam.teamId) }
                 .groupBy(teamId)
                 .associate {
                     it[teamId].value to
@@ -164,10 +178,8 @@ object Demo_grade : IntIdTable("Demo_grade") {
                 otherColumn = User.id)
                 .slice(teamId, User.first_name, User.last_name, User.father_name, comment)
                 .select { Demo_grade.eventId eq eventId }
+                .filter { it[comment].isNotEmpty() }
                 .forEach {
-                    if (it[comment].isEmpty()) {
-                        return@forEach
-                    }
                     if (!res.containsKey(it[teamId].value)) {
                         res[it[teamId].value] = mutableListOf()
                     }
