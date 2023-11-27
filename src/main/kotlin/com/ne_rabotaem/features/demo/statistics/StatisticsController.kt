@@ -1,9 +1,8 @@
 package com.ne_rabotaem.features.demo.statistics
 
-import com.ne_rabotaem.database.grade.Demo_grade
+import com.ne_rabotaem.database.grade.DemoGrade
 import com.ne_rabotaem.database.person_team.PersonTeam
 import com.ne_rabotaem.database.user.User
-import com.ne_rabotaem.utils.TokenCheck
 import com.ne_rabotaem.utils.UserCheck
 import com.ne_rabotaem.utils.UserId
 import io.ktor.http.*
@@ -50,7 +49,7 @@ class StatisticsController(val call: ApplicationCall) {
 
         call.respond(
             Json.encodeToString(
-                Demo_grade.getAverage(
+                DemoGrade.getAverage(
                     parameters.eventId,
                     parameters.teamId
                 )
@@ -68,7 +67,7 @@ class StatisticsController(val call: ApplicationCall) {
 
         call.respond(
             Json.encodeToString(
-                Demo_grade.getComments(
+                DemoGrade.getComments(
                     parameters.eventId,
                     parameters.teamId
                 )
@@ -87,7 +86,7 @@ class StatisticsController(val call: ApplicationCall) {
             call.respond("Query parameters must contain event id!")
         }
 
-        call.respond(Json.encodeToString(Demo_grade.getAverage(eventId!!)))
+        call.respond(Json.encodeToString(DemoGrade.getAverage(eventId!!)))
     }
 
     suspend fun getAllComments() {
@@ -101,6 +100,6 @@ class StatisticsController(val call: ApplicationCall) {
             call.respond("Query parameters must contain event id!")
         }
 
-        call.respond(Json.encodeToString(Demo_grade.getComments(eventId!!)))
+        call.respond(Json.encodeToString(DemoGrade.getComments(eventId!!)))
     }
 }

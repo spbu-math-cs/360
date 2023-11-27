@@ -2,19 +2,16 @@ package com.ne_rabotaem.features.vote
 
 import com.ne_rabotaem.database.event.Event
 import com.ne_rabotaem.database.event.EventDTO
-import com.ne_rabotaem.database.grade.Demo_grade
+import com.ne_rabotaem.database.grade.DemoGrade
 import com.ne_rabotaem.database.grade.GradeDTO
-import com.ne_rabotaem.database.person_team.InteamGrade
-import com.ne_rabotaem.database.person_team.Invite
+import com.ne_rabotaem.database.person_team.InTeamGrade
 import com.ne_rabotaem.database.person_team.InteamGradeDTO
 import com.ne_rabotaem.database.person_team.PersonTeam
-import com.ne_rabotaem.database.person_team.PersonTeamDTO
 import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.database.user.User.checkSuperUser
 import com.ne_rabotaem.features.demo.GradeReceiveRemote
-import com.ne_rabotaem.utils.TokenCheck
 import com.ne_rabotaem.utils.UserCheck
 import com.ne_rabotaem.utils.UserId
 import io.ktor.http.*
@@ -62,7 +59,7 @@ class VoteController(val call: ApplicationCall) {
     }
 
     suspend fun getDemo(id: Int) {
-        call.respond(Demo_grade.fetch(id).groupBy { it.teamId })
+        call.respond(DemoGrade.fetch(id).groupBy { it.teamId })
     }
 
     suspend fun getTeams() {
@@ -123,9 +120,9 @@ class VoteController(val call: ApplicationCall) {
             Token.fetch(call.request.cookies.rawCookies["token"]!!)!!.login
         )!!
 
-        val gradeId = Demo_grade.getId(grade.eventId, userId, grade.teamId);
+        val gradeId = DemoGrade.getId(grade.eventId, userId, grade.teamId);
         if (gradeId != null) {
-            Demo_grade.update(
+            DemoGrade.update(
                 gradeId,
                 GradeDTO(
                     eventId = grade.eventId,
@@ -142,7 +139,7 @@ class VoteController(val call: ApplicationCall) {
             return
         }
 
-        Demo_grade.insert(
+        DemoGrade.insert(
             GradeDTO(
                 eventId = grade.eventId,
                 personId = userId,
@@ -163,7 +160,7 @@ class VoteController(val call: ApplicationCall) {
 
         inteamGradeReceiveRemote.grades.forEach {
             if (userId!! != it.personId) {
-                InteamGrade.insertOrUpdate(
+                InTeamGrade.insertOrUpdate(
                     InteamGradeDTO(
                         eventId = inteamGradeReceiveRemote.eventId,
                         evaluatorId = userId!!,
@@ -185,9 +182,20 @@ class VoteController(val call: ApplicationCall) {
             return
         }
 
-        val userId = UserId.getId(call)!!
-        val grades = Demo_grade.getGrades(userId, eventId)
+        val grades = DemoGrade.getGrades(userId, eventId)
 
+        call.respond(Json.encodeToString(grades))
+    }
+
+    suspend fun getInTeamGrades() {
+        val eventId = call.parameters["eventId"]?.toInt()
+
+        if (eventId == null) {
+            call.respond(HttpStatusCode.BadRequest, "Request must contain int eventId!")
+            return
+        }
+
+        val grades = InTeamGrade.getGrades(userId, eventId)
         call.respond(Json.encodeToString(grades))
     }
 }

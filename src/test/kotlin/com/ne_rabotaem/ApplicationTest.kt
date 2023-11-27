@@ -1,7 +1,7 @@
 package com.ne_rabotaem
 
 import com.ne_rabotaem.database.event.Event
-import com.ne_rabotaem.database.grade.Demo_grade
+import com.ne_rabotaem.database.grade.DemoGrade
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.user.User
@@ -97,7 +97,7 @@ class ApplicationTest {
                 deleteAll()
             }
         }
-        Demo_grade.run {
+        DemoGrade.run {
             transaction {
                 deleteAll()
             }

@@ -10,8 +10,6 @@ import com.ne_rabotaem.features.demo.statistics.StatisticsResponseRemote
 import com.ne_rabotaem.features.vote.PersonDemoGradeResponseRemote
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Join
-import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.neq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.avg
 import org.jetbrains.exposed.sql.insert
@@ -19,7 +17,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
-object Demo_grade : IntIdTable("Demo_grade") {
+object DemoGrade : IntIdTable("Demo_grade") {
     private val eventId = reference("event_id", Event.id)
     private val personId = reference("person_id", User.id)
     private val teamId = reference("team_id", Team.id)
@@ -46,9 +44,9 @@ object Demo_grade : IntIdTable("Demo_grade") {
 
     fun fetch(eventId: Int): List<GradeResponseRemote> {
         return transaction {
-            Demo_grade.select { Demo_grade.eventId.eq(eventId) }.toList().map {
+            DemoGrade.select { DemoGrade.eventId.eq(eventId) }.toList().map {
                 GradeResponseRemote(
-                    it[Demo_grade.id].value,
+                    it[DemoGrade.id].value,
                     it[personId].value,
                     it[teamId].value,
                     it[level],
@@ -64,21 +62,21 @@ object Demo_grade : IntIdTable("Demo_grade") {
     // needs a test
     fun getId(eventId: Int, userId: Int, teamId: Int): Int? {
         return transaction {
-            val query = Demo_grade.select {
-                Demo_grade.eventId.eq(eventId) and Demo_grade.personId.eq(userId) and Demo_grade.teamId.eq(teamId)
+            val query = DemoGrade.select {
+                DemoGrade.eventId.eq(eventId) and DemoGrade.personId.eq(userId) and DemoGrade.teamId.eq(teamId)
             }
             if (query.none())
                 return@transaction null
 
             query.single().run {
-                this[Demo_grade.id].value
+                this[DemoGrade.id].value
             }
         }
     }
 
     fun update(gradeId: Int, gradeDTO: GradeDTO) {
         transaction {
-            update( { Demo_grade.id eq gradeId } ) {
+            update( { DemoGrade.id eq gradeId } ) {
                 it[level] = gradeDTO.level
                 it[grade] = gradeDTO.grade
                 it[presentation] = gradeDTO.presentation
@@ -91,7 +89,7 @@ object Demo_grade : IntIdTable("Demo_grade") {
     fun getGrades(personId: Int, eventId: Int): List<PersonDemoGradeResponseRemote> {
         return transaction {
             select {
-                Demo_grade.personId eq personId and (Demo_grade.eventId eq eventId)
+                DemoGrade.personId eq personId and (DemoGrade.eventId eq eventId)
             }.toList().map {
                 PersonDemoGradeResponseRemote(
                     it[teamId].value,
@@ -107,14 +105,14 @@ object Demo_grade : IntIdTable("Demo_grade") {
 
     fun getAverage(eventId: Int, teamId: Int): StatisticsResponseRemote {
         return transaction {
-            Join(Demo_grade,
+            Join(DemoGrade,
                 PersonTeam,
                 onColumn = personId,
                 otherColumn = PersonTeam.id)
                 .slice(level.avg(), grade.avg(), presentation.avg(), additional.avg())
-                .select { Demo_grade.eventId eq eventId and
-                        (Demo_grade.teamId eq teamId) and
-                        (Demo_grade.teamId neq PersonTeam.teamId) }
+                .select { DemoGrade.eventId eq eventId and
+                        (DemoGrade.teamId eq teamId) and
+                        (DemoGrade.teamId neq PersonTeam.teamId) }
                 .single().run {
                     StatisticsResponseRemote(
                         avgLevel = (this[level.avg()] ?: 0).toFloat(),
@@ -128,12 +126,12 @@ object Demo_grade : IntIdTable("Demo_grade") {
 
     fun getAverage(eventId: Int): Map<Int, StatisticsResponseRemote> {
         return transaction {
-            Join(Demo_grade,
+            Join(DemoGrade,
                 PersonTeam,
                 onColumn = personId,
                 otherColumn = PersonTeam.id)
                 .slice(teamId, level.avg(), grade.avg(), presentation.avg(), additional.avg())
-                .select { Demo_grade.eventId eq eventId and
+                .select { DemoGrade.eventId eq eventId and
                         (teamId neq PersonTeam.teamId) }
                 .groupBy(teamId)
                 .associate {
@@ -150,12 +148,12 @@ object Demo_grade : IntIdTable("Demo_grade") {
 
     fun getComments(eventId: Int, teamId: Int): List<CommentReceiveRemote> {
         return transaction {
-            Join(Demo_grade,
+            Join(DemoGrade,
                 User,
                 onColumn = personId,
                 otherColumn = User.id)
                 .slice(User.first_name, User.last_name, User.father_name, comment)
-                .select { Demo_grade.eventId eq eventId and (Demo_grade.teamId eq teamId) }
+                .select { DemoGrade.eventId eq eventId and (DemoGrade.teamId eq teamId) }
                 .filter { it[comment].isNotEmpty() }
                 .map {
                     CommentReceiveRemote(
@@ -172,12 +170,12 @@ object Demo_grade : IntIdTable("Demo_grade") {
         val res = mutableMapOf<Int, MutableList<CommentReceiveRemote>>()
 
         transaction {
-            Join(Demo_grade,
+            Join(DemoGrade,
                 User,
                 onColumn = personId,
                 otherColumn = User.id)
                 .slice(teamId, User.first_name, User.last_name, User.father_name, comment)
-                .select { Demo_grade.eventId eq eventId }
+                .select { DemoGrade.eventId eq eventId }
                 .filter { it[comment].isNotEmpty() }
                 .forEach {
                     if (!res.containsKey(it[teamId].value)) {
