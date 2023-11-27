@@ -1,4 +1,4 @@
-function fillPage(containerId, userInfo, eventId, setComments, teams) {
+function fillPage(containerId, userInfo, eventId, setComments, teams, digits) {
     var rank = userInfo["rank"];
     if (rank == "teacher") {
         $(containerId).append(`
@@ -13,15 +13,20 @@ function fillPage(containerId, userInfo, eventId, setComments, teams) {
     </div>
     <div class="graph-inner">
         <h3>Качество презентации</h3>
-    <div class="grades-graph" id="graph-3"></div>
+        <div class="grades-graph" id="graph-3"></div>
     </div>
-        <div class="graph-inner">
+    <div class="graph-inner">
         <h3>Дополнительные баллы</h3>
         <div class="grades-graph" id="graph-4"></div>
     </div>
+    <div class="graph-inner">
+        <h3>Итоговый балл</h3>
+        <div class="grades-graph" id="graph-5"></div>
+    </div>
 </div>
         `);
-        fetchAllStatistics(eventId, teams);
+        createGraphs(teams);
+        updateAllStatistics(eventId, teams, digits);
     } else {
         $(containerId).append(`
 <div class="grades-container">
@@ -61,57 +66,21 @@ function fillPage(containerId, userInfo, eventId, setComments, teams) {
     }
 }
 
-function fetchAllStatistics(eventId, teams) {
-    fetch(`/demo/statistics/average/all?eventId=${eventId}`, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (response.ok) {
-            response.json().then(responseJson => {
-                setAllStatistics(responseJson, teams, eventId);
-            })
-        } else {
-            response.text().then(text => function() {
-                alert("There's no statistics for this demo.");
-                window.location.href = "/demo";
-            });
-        }
-    });
-}
-
-function setAllStatistics(statistics, teams, eventId) {
+function createGraphs(teams) {
     teams.forEach(team => {
         var teamId = team["teamId"];
-        if (teamId in statistics) {
-            var grade = statistics[teamId];
-        } else {
-            var grade = {avgLevel: 0, avgGrade: 0, avgPresentation: 0, avgAdditional: 0};
-        }
-        const criteria = ["avgLevel", "avgGrade", "avgPresentation", "avgAdditional"];
-        for (let i = 1; i < 5; i++) {
-            var criterion = criteria[i - 1];
-            if (criterion == "avgAdditional") {
-                var grade_1 = normalize(grade[criterion], 0, 3);
-            } else {
-                var grade_1 = normalize(grade[criterion], 1, 5);
-            }
-            var grade_100 = Math.floor(grade_1 * 100);
-            var color = calcColorBetween("92DF7E", "12486B", grade_1);
+        for (let i = 1; i < 6; i++) {
             $(`#graph-${i}`).append(`
-    <div class="item" id="graph-${i}-team${teamId}" style="--val: ${grade_100}; --clr: #${color};">
-        <div class="label">${teamId}</div>
-        <div class="value">${Math.floor(grade[criterion] * 10) / 10}</div>
-    </div>
+<div class="item" id="graph-${i}-team${teamId}" style="--val: 0; --clr: #ffffff;">
+    <div class="label">${teamId}</div>
+    <div class="value"></div>
+</div>
             `);   
         }
     });
 }
 
-function updateAllStatistics(eventId, teams) {
+function updateAllStatistics(eventId, teams, digits) {
     fetch(`/demo/statistics/average/all?eventId=${eventId}`, {
         method: 'GET',
         headers: {
@@ -132,17 +101,12 @@ function updateAllStatistics(eventId, teams) {
                     const criteria = ["avgLevel", "avgGrade", "avgPresentation", "avgAdditional"];
                     for (let i = 1; i < 5; i++) {
                         var criterion = criteria[i - 1];
-                        if (criterion == "avgAdditional") {
-                            var grade_1 = normalize(grade[criterion], 0, 3);
-                        } else {
-                            var grade_1 = normalize(grade[criterion], 1, 5);
-                        }
-                        var grade_100 = Math.floor(grade_1 * 100);
-                        var color = calcColorBetween("92DF7E", "12486B", grade_1);
-                        $(`#graph-${i}-team${teamId}`).attr("style", `--val: ${grade_100}; --clr: #${color};`);
-                        $(`#graph-${i}-team${teamId} > .label`).html(teamId);
-                        $(`#graph-${i}-team${teamId} > .value`).html(Math.floor(grade[criterion] * 10) / 10);
+                        var minValue = (criterion == "avgAdditional") ? 0 : 1;
+                        var maxValue = (criterion == "avgAdditional") ? 3 : 5;
+                        setGraphColumn(`#graph-${i}-team${teamId}`, grade[criterion], minValue, maxValue, roundStr(grade[criterion], digits));
                     }
+                    var totalGrade = calcGrade(grade[criteria[0]], grade[criteria[1]], grade[criteria[2]], grade[criteria[3]]);
+                    setGraphColumn(`#graph-5-team${teamId}`, totalGrade, 0, 20, roundStr(totalGrade, digits));
                 });
             });
         }
@@ -171,22 +135,17 @@ function fetchStatictics(eventId, setComments) {
     });
 }
 
-
-function normalize(value, lBound, rBound) {
-    return Math.min(Math.max((value - lBound) / (rBound - lBound), 0), 1);
-}
-
 function setStatistics(statistics, eventId, setComments) {
     $(`.statistics-content > h1`).html(`Demo ${eventId}`);
     
     $(`#ratio-1`).attr("style", `--ratio: ${normalize(statistics["avgLevel"], 1, 5)}`);
-    $(`#ratio-1 > p`).html(Math.floor(statistics["avgLevel"] * 10) / 10);
+    $(`#ratio-1 > p`).html(roundStr(statistics["avgLevel"], 1));
     $(`#ratio-2`).attr("style", `--ratio: ${normalize(statistics["avgGrade"], 1, 5)}`);
-    $(`#ratio-2 > p`).html(Math.floor(statistics["avgGrade"] * 10) / 10);
+    $(`#ratio-2 > p`).html(roundStr(statistics["avgGrade"], 1));
     $(`#ratio-3`).attr("style", `--ratio: ${normalize(statistics["avgPresentation"], 1, 5)}`);
-    $(`#ratio-3 > p`).html(Math.floor(statistics["avgPresentation"] * 10) / 10);
+    $(`#ratio-3 > p`).html(roundStr(statistics["avgPresentation"], 1));
     $(`#ratio-4`).attr("style", `--ratio: ${normalize(statistics["avgAdditional"], 0, 3)}`);
-    $(`#ratio-4 > p`).html(Math.floor(statistics["avgAdditional"] * 10) / 10);
+    $(`#ratio-4 > p`).html(roundStr(statistics["avgAdditional"], 1));
 
     if (setComments) {
         fetchComments(eventId);
@@ -219,10 +178,6 @@ function setComments(comments) {
         </div>
         `);
     });
-
-    if ($(`#comments-container`).children().length == 0) {
-        $(`#comments-container`).addClass('empty');
-    }
 }
 
 function htmlEncode(str){
