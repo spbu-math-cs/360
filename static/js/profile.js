@@ -166,7 +166,7 @@ $(function() {
 }(jQuery));
 
 function resetInput(popupId) {
-    $(`${popupId} > input`).val("");
+    $(`${popupId} input`).val("");
     $(`${popupId} .search-bar`).removeClass("complete");
 }
 

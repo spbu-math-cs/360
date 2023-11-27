@@ -142,6 +142,7 @@ object Demo_grade : IntIdTable("Demo_grade") {
                 otherColumn = User.id)
                 .slice(User.first_name, User.last_name, User.father_name, comment)
                 .select { Demo_grade.eventId eq eventId and (Demo_grade.teamId eq teamId) }
+                .filter { it[comment].isNotEmpty() }
                 .map {
                     CommentReceiveRemote(
                         firstName = it[User.first_name],
