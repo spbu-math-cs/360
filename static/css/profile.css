@@ -354,6 +354,7 @@ h1, h2, h3 {
     .profile-grid {
         display: grid;
         grid-template-columns: min-content 1fr;
+        gap: 1.5rem;
     }
 
     .profile-grid > .info-container {
@@ -367,5 +368,9 @@ h1, h2, h3 {
         max-width: 200px;
         grid-column: 1 / 2;
         grid-row: 1 / 2;
+    }
+
+    .account-card h1 {
+        text-align: start;
     }
 }
