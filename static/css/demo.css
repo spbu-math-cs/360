@@ -69,7 +69,7 @@ h1 {
     font-size: .8em;
 }
 
-.demo-outer-container > *::after {
+.demo-outer-container > *.empty::after {
     content: "No demos";
     color: #777;
     font-style: italic;
@@ -77,10 +77,6 @@ h1 {
     display: block;
     margin-bottom: .5rem;
     text-align: center;
-}
-
-.demo-outer-container > *:has(.demo-card)::after {
-    display: none;
 }
 
 @media (min-width: 1280px) {

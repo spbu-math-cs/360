@@ -219,6 +219,10 @@ function setComments(comments) {
         </div>
         `);
     });
+
+    if ($(`#comments-container`).children().length == 0) {
+        $(`#comments-container`).addClass('empty');
+    }
 }
 
 function htmlEncode(str){

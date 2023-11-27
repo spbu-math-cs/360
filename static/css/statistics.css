@@ -14,15 +14,11 @@ h3 {
     margin: 1rem auto;
 }
 
-#comments-container::after {
+#comments-container.empty::after {
     content: "No comments";
     font-size: 1.2rem;
     font-style: italic;
     color: #777;
-}
-
-#comments-container:has(.comment)::after {
-    display: none;
 }
 
 .comment {

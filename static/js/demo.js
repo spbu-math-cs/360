@@ -1,15 +1,13 @@
 $(function() {
-    if (getPageName() == "demo") {
-        fetch('/demo_list', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(response => setDemosInPage(response));
-    }
+    fetch('/demo_list', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(response => setDemosInPage(response));
 });
 
 function setDemosInPage(demosJson) {
@@ -27,6 +25,12 @@ function setDemosInPage(demosJson) {
             <p class="demo-card-date">${dateToHumanFormat(date)}</p>
         </div>
         `);
+    });
+
+    $(`.demo-list`).each(function() {
+        if ($(this).children().length == 0) {
+            $(this).parent().addClass('empty');
+        }
     });
 }
 

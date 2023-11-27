@@ -235,7 +235,7 @@ h1, h2, h3 {
     transition: all .2s;
 }
 
-.search-bar:has(input:focus) > span {
+.search-bar:focus-within > span {
     background-color: var(--active-background);
     border-color: var(--active-border);
     color: var(--active-color);
@@ -266,7 +266,7 @@ h1, h2, h3 {
     margin: 1rem auto;
 }
 
-.search-form:has(.search-bar.complete) .send-invite-button {
+.search-bar.complete ~ .send-invite-button {
     background-color: #75df8c;
     border: 1px solid rgb(46, 197, 91);
     color: white;

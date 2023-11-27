@@ -11,7 +11,6 @@ $(function() {
     $(`#statistics-content > h1`).html(`Demo ${eventId}`);
 
     fetchRank(eventId);
-    // fillPage({rank: "teacher"}, eventId);
 });
 
 function fetchRank(eventId) {
