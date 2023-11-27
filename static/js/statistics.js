@@ -27,7 +27,7 @@ function fetchRank(eventId) {
                 if (responseJson["rank"] == "teacher") {
                     fetchTeams(eventId, responseJson);
                 } else {
-                    fillPage("#statistics-content", responseJson, eventId, true, []);
+                    fillPage("#statistics-content", responseJson, eventId, true, [], 1);
                 }
             })
         } else {
@@ -47,7 +47,7 @@ function fetchTeams(eventId, userInfo) {
     .then(response => {
         if (response.ok) {
             response.json().then(responseJson => {
-                fillPage("#statistics-content", userInfo, eventId, false, responseJson);
+                fillPage("#statistics-content", userInfo, eventId, false, responseJson, 1);
             })
         } else {
             response.text().then(text => alert(text));
