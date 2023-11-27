@@ -173,6 +173,7 @@ function setComments(comments) {
     comments.forEach(comment => {
         $(`#comments-container`).append(`
         <div class="comment">
+            <img src="../img/user_images/default.jpg">
             <h3>${htmlEncode(comment["lastName"])} ${htmlEncode(comment["firstName"])} ${htmlEncode(comment["fatherName"])}</h3>
             <p>${htmlEncode(comment["comment"])}</p>
         </div>

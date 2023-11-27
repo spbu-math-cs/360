@@ -22,10 +22,15 @@
 
     <div class="profile-content">
         <div class="account-card white-card">
-            <h1>{{last_name}}</h1>
-            <h1>{{first_name}}</h1>
-            <h1>{{father_name}}</h1>
-            <p>ID: #<i>{{user_id}}</i></p>
+            <div class="profile-grid">
+                <img src="{{profile_picture}}">
+                <div class="info-container">
+                    <h1>{{last_name}}</h1>
+                    <h1>{{first_name}}</h1>
+                    <h1>{{father_name}}</h1>
+                    <p>ID: #<i>{{user_id}}</i></p>
+                </div>
+            </div>
             <button id="change-password-button" onclick="openPopup('#change-password-popup')" type="button">Change Password</button>
             <div id="change-password-popup" class="popup">
                 <div>
