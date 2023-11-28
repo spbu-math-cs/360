@@ -124,7 +124,7 @@ function addVoteCards(teams, eventId) {
 
     $(`#upper-voting-buttons`).append(`
         <div class="voting-button graphs-button" id="graphs-button" onclick="updateGraph();showCard('graphs-card', 'graphs-button')">
-            <img src="../img/chart.png" alt="Graphs">
+            <img src="/img/chart.png" alt="Graphs">
         </div>
     `);
 

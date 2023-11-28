@@ -1,29 +1,14 @@
-var direction = true;
+async function spin(object) {
+    if (!$(object).hasClass("active")) {
+        $(object).addClass("active");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        $(object).removeClass("active");
+    }
+}
 
 $(function() {
-    $(".joebiden").on("mousedown", function() {
-        if (direction) {
-            $(this).addClass("counterclockwise");
-            $(this).removeClass("clockwise");
-        } else {
-            $(this).addClass("clockwise");
-            $(this).removeClass("counterclockwise");
-        }
-        direction = !direction;
+    spin("#spinner");
+    $("#spinner").on("mouseover", function() {
+        spin(this);
     });
-
-    $(".joebiden").on("mouseup", function() {
-        $(this).removeClass("counterclockwise");
-        $(this).removeClass("clockwise");
-    });
-
-    $(".joebiden").on("click", function() {
-        if ($(this).hasClass("zero")) {
-            $(this).addClass("seven");
-            $(this).removeClass("zero");
-        } else {
-            $(this).addClass("zero");
-            $(this).removeClass("seven");
-        }
-    })
 });

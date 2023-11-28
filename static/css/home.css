@@ -1,38 +1,24 @@
-.spinner {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+html, body {
+    height: 100%;
+    position: relative;
 }
 
-.joebiden {
+.spinner-container {
     display: inline-block;
-    max-width: min(80%, 400px);
-    margin: 5rem auto 0 auto;
+    position: absolute;
+    inset: 50% 0% 0% 50%;
+    transform: translate(-50%, -50%);
 }
 
-@media (min-width: 750px) {
-    .joebiden {
-        transform: rotate(0deg);
-        transition: transform 2s ease;
-    }
-    
-    .joebiden.counterclockwise {
-        transform: rotate(-720deg);
-    }
-    
-    .joebiden.clockwise {
-        transform: rotate(720deg);   
-    }
+#spinner {
+    border-radius: 60% 35% 60% 40%;
+
+    transform-origin: center;
+    transform: rotate(0deg);
+    transition: none;
 }
 
-@media (max-width: 750px) {
-    .joebiden.zero {
-        transform: rotate(0deg);
-        transition: transform 2s ease;
-    }
-
-    .joebiden.seven {
-        transform: rotate(-720deg);
-        transition: transform 2s ease;
-    }
+#spinner.active {
+    transform: rotate(-720deg);
+    transition: transform 1s ease;
 }
