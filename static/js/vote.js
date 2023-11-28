@@ -310,14 +310,16 @@ function fetchInteamPreviousGrades(eventId) {
 }
 
 function fillInteamPreviousGrades(grades) {
-    $(`#in-team-voting-card > input`).each(function() {
-        var UID = $(this).attr("-data-UID");
-        grades.filter(grade => grade["personId"] == UID).forEach(grade => {
-            $(this).val(grade["grade"]);
+    if (grades.length != 0) {
+        $(`#in-team-voting-card > input`).each(function() {
+            var UID = $(this).attr("-data-UID");
+            grades.filter(grade => grade["personId"] == UID).forEach(grade => {
+                $(this).val(grade["grade"]);
+            });
         });
-    });
-    touchInputs();
-    lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
+        touchInputs();
+        lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
+    }
 }
 
 function showCard(cardId, buttonId) {
