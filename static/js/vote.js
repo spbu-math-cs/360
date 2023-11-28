@@ -134,6 +134,8 @@ function addVoteCards(teams, eventId) {
         </div> 
     `);
 
+    $(`.revote-button`).hide();
+
     if ($(".card.active").length == 0) {
         showCard(`voting-card-team1`, `voting-button-team1`);
     }
