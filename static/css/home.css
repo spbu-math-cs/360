@@ -5,6 +5,7 @@ html, body {
 
 .spinner-container {
     display: inline-block;
+    width: 100%;
     position: absolute;
     inset: 50% 0% 0% 50%;
     transform: translate(-50%, -50%);
@@ -12,10 +13,12 @@ html, body {
 
 #spinner {
     border-radius: 60% 35% 60% 40%;
-
     transform-origin: center;
     transform: rotate(0deg);
     transition: none;
+    display: block;
+    margin: 0 auto;
+    max-width: 80vw;
 }
 
 #spinner.active {
