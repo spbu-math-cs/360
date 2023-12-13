@@ -1,17 +1,19 @@
 $(document).ready(function() {
     var curr_url = window.location.href;
     var url = new URL(curr_url);
-    var eventId = parseInt(url.searchParams.get("eventId"));
-    if (eventId == null) {
-        window.alert("You haven't choose demo to vote!");
-        window.location.href = "/demo";
-        return;
-    }
+    if (url.pathname == "/demo/vote") {
+        var eventId = parseInt(url.searchParams.get("eventId"));
+        if (eventId == null) {
+            window.alert("You haven't choose demo to vote!");
+            window.location.href = "/demo";
+            return;
+        }
 
-    fetchTeams(eventId);
-    fetchPreviousGrades(eventId);
-    fetchInteamPreviousGrades(eventId);
-    fetchId(eventId);
+        fetchTeams(eventId);
+        fetchPreviousGrades(eventId);
+        fetchInteamPreviousGrades(eventId);
+        fetchId(eventId);
+    }
 })
 
 var voteCardsCreated = false;
