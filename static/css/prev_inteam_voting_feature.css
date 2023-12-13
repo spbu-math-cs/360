@@ -19,3 +19,11 @@
         width: 100%;
     }
 }
+
+@media (min-width: 750px) {
+    #in-team-voting-card {
+        padding: 1rem 2rem;
+        min-width: 15%;
+    }
+}
+}
