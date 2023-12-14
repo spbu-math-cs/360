@@ -3,6 +3,7 @@ package com.ne_rabotaem.features.register
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.database.user.UserDTO
 import com.ne_rabotaem.database.user.rank
+import com.ne_rabotaem.utils.Hashing
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.mustache.*
@@ -37,7 +38,7 @@ class RegisterController(val call: ApplicationCall) {
                 last_name = registerReceiveRemote.last_name,
                 father_name = registerReceiveRemote.father_name,
                 login = registerReceiveRemote.login,
-                password = registerReceiveRemote.password,
+                password = Hashing.getHash(registerReceiveRemote.login + registerReceiveRemote.password),
                 rank = rank.valueOf(registerReceiveRemote.rank),
             ),
         )
