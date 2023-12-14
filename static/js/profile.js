@@ -1,6 +1,8 @@
 $(function() {
-    fetchTeamInfo();
+    $("#team-card").hide();
     resizeImage();
+    fetchInvitations();
+    fetchTeamInfo();
 });
 
 function resizeImage() {
@@ -42,10 +44,6 @@ function setInvitations(invitations) {
     });
 }
 
-function removeInvitations() {
-    $("#invitations-card").remove();
-}
-
 function fetchTeamInfo() {
     fetch('/profile/team/info', {
         method: 'GET',
@@ -56,12 +54,9 @@ function fetchTeamInfo() {
     })
     .then(async (response) => {
         if (response.ok) {
-            removeInvitations();
-            $("#team-card").removeClass("hidden");
+            $("#invitations-card").hide();
+            $("#team-card").show();
             setTeamInfo(await response.json());
-        } else {
-            $("#team-card").remove();
-            fetchInvitations();
         }
     });
 }
@@ -92,7 +87,6 @@ function answerInvitation(inviteId, action) {
     })
     .then(response => {
         if (response.ok) {
-            // location.reload();
             if (action == 1) {
                 location.reload();
             } else {
