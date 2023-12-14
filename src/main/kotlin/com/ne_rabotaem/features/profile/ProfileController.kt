@@ -7,6 +7,7 @@ import com.ne_rabotaem.database.person_team.PersonTeamDTO
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.user.User
+import com.ne_rabotaem.utils.Hashing
 import com.ne_rabotaem.utils.PasswordCheck
 import com.ne_rabotaem.utils.UserCheck
 import com.ne_rabotaem.utils.UserId
@@ -172,9 +173,10 @@ class ProfileController(val call: ApplicationCall) {
 
     suspend fun changePassword() {
         val passwordReceiveRemote = call.receive<NewPasswordReceiveRemote>()
+        val login = User.fetch(userId)!!.login
 
-        if (PasswordCheck.isPasswordValid(userId, passwordReceiveRemote.oldPassword)!!) {
-            User.updatePassword(userId, passwordReceiveRemote.newPassword)
+        if (PasswordCheck.isPasswordValid(userId, Hashing.getHash(login + passwordReceiveRemote.oldPassword))!!) {
+            User.updatePassword(userId, Hashing.getHash(login + passwordReceiveRemote.newPassword))
             call.respond(HttpStatusCode.OK)    
             return
         }

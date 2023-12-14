@@ -50,10 +50,10 @@ class VoteController(val call: ApplicationCall) {
             return;
         }
 
-        if (!isDemoValid(eventDTO)) {
-            call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
-            return
-        }
+//        if (!isDemoValid(eventDTO)) {
+//            call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
+//            return
+//        }
 
         call.respond(MustacheContent("voting.html", mapOf<String, String>()))
     }
