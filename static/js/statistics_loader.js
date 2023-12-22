@@ -138,11 +138,11 @@ function fetchStatistics(eventId, setComments) {
 function setStatistics(statistics, eventId, setComments) {
     $(`.statistics-content > h1`).html(`Demo ${eventId}`);
     
-    $(`#ratio-1`).attr("style", `--ratio: ${normalize(statistics["avgLevel"], 1, 5)}`);
+    $(`#ratio-1`).attr("style", `--ratio: ${normalize(statistics["avgLevel"], 0, 5)}`);
     $(`#ratio-1 > p`).html(roundStr(statistics["avgLevel"], 1));
-    $(`#ratio-2`).attr("style", `--ratio: ${normalize(statistics["avgGrade"], 1, 5)}`);
+    $(`#ratio-2`).attr("style", `--ratio: ${normalize(statistics["avgGrade"], 0, 5)}`);
     $(`#ratio-2 > p`).html(roundStr(statistics["avgGrade"], 1));
-    $(`#ratio-3`).attr("style", `--ratio: ${normalize(statistics["avgPresentation"], 1, 5)}`);
+    $(`#ratio-3`).attr("style", `--ratio: ${normalize(statistics["avgPresentation"], 0, 5)}`);
     $(`#ratio-3 > p`).html(roundStr(statistics["avgPresentation"], 1));
     $(`#ratio-4`).attr("style", `--ratio: ${normalize(statistics["avgAdditional"], 0, 3)}`);
     $(`#ratio-4 > p`).html(roundStr(statistics["avgAdditional"], 1));
@@ -182,7 +182,10 @@ function setComments(comments) {
 }
 
 function htmlEncode(str){
-    return String(str).replace(/[^\w. ]/gi, function(c){
-        return '&#'+c.charCodeAt(0)+';';
-    });
+    return str.replace(/\&/g, '&amp;')
+		.replace(/\</g, '&lt;')
+		.replace(/\>/g, '&gt;')
+		.replace(/\"/g, '&quot;')
+		.replace(/\'/g, '&#x27;')
+		.replace(/\//g, '&#x2F;');
 }

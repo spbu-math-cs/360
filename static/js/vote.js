@@ -185,15 +185,16 @@ function fetchId(eventId) {
     .then(response => {
         if (response.ok) {
             response.json().then(responseJson => {
-                fillPage("#statistics-container", responseJson, eventId, false, teamsResponse, 0);
                 if (responseJson["rank"] == "teacher") {
                     $(`#in-team-voting-button`).css("display", "none");
                     waitFor(() => teamsFetched == true, () => {
+			    fillPage("#statistics-container", responseJson, eventId, false, teamsResponse, 0);
                         updateAllStatistics(eventId, teamsResponse, 0);
                         setInterval(function() { updateAllStatistics(eventId, teamsResponse, 0); }, 10000);
                         preparePage(eventId);
                     });
                 } else {
+			fillPage("#statistics-container", responseJson, eventId, false, teamsResponse, 0);
                     fetchStatistics(eventId, false, 0);
                     setInterval(function() { fetchStatistics(eventId, false, 0); }, 10000);
                     fetchInteamVoting(eventId, responseJson);
@@ -263,11 +264,11 @@ function normalize(value, lBound, rBound) {
 }
 
 function setRealTimeStatistics(statistics) {
-    $(`#ratio-1`).attr("style", `--ratio: ${normalize(statistics["avgLevel"], 1, 5)}`);
+    $(`#ratio-1`).attr("style", `--ratio: ${normalize(statistics["avgLevel"], 0, 5)}`);
     $(`#ratio-1 > p`).html(Math.floor(statistics["avgLevel"] * 10) / 10);
-    $(`#ratio-2`).attr("style", `--ratio: ${normalize(statistics["avgGrade"], 1, 5)}`);
+    $(`#ratio-2`).attr("style", `--ratio: ${normalize(statistics["avgGrade"], 0, 5)}`);
     $(`#ratio-2 > p`).html(Math.floor(statistics["avgGrade"] * 10) / 10);
-    $(`#ratio-3`).attr("style", `--ratio: ${normalize(statistics["avgPresentation"], 1, 5)}`);
+    $(`#ratio-3`).attr("style", `--ratio: ${normalize(statistics["avgPresentation"], 0, 5)}`);
     $(`#ratio-3 > p`).html(Math.floor(statistics["avgPresentation"] * 10) / 10);
     $(`#ratio-4`).attr("style", `--ratio: ${normalize(statistics["avgAdditional"], 0, 3)}`);
     $(`#ratio-4 > p`).html(Math.floor(statistics["avgAdditional"] * 10) / 10);

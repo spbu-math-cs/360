@@ -40,7 +40,8 @@ class VoteController(val call: ApplicationCall) {
     }
 
     private fun isDemoValid(eventDTO: EventDTO): Boolean {
-        return eventDTO.start < LocalTime.now() && eventDTO.finish > LocalTime.now()
+	return true;
+        /* return eventDTO.start < LocalTime.now() && eventDTO.finish > LocalTime.now() */
     }
 
     suspend fun getPage(eventId: Int) {
