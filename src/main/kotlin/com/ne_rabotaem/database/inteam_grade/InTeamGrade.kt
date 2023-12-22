@@ -8,6 +8,7 @@ import com.ne_rabotaem.features.vote.PersonInTeamVotingResponseRemote
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.avg
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -57,6 +58,24 @@ object InTeamGrade : IntIdTable("Inteam_grade") {
                     grade = it[grade]
                 )
             }
+        }
+    }
+
+    fun getDemoUserRating(userId: Int, eventId: Int): Double {
+        return transaction {
+            slice(grade.avg())
+                .select { assessedId eq userId and (InTeamGrade.eventId eq eventId) }
+                .toList()
+                .single()[grade.avg()]?.toDouble() ?: 0.0
+        }
+    }
+
+    fun getDemoAvgRating(eventId: Int): Double {
+        return transaction {
+            slice(grade.avg())
+                .select { InTeamGrade.eventId eq eventId }
+                .toList()
+                .single()[grade.avg()]?.toDouble() ?: 1.0
         }
     }
 

@@ -3,6 +3,8 @@ package com.ne_rabotaem
 import com.ne_rabotaem.database.event.Event
 import com.ne_rabotaem.database.event.EventDTO
 import com.ne_rabotaem.database.event.EventType
+import com.ne_rabotaem.database.person_team.InTeamGrade
+import com.ne_rabotaem.features.vote.PersonGrade
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -16,7 +18,7 @@ class SampleTest {
     @BeforeTest
     fun prepare() {
         Database.connect(
-            "jdbc:postgresql://localhost:5432/DEV_ne_rabotaem",
+            "jdbc:postgresql://localhost:5432/ne_rabotaem",
             driver = "org.postgresql.Driver",
             user = "postgres",
             password = "dubchuk",
@@ -43,5 +45,11 @@ class SampleTest {
             }
         }
         assertEquals(Event.fetch(eventId)?.date, date)
+    }
+
+    @Test fun getInTeamAvg() {
+        val avgGrade = InTeamGrade.getDemoUserRating(6, 4)
+
+        println(avgGrade)
     }
 }

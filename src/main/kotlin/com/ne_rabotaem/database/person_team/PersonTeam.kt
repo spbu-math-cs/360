@@ -37,6 +37,12 @@ object PersonTeam : IntIdTable("Person_team") {
         }
     }
 
+    fun getMembersCount(teamId: Int): Int {
+        return transaction {
+            select { PersonTeam.teamId eq teamId }.count().toInt()
+        }
+    }
+
     fun delete(personId: Int) {
         transaction {
             val teamId: Int = select { PersonTeam.personId eq personId }.single()[teamId].value
