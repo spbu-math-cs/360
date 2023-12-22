@@ -1,5 +1,8 @@
 package com.ne_rabotaem.features.profile
 
+import com.ne_rabotaem.database.event.Event
+import com.ne_rabotaem.database.event.EventType
+import com.ne_rabotaem.database.grade.DemoGrade
 import com.ne_rabotaem.database.person_team.Invite
 import com.ne_rabotaem.database.person_team.InviteDTO
 import com.ne_rabotaem.database.person_team.PersonTeam
@@ -208,5 +211,25 @@ class ProfileController(val call: ApplicationCall) {
         }
 
         User.addImage(userId, fileName)
+    }
+
+    suspend fun getUserDemoStatistics() {
+        val teamId = PersonTeam.getTeam(userId)
+        if (teamId == null) {
+            call.respond(HttpStatusCode.NotFound, "Your team not found!")
+            return
+        }
+
+        call.respond(Json.encodeToString(
+            Event.fetchAll()
+                .filter { it.type == EventType.demo }
+                .associate { it.eventId to DemoGrade.getAverage(it.eventId, teamId) }
+                .map {
+                    it.key to (it.value.avgLevel + it.value.avgGrade + it.value.avgPresentation) *
+                            (1.0 + it.value.avgAdditional / 9.0)
+                }
+                .toList()
+                .sortedBy { Event.fetch(it.first)!!.date }
+        ))
     }
 }

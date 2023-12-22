@@ -51,3 +51,8 @@ data class UserInfoResponseRemote(
 data class ImageNameReceiveRemote(
     val name: String
 )
+
+@Serializable
+data class UserDemoStatisticsRemote(
+    val demoId: Int
+)

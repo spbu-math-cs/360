@@ -40,5 +40,9 @@ fun Application.configureProfileRouting() {
         post("profile/image/load") {
             ProfileController(call).loadImage()
         }
+
+        post("profile/statistics") {
+            ProfileController(call).getUserDemoStatistics()
+        }
     }
 }
