@@ -61,6 +61,7 @@ function fillPage(containerId, userInfo, eventId, setComments, teams, digits) {
 <h2>Comments</h2>
 <div id="comments-container"></div>
             `);
+            fetchComments(eventId);
         }
         fetchStatistics(eventId, setComments);
     }
@@ -146,10 +147,6 @@ function setStatistics(statistics, eventId, setComments) {
     $(`#ratio-3 > p`).html(roundStr(statistics["avgPresentation"], 1));
     $(`#ratio-4`).attr("style", `--ratio: ${normalize(statistics["avgAdditional"], 0, 3)}`);
     $(`#ratio-4 > p`).html(roundStr(statistics["avgAdditional"], 1));
-
-    if (setComments) {
-        fetchComments(eventId);
-    }
 }
 
 function fetchComments(eventId) {
