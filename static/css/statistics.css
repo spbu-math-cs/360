@@ -59,6 +59,8 @@ h3 {
     grid-row: 1 / -1;
     height: 4rem;
     margin-right: 1rem;
+    border-radius: 100%;
+    object-fit: cover;
 }
 
 .comment > h3 {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,44 +15,26 @@
     <script src="/js/jquery-3.7.1.min.js"></script>
     <script src="/js/cookie.js"></script>
     <script src="/js/navbar.js"></script>
-	<script src="/js/redirects.js"></script>
-	<script src="/js/profile.js"></script>
+    <script src="/js/redirects.js"></script>
+    <script src="/js/profile.js"></script>
 
 </head>
+
 <body class="body-profile-page with-nav-bar">
     <nav> <!-- will be loaded by navbar.js --> </nav>
 
     <div class="profile-content">
         <div class="account-card white-card">
-            <div class="profile-grid">
-                <img src="{{profile_picture}}">
-                <div class="info-container">
-                    <h1>{{last_name}}</h1>
-                    <h1>{{first_name}}</h1>
-                    <h1>{{father_name}}</h1>
-                    <p>ID: #<i>{{user_id}}</i></p>
-                </div>
-            </div>
+            <img src="{{profile_picture}}">
+            <h2>{{last_name}} {{first_name}}</h2>
+            <h2>{{father_name}}</h2>
+            <p>ID: #<i>{{user_id}}</i></p>
+            <button id="change-avatar-button" onclick="openPopup('#change-avatar-popup')" type="button">Change Avatar</button>
             <button id="change-password-button" onclick="openPopup('#change-password-popup')" type="button">Change Password</button>
-            <div id="change-password-popup" class="popup">
-                <div>
-                    <button class="round-button exit-button" type="button" onclick="closePopup('#change-password-popup');resetInput('#change-password-popup');setPasswordMessage('',false)">⤫</button>
-
-                    <h3>Change Password</h3>
-
-                    <label for="old-password">Old Password</label>
-                    <input type="password" name="Old Password" id="old-password">
-
-                    <label for="old-password">New Password</label>
-                    <input type="password" name="New Password" id="new-password">
-
-                    <p id="password-status" class="success"></p>
-    
-                    <button id="change-password-submit-button" type="button" onclick="changePassword()">Change Password</button>
-                </div>
-            </div>
             <button type="button" class="log-out-button" onclick="logOut()">Log Out</button>
         </div>
+
+
         <div id="invitations-card" class="invitations-card white-card">
             <h2>Team Invitations</h2>
         </div>
@@ -62,24 +45,58 @@
             <ul id="team-members" class="team-members"></ul>
 
             <button class="invite-button" type="button" onclick="openPopup('#invite-popup')">Invite Members</button>
-            <div id="invite-popup" class="popup">
-                <div class="search-form">
-                    <button class="round-button exit-button" type="button" onclick="closePopup('#invite-popup');resetInput('#invite-popup')">⤫</button>
-
-                    <h3>Search by ID</h3>
-
-                    <div class="search-bar">
-                        <span>#</span>
-                        <input type="text" name="ID" id="id-input" placeholder="0000">
-                    </div>
-
-                    <button id="send-invite-button" type="button" class="send-invite-button" onclick="inviteMember()">Invite</button>
-                </div>
-            </div>
-
             <button class="leave-button" type="button" onclick="leaveTeam()">Leave Team</button>
         </div>
     </div>
 
+    <div id="change-password-popup" class="popup">
+        <div>
+            <button class="round-button exit-button" type="button"
+                onclick="closePopup('#change-password-popup');resetInput('#change-password-popup');setPasswordMessage('',false)">⤫</button>
+
+            <h3>Change Password</h3>
+
+            <label for="old-password">Old Password</label>
+            <input type="password" name="Old Password" id="old-password">
+
+            <label for="old-password">New Password</label>
+            <input type="password" name="New Password" id="new-password">
+
+            <p id="password-status" class="success"></p>
+
+            <button id="change-password-submit-button" type="button" onclick="changePassword()">Change Password</button>
+        </div>
+    </div>
+
+    <div id="invite-popup" class="popup">
+        <div class="search-form">
+            <button class="round-button exit-button" type="button"
+                onclick="closePopup('#invite-popup');resetInput('#invite-popup')">⤫</button>
+
+            <h3>Search by ID</h3>
+
+            <div class="search-bar">
+                <span>#</span>
+                <input type="text" name="ID" id="id-input" placeholder="0000">
+            </div>
+
+            <button id="send-invite-button" type="button" class="send-invite-button"
+                onclick="inviteMember()">Invite</button>
+        </div>
+    </div>
+
+    <div id="change-avatar-popup" class="popup">
+        <div class="change-avatar-form">
+            <h2>Upload new avatar image</h2>
+            <p>File size must not exceed 300kB</p>
+            <p>Supported extensions: .png, .jpg, .webp</p>
+            <p id="error-label"></p>
+            <button class="round-button exit-button" type="button" onclick="closePopup('#change-avatar-popup')">⤫</button>
+            <input id="image-input" onchange="validateImage()" type="file">
+            <button id="submit-avatar-button" type="button" onclick="submitAvatar()">Change Avatar</button>
+        </div>
+    </div>
+
 </body>
+
 </html>

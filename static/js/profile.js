@@ -1,12 +1,53 @@
 $(function() {
     $("#team-card").hide();
-    resizeImage();
     fetchInvitations();
     fetchTeamInfo();
 });
 
-function resizeImage() {
-    $(`.profile-grid > img`).css({"width":  `${$('.account-card').width() * 0.6}`, "left": `${$('.account-card').width() * 0.2}`});
+function showError(message) {
+    $(`#error-label`).html(message);
+}
+
+function hideError() {
+    showError("");
+}
+
+function submitAvatar() {
+    var files = document.getElementById("image-input").files;
+    if (files.length == 0) {
+        showError(`You haven't choosed an image`);
+        return;
+    }
+    var file = files[0];
+    // var reader = new FileReader();
+    // reader.readAsArrayBuffer(file);
+    // reader.onload = readerEvent => {
+    //     var content = readerEvent.target.result;
+    //     console.log(content);
+    // };
+    fetch('/profile/image/load', {
+        method: 'POST',
+        body: {
+            binary_data: file
+        }
+    }).then(() => {
+        window.location = "/profile";
+    });
+}
+
+function validateImage() {
+    var file = document.getElementById("image-input").files[0];
+    hideError();
+    if (file.type != "image/png" && file.type != "image/jpg" && file.type != "image/webp") {
+        if (!file.type.startsWith('image/')) {
+            showError("Choosed file is not an image");
+        } else {
+            showError(`Choosed image is in unsupported format (supported formats: jpg, png, webp) `);
+        }
+    } else if (file.size > 300000) {
+        showError(`Choosed file is too big (${Math.ceil(file.size / 1000)}kB > 300kB)`);
+    } else return
+    resetInput(`#change-avatar-popup`);
 }
 
 function fetchInvitations() {
