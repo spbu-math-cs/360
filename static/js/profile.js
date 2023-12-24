@@ -22,19 +22,16 @@ function submitAvatar() {
     var reader = new FileReader();
     reader.readAsArrayBuffer(file);
     reader.onload = readerEvent => {
-        var content = new Uint8Array(readerEvent.target.result);
-        console.log(content);
+        // var content = new Uint8Array(readerEvent.target.result);
+        let formData = new FormData();
+        formData.append("blob", file);
+        formData.append("format", re.exec(file.name)[1]);
+        // console.log(content);
+        console.log(formData);
         var re = /(?:\.([^.]+))?$/;
         fetch('/profile/image/load', {
             method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: {
-                format: re.exec(file.name)[1],
-                blob: content
-            }
+            body: formData
         }).then(() => {
             // window.location = "/profile";
         });
