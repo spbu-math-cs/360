@@ -185,7 +185,7 @@ function fetchId(eventId) {
     .then(response => {
         if (response.ok) {
             response.json().then(responseJson => {
-                fillPage("#statistics-container", responseJson, eventId, false, teamsResponse, 0);
+                fillPage("#statistics-container", responseJson, eventId, false, teamsResponse, 0, false);
                 if (responseJson["rank"] == "teacher") {
                     $(`#in-team-voting-button`).css("display", "none");
                     waitFor(() => teamsFetched == true, () => {

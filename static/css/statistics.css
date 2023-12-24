@@ -70,3 +70,34 @@ h3 {
     grid-column: 2 / -1;
     grid-row: 2 / -1;
 }
+
+#personal-grade-graph {
+    border-radius: 10px;
+    height: 2rem;
+    width: 80%;
+    background-color: hsl(185, 30%, 92%);
+    margin: 0 auto;
+    position: relative;
+}
+
+#personal-grade-graph > p {
+    position: relative;
+    margin: 0;
+    text-align: center;
+    color: white;
+    mix-blend-mode: hard-light;
+    line-height: 2rem;
+    text-shadow: 2px 2px 7px hsl(0, 0%, 25%);
+}
+
+#personal-grade-graph::before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    border-radius: 10px;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: calc(var(--ratio, 0) * 100%);
+    background-color: #419197;
+}

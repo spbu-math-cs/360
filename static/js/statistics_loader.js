@@ -1,4 +1,4 @@
-function fillPage(containerId, userInfo, eventId, setComments, teams, digits) {
+function fillPage(containerId, userInfo, eventId, setComments, teams, digits, setPersonalStatistic) {
     var rank = userInfo["rank"];
     if (rank == "teacher") {
         $(containerId).append(`
@@ -56,6 +56,17 @@ function fillPage(containerId, userInfo, eventId, setComments, teams, digits) {
     </div>
 </div>
         `);
+        if (setPersonalStatistic) {
+            $(containerId).append(`
+<div id="personal-grade-container">
+    <h3>Your personal grade in this demo</h3>
+    <div id="personal-grade-graph">
+        <p></p>
+    </div>
+</div>
+            `);
+            fetchPersonalStatistics(eventId);
+        }
         if (setComments) {
             $(containerId).append(`
 <h2>Comments</h2>
@@ -65,6 +76,23 @@ function fillPage(containerId, userInfo, eventId, setComments, teams, digits) {
         }
         fetchStatistics(eventId, setComments);
     }
+}
+
+function fetchPersonalStatistics(eventId) {
+    fetch(`/profile/statistics`, {
+        method: 'POST'
+    }).then(response => {
+        if (response.ok) {
+            response.json().then(personalStatistics => {
+                personalStatistics.forEach(eventGrade => {
+                    if (eventGrade["first"] == eventId) {
+                        $(`#personal-grade-graph > p`).html(Math.floor(eventGrade["second"] * 100) / 100);
+                        $(`#personal-grade-graph`).attr("style", `--ratio: ${eventGrade["second"] / 21};`);
+                    }
+                })
+            });
+        }
+    });
 }
 
 function createGraphs(teams) {
