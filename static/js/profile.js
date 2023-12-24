@@ -25,10 +25,12 @@ function submitAvatar() {
     //     var content = readerEvent.target.result;
     //     console.log(content);
     // };
+    var re = /(?:\.([^.]+))?$/;
     fetch('/profile/image/load', {
         method: 'POST',
         body: {
-            binary_data: file
+            format: re.exec(file.name)[1],
+            blob: file
         }
     }).then(() => {
         window.location = "/profile";
