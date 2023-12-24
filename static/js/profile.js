@@ -25,7 +25,6 @@ function submitAvatar() {
         // var content = new Uint8Array(readerEvent.target.result);
         let formData = new FormData();
         formData.append("blob", file);
-        formData.append("format", re.exec(file.name)[1]);
         // console.log(content);
         console.log(formData);
         var re = /(?:\.([^.]+))?$/;

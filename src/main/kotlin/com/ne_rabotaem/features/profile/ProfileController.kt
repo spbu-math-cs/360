@@ -31,7 +31,7 @@ import kotlin.streams.asSequence
 class ProfileController(val call: ApplicationCall) {
     private val isUserValid get() = UserCheck.isUserExists(call)
     private val userId: Int
-    private val imagePath = "img/user_images/default.jpg"
+    private val imagePath = "img/user_images/"
 
     init {
         runBlocking {
@@ -55,7 +55,7 @@ class ProfileController(val call: ApplicationCall) {
             "last_name" to userDTO.last_name,
             "father_name" to userDTO.father_name,
             "user_id" to User.getUserId(userDTO.login)!!.toString().padStart(4, '0'),
-            "profile_picture" to (User.getImage(userId) ?: imagePath)
+            "profile_picture" to imagePath + (User.getImage(userId) ?: "default.jpg")
         )))
     }
 
@@ -212,33 +212,26 @@ class ProfileController(val call: ApplicationCall) {
         val data = call.receiveMultipart()
 
         val charPool : List<Char> = ('a'..'z') + ('0'..'9')
-        val fileName: String = ThreadLocalRandom.current()
+        var fileName: String = ThreadLocalRandom.current()
             .ints(10L, 0, charPool.size)
             .asSequence()
             .map(charPool::get)
             .joinToString("")
 
-        var fileDescription = ""
-        var fileName2 = ""
-
         data.forEachPart { part ->
             when (part) {
-                is PartData.FormItem -> {
-                    fileDescription = part.value
-                }
-
                 is PartData.FileItem -> {
-                    fileName2 = part.originalFileName as String
+                    val originName = part.originalFileName as String
                     val fileBytes = part.streamProvider().readBytes()
-                    File("imagePath/$fileName2").writeBytes(fileBytes)
+                    fileName += "." + originName.split(".").last()
+                    File("static/$imagePath/", fileName).writeBytes(fileBytes)
                 }
 
                 else -> {}
             }
             part.dispose()
         }
-
-        //File(imagePath, fileName).writeBytes(data.blob.toString().toByteArray())
+        call.respond(HttpStatusCode.OK)
 
         User.addImage(userId, fileName)
     }
