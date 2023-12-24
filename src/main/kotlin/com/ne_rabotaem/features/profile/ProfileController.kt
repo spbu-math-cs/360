@@ -16,6 +16,7 @@ import com.ne_rabotaem.utils.PasswordCheck
 import com.ne_rabotaem.utils.UserCheck
 import com.ne_rabotaem.utils.UserId
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.mustache.*
 import io.ktor.server.request.*
@@ -208,16 +209,36 @@ class ProfileController(val call: ApplicationCall) {
     }
 
     suspend fun loadImage() {
-        val data = call.receive<ImageNameReceiveRemote>()
+        val data = call.receiveMultipart()
 
         val charPool : List<Char> = ('a'..'z') + ('0'..'9')
         val fileName: String = ThreadLocalRandom.current()
             .ints(10L, 0, charPool.size)
             .asSequence()
             .map(charPool::get)
-            .joinToString("") + "." + data.format
+            .joinToString("")
 
-        File(imagePath, fileName).writeBytes(data.blob.toString().toByteArray())
+        var fileDescription = ""
+        var fileName2 = ""
+
+        data.forEachPart { part ->
+            when (part) {
+                is PartData.FormItem -> {
+                    fileDescription = part.value
+                }
+
+                is PartData.FileItem -> {
+                    fileName2 = part.originalFileName as String
+                    val fileBytes = part.streamProvider().readBytes()
+                    File("imagePath/$fileName2").writeBytes(fileBytes)
+                }
+
+                else -> {}
+            }
+            part.dispose()
+        }
+
+        //File(imagePath, fileName).writeBytes(data.blob.toString().toByteArray())
 
         User.addImage(userId, fileName)
     }
