@@ -10,7 +10,7 @@ $(function() {
 
     $(`#statistics-content > h1`).html(`Demo ${eventId}`);
 
-    fetchRank(eventId);
+    fetchRankStatistics(eventId);
 
     // Previous InTeam votings feature
     fetchInteamVoting_Feature(eventId, profileInfoResponse);
@@ -20,7 +20,7 @@ $(function() {
 var profileInfoFetched = false;
 var profileInfoResponse = null;
 
-function fetchRank(eventId) {
+function fetchRankStatistics(eventId) {
     fetch(`/profile/info`, {
         method: 'GET',
         headers: {
@@ -32,7 +32,7 @@ function fetchRank(eventId) {
         if (response.ok) {
             response.json().then(responseJson => {
                 if (responseJson["rank"] == "teacher") {
-                    fetchTeams(eventId, responseJson);
+                    fetchTeamsStatistics(eventId, responseJson);
                 } else {
                     fillPage("#statistics-content", responseJson, eventId, true, [], 1, true);
                     profileInfoResponse = responseJson;
@@ -45,7 +45,7 @@ function fetchRank(eventId) {
     });
 }
 
-function fetchTeams(eventId, userInfo) {
+function fetchTeamsStatistics(eventId, userInfo) {
     fetch(`/demo/vote/teams?eventId=${eventId}`, {
         method: 'GET',
         headers: {
@@ -78,7 +78,7 @@ function fetchInteamVoting_Feature(eventId) {
                 waitFor(() => profileInfoFetched == true, () => addInteamVotingCard_Feature(responseJson, eventId, profileInfoResponse));
             })
         } else {
-            response.text().then(text => alert(text));
+		$("#in-team-voting-card").remove();
         }
     });
 }

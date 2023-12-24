@@ -1,5 +1,9 @@
 package com.ne_rabotaem.features.profile
 
+import com.ne_rabotaem.database.event.Event
+import com.ne_rabotaem.database.event.EventType
+import com.ne_rabotaem.database.grade.DemoGrade
+import com.ne_rabotaem.database.person_team.InTeamGrade
 import com.ne_rabotaem.database.person_team.Invite
 import com.ne_rabotaem.database.person_team.InviteDTO
 import com.ne_rabotaem.database.person_team.PersonTeam
@@ -7,6 +11,7 @@ import com.ne_rabotaem.database.person_team.PersonTeamDTO
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.user.User
+import com.ne_rabotaem.utils.Hashing
 import com.ne_rabotaem.utils.PasswordCheck
 import com.ne_rabotaem.utils.UserCheck
 import com.ne_rabotaem.utils.UserId
@@ -172,9 +177,10 @@ class ProfileController(val call: ApplicationCall) {
 
     suspend fun changePassword() {
         val passwordReceiveRemote = call.receive<NewPasswordReceiveRemote>()
+        val login = User.fetch(userId)!!.login
 
-        if (PasswordCheck.isPasswordValid(userId, passwordReceiveRemote.oldPassword)!!) {
-            User.updatePassword(userId, passwordReceiveRemote.newPassword)
+        if (PasswordCheck.isPasswordValid(userId, Hashing.getHash(login + passwordReceiveRemote.oldPassword))!!) {
+            User.updatePassword(userId, Hashing.getHash(login + passwordReceiveRemote.newPassword))
             call.respond(HttpStatusCode.OK)    
             return
         }
@@ -206,5 +212,29 @@ class ProfileController(val call: ApplicationCall) {
         }
 
         User.addImage(userId, fileName)
+    }
+
+    suspend fun getUserDemoStatistics() {
+        val teamId = PersonTeam.getTeam(userId)
+        if (teamId == null) {
+            call.respond(HttpStatusCode.NotFound, "Your team not found!")
+            return
+        }
+
+        call.respond(Json.encodeToString(
+            Event.fetchAll()
+                .asSequence()
+                .filter { it.type == EventType.demo }
+                .associate { it.eventId to DemoGrade.getAverage(it.eventId, teamId) }
+                .map {
+                    it.key to (it.value.avgLevel + it.value.avgGrade + it.value.avgPresentation) *
+                            (1.0 + it.value.avgAdditional / 9.0) *
+                            InTeamGrade.getDemoUserRating(userId, it.key) /
+                            InTeamGrade.getDemoAvgRating(it.key)
+
+                }
+                .toList()
+                .sortedBy { Event.fetch(it.first)!!.date }
+        ))
     }
 }

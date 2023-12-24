@@ -39,8 +39,9 @@ class VoteController(val call: ApplicationCall) {
         userId = UserId.getId(call)!!
     }
 
-    fun isDemoValid(eventDTO: EventDTO): Boolean {
-        return eventDTO.start < LocalTime.now() && eventDTO.finish > LocalTime.now()
+    private fun isDemoValid(eventDTO: EventDTO): Boolean {
+	return true;
+        /* return eventDTO.start < LocalTime.now() && eventDTO.finish > LocalTime.now() */
     }
 
     suspend fun getPage(eventId: Int) {
@@ -50,16 +51,12 @@ class VoteController(val call: ApplicationCall) {
             return;
         }
 
-        if (!isDemoValid(eventDTO)) {
-            call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
-            return
-        }
+//        if (!isDemoValid(eventDTO)) {
+//            call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
+//            return
+//        }
 
         call.respond(MustacheContent("voting.html", mapOf<String, String>()))
-    }
-
-    suspend fun getDemo(id: Int) {
-        call.respond(DemoGrade.fetch(id).groupBy { it.teamId })
     }
 
     suspend fun getTeams() {
@@ -85,11 +82,6 @@ class VoteController(val call: ApplicationCall) {
             call.respond(HttpStatusCode.BadRequest, "No such event!")
             return;
         }
-
-//        if (!isDemoValid(eventDTO)) {
-//            call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
-//            return
-//        }
 
         call.respond(Team.fetchAll().filter {it.teamId != userTeam});
     }
@@ -155,15 +147,15 @@ class VoteController(val call: ApplicationCall) {
         call.respond(HttpStatusCode.OK)
     }
 
-    suspend fun inteamVote() {
-        val inteamGradeReceiveRemote = call.receive<InteamGradeReceiveRemote>()
+    suspend fun inTeamVote() {
+        val inTeamGradeReceiveRemote = call.receive<InteamGradeReceiveRemote>()
 
-        inteamGradeReceiveRemote.grades.forEach {
-            if (userId!! != it.personId) {
+        inTeamGradeReceiveRemote.grades.forEach {
+            if (userId != it.personId) {
                 InTeamGrade.insertOrUpdate(
                     InteamGradeDTO(
-                        eventId = inteamGradeReceiveRemote.eventId,
-                        evaluatorId = userId!!,
+                        eventId = inTeamGradeReceiveRemote.eventId,
+                        evaluatorId = userId,
                         assessedId = it.personId,
                         grade = it.grade
                     )

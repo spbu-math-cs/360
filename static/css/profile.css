@@ -12,11 +12,13 @@ h1, h2, h3 {
 .profile-content > * {
     margin-bottom: 1rem;
     padding: 1rem;
+    max-height: max-content;
 }
 
 .account-card {
     min-width: 300px;
     max-width: 100vw;
+    max-height: fit-content;
     grid-column: 1 / 2;
     grid-row: 1 / 2;
 }
@@ -30,30 +32,22 @@ h1, h2, h3 {
     min-width: 300px;
     max-width: 100vw;
     grid-column: 2 / 3;
-    grid-row: 1 / -1;
-
+    grid-row: 1 / 2;
     display: flex;
     flex-direction: column;
 }
 
-.account-card h1 {
-    /* text-align: start; */
-    margin: 0 0 1rem 0;
-}
-
 .account-card > button, 
 .team-card > button {
-    margin: 1rem auto 0 0;
+    margin: .5rem auto 0 0;
     width: 100%;
     min-width: min-content;
-
     font-size: 1rem;
-    padding: 1rem .5rem;
+    padding: .7rem .5rem;
     border-radius: 5px;
     border: 0px solid transparent;
     cursor: pointer;
     background-color: #FFC5BC;
-
     transition: background-color .15s;
 }
 
@@ -141,7 +135,7 @@ h1, h2, h3 {
 }
 
 .team-card .invite-button {
-    margin-top: auto;
+    /* margin-top: auto; */
 }
 
 .popup {
@@ -308,22 +302,62 @@ h1, h2, h3 {
 }
 
 #change-password-button {
+    background-color: #ffd7bd;
+}
+
+#change-avatar-button {
     background-color: #beffbc;
-}
-
-.account-card {
-    position: relative;
-}
-
-.profile-grid {
-    max-width: min-content;
-    margin: auto;
-    text-align: center;
 }
 
 .info-container {
     max-width: min-content;
     margin: auto;
+}
+
+.account-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.account-card > img {
+    aspect-ratio: 1 / 1;
+    width: 150px;
+    object-fit: cover;
+
+    border-radius: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+
+    margin-bottom: 2rem;
+}
+
+.change-avatar-form {
+    max-width:fit-content;
+    padding: 2rem 2rem;
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#submit-avatar-button {
+    margin-top: 1rem;
+    padding: .5rem;
+}
+
+.change-avatar-form > h2 {
+    margin-bottom: 1rem;
+}
+
+.change-avatar-form > p {
+    margin: 0;
+}
+
+#error-label {
+    color: red;
+    overflow-wrap: break-word;
+    margin-top: 2rem;
+    margin-bottom: .2rem;
 }
 
 @media (min-width: 750px) {
@@ -332,32 +366,10 @@ h1, h2, h3 {
         gap: 1rem;
         grid-template-columns: max-content max-content;
         grid-template-rows: 1fr max-content;
+        align-items: flex-start;
     }
 
     .profile-content > * {
         margin: 0;
-    }
-
-    .profile-grid {
-        display: grid;
-        grid-template-columns: min-content 1fr;
-        gap: 1.5rem;
-    }
-
-    .profile-grid > .info-container {
-        margin-right: 1rem;
-        grid-column: 2 / -1;
-        grid-row: 1 / 2;
-    }
-
-    .profile-grid > img {
-        left: 0%;
-        max-width: 200px;
-        grid-column: 1 / 2;
-        grid-row: 1 / 2;
-    }
-
-    .account-card h1 {
-        text-align: start;
     }
 }

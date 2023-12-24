@@ -3,6 +3,7 @@ package com.ne_rabotaem.features.login
 import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.token.TokenDTO
 import com.ne_rabotaem.database.user.User
+import com.ne_rabotaem.utils.Hashing
 import com.ne_rabotaem.utils.PasswordCheck
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -26,7 +27,7 @@ class LoginController(val call: ApplicationCall) {
 
         println(userDTO.last_name)
 
-        if (userDTO.password != loginReceiveRemote.password) {
+        if (userDTO.password != Hashing.getHash(loginReceiveRemote.login + loginReceiveRemote.password)) {
             call.respond(HttpStatusCode.BadRequest, "Wrong password!")
             return
         }
