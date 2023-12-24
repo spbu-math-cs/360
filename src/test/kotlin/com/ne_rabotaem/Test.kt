@@ -8,6 +8,8 @@ import com.ne_rabotaem.features.vote.PersonGrade
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.io.File
+import java.sql.Blob
 import java.time.LocalDate
 import java.time.LocalTime
 import kotlin.test.BeforeTest

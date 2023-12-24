@@ -24,10 +24,13 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 import java.io.File
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.streams.asSequence
 
 class ProfileController(val call: ApplicationCall) {
     private val isUserValid get() = UserCheck.isUserExists(call)
     private val userId: Int
+    private val imagePath = "img/user_images/default.jpg"
 
     init {
         runBlocking {
@@ -51,7 +54,7 @@ class ProfileController(val call: ApplicationCall) {
             "last_name" to userDTO.last_name,
             "father_name" to userDTO.father_name,
             "user_id" to User.getUserId(userDTO.login)!!.toString().padStart(4, '0'),
-            "profile_picture" to (User.getImage(userId) ?: "img/user_images/default.jpg")
+            "profile_picture" to (User.getImage(userId) ?: imagePath)
         )))
     }
 
@@ -205,11 +208,16 @@ class ProfileController(val call: ApplicationCall) {
     }
 
     suspend fun loadImage() {
-        val fileName = call.receive<ImageNameReceiveRemote>().name
-        if (!File(fileName).exists()) {
-            call.respond(HttpStatusCode.NotFound, "Image not found!")
-            return
-        }
+        val data = call.receive<ImageNameReceiveRemote>()
+
+        val charPool : List<Char> = ('a'..'z') + ('0'..'9')
+        val fileName: String = ThreadLocalRandom.current()
+            .ints(10L, 0, charPool.size)
+            .asSequence()
+            .map(charPool::get)
+            .joinToString("") + "." + data.format
+
+        File(imagePath, fileName).writeBytes(data.blob.toString().toByteArray())
 
         User.addImage(userId, fileName)
     }

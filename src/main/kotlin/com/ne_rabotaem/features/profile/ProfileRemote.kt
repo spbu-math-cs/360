@@ -1,6 +1,7 @@
 package com.ne_rabotaem.features.profile
 
 import kotlinx.serialization.Serializable
+import java.sql.Blob
 
 @Serializable
 data class InviteReceiveRemote(
@@ -49,7 +50,8 @@ data class UserInfoResponseRemote(
 
 @Serializable
 data class ImageNameReceiveRemote(
-    val name: String
+    val blob: ByteArray,
+    val format: String
 )
 
 @Serializable
