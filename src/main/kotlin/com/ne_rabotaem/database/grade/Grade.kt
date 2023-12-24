@@ -33,6 +33,7 @@ object DemoGrade : IntIdTable("Demo_grade") {
     private val presentation = integer("presentation")
     private val additional = integer("additional")
     private val comment = varchar("comment", 500)
+    private val imagePath = "img/user_images/"
 
     fun insert(gradeDTO: GradeDTO) {
         transaction {
@@ -180,7 +181,7 @@ object DemoGrade : IntIdTable("Demo_grade") {
                         lastName = it[User.last_name],
                         fatherName = it[User.father_name],
                         comment = it[comment],
-                        imageSrc = it[User.image_src] ?: "/img/user_images/default.jpg"
+                        imageSrc = imagePath + (it[User.image_src] ?: "default.jpg")
                     )
                 }
         }
