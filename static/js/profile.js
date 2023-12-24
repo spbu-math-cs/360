@@ -27,6 +27,10 @@ function submitAvatar() {
         var re = /(?:\.([^.]+))?$/;
         fetch('/profile/image/load', {
             method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
             body: {
                 format: re.exec(file.name)[1],
                 blob: content

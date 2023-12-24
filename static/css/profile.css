@@ -37,6 +37,10 @@ h1, h2, h3 {
     flex-direction: column;
 }
 
+.team-card h1 {
+    margin-left: .4em;
+}
+
 .account-card > button, 
 .team-card > button {
     margin: .5rem auto 0 0;
