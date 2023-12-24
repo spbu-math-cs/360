@@ -19,22 +19,22 @@ function submitAvatar() {
         return;
     }
     var file = files[0];
-    // var reader = new FileReader();
-    // reader.readAsArrayBuffer(file);
-    // reader.onload = readerEvent => {
-    //     var content = readerEvent.target.result;
-    //     console.log(content);
-    // };
-    var re = /(?:\.([^.]+))?$/;
-    fetch('/profile/image/load', {
-        method: 'POST',
-        body: {
-            format: re.exec(file.name)[1],
-            blob: file
-        }
-    }).then(() => {
-        window.location = "/profile";
-    });
+    var reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+    reader.onload = readerEvent => {
+        var content = new Uint8Array(readerEvent.target.result);
+        console.log(content);
+        var re = /(?:\.([^.]+))?$/;
+        fetch('/profile/image/load', {
+            method: 'POST',
+            body: {
+                format: re.exec(file.name)[1],
+                blob: content
+            }
+        }).then(() => {
+            // window.location = "/profile";
+        });
+    };
 }
 
 function validateImage() {
