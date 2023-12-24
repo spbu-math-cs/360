@@ -231,9 +231,13 @@ class ProfileController(val call: ApplicationCall) {
             }
             part.dispose()
         }
-        call.respond(HttpStatusCode.OK)
 
+        val oldImgSrc = User.getImage(userId)
+        if (oldImgSrc != null)
+            File("static/$imagePath/$oldImgSrc").delete()
         User.addImage(userId, fileName)
+
+        call.respond(HttpStatusCode.OK)
     }
 
     suspend fun getUserDemoStatistics() {
