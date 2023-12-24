@@ -19,28 +19,20 @@ function submitAvatar() {
         return;
     }
     var file = files[0];
-    var reader = new FileReader();
-    reader.readAsArrayBuffer(file);
-    reader.onload = readerEvent => {
-        // var content = new Uint8Array(readerEvent.target.result);
-        let formData = new FormData();
-        formData.append("blob", file);
-        // console.log(content);
-        console.log(formData);
-        var re = /(?:\.([^.]+))?$/;
-        fetch('/profile/image/load', {
-            method: 'POST',
-            body: formData
-        }).then(() => {
-            // window.location = "/profile";
-        });
-    };
+    let formData = new FormData();
+    formData.append("blob", file);
+    fetch('/profile/image/load', {
+        method: 'POST',
+        body: formData
+    }).then(() => {
+        window.location = "/profile";
+    });
 }
 
 function validateImage() {
     var file = document.getElementById("image-input").files[0];
     hideError();
-    if (file.type != "image/png" && file.type != "image/jpg" && file.type != "image/webp") {
+    if (file.type != "image/png" && file.type != "image/jpg" && file.type != "image/jpeg" && file.type != "image/webp") {
         if (!file.type.startsWith('image/')) {
             showError("Choosed file is not an image");
         } else {
