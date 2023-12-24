@@ -37,3 +37,4 @@ out/
 db_backups/
 output_log.txt
 setup.bat
+static/img/user_images

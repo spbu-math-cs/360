@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/profile.css">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css">
+
     <script src="/js/jquery-3.7.1.min.js"></script>
     <script src="/js/cookie.js"></script>
     <script src="/js/navbar.js"></script>
@@ -24,28 +26,43 @@
     <nav> <!-- will be loaded by navbar.js --> </nav>
 
     <div class="profile-content">
-        <div class="account-card white-card">
-            <img src="{{profile_picture}}">
-            <h2>{{last_name}} {{first_name}}</h2>
-            <h2>{{father_name}}</h2>
-            <p>ID: #<i>{{user_id}}</i></p>
-            <button id="change-avatar-button" onclick="openPopup('#change-avatar-popup')" type="button">Change Avatar</button>
-            <button id="change-password-button" onclick="openPopup('#change-password-popup')" type="button">Change Password</button>
-            <button type="button" class="log-out-button" onclick="logOut()">Log Out</button>
+        <div class="column">
+            <div class="account-card white-card">
+                <img src="{{profile_picture}}">
+                <h2>{{last_name}} {{first_name}}</h2>
+                <h2>{{father_name}}</h2>
+                <p>ID: #<i>{{user_id}}</i></p>
+                <button id="change-avatar-button" onclick="openPopup('#change-avatar-popup')" type="button">Change
+                    Avatar</button>
+                <button id="change-password-button" onclick="openPopup('#change-password-popup')" type="button">Change
+                    Password</button>
+                <button type="button" class="log-out-button" onclick="logOut()">Log Out</button>
+            </div>
+
+            <div id="invitations-card" class="invitations-card white-card">
+                <h2>Team Invitations</h2>
+            </div>
         </div>
 
+        <div class="column">
+            <div id="team-card" class="team-card white-card">
+                <h1 id="team-id"></h1>
+                <ul id="team-members" class="team-members"></ul>
 
-        <div id="invitations-card" class="invitations-card white-card">
-            <h2>Team Invitations</h2>
-        </div>
+                <button class="invite-button" type="button" onclick="openPopup('#invite-popup')">Invite Members</button>
+                <button class="leave-button" type="button" onclick="leaveTeam()">Leave Team</button>
+            </div>
 
-        {{!-- if no team, hide card --}}
-        <div id="team-card" class="team-card white-card">
-            <h1 id="team-id"></h1>
-            <ul id="team-members" class="team-members"></ul>
-
-            <button class="invite-button" type="button" onclick="openPopup('#invite-popup')">Invite Members</button>
-            <button class="leave-button" type="button" onclick="leaveTeam()">Leave Team</button>
+            <div id="graph-card" class="white-card">
+                <h2>Your sprint progress</h2>
+                <p>Your summarized grade: <span id="average-grade-label"></span></p>
+                <div id="personal-graph-container">
+                    <table class="charts-css line show-labels">
+                        <tbody id="personal-graph">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -91,7 +108,8 @@
             <p>File size must not exceed 300kB</p>
             <p>Supported extensions: .png, .jpg, .webp</p>
             <p id="error-label"></p>
-            <button class="round-button exit-button" type="button" onclick="closePopup('#change-avatar-popup')">⤫</button>
+            <button class="round-button exit-button" type="button"
+                onclick="closePopup('#change-avatar-popup')">⤫</button>
             <input id="image-input" onchange="validateImage()" type="file">
             <button id="submit-avatar-button" type="button" onclick="submitAvatar()">Change Avatar</button>
         </div>

@@ -1,8 +1,42 @@
 $(function() {
     $("#team-card").hide();
+    $("#graph-card").hide();
     fetchInvitations();
     fetchTeamInfo();
+    fetchPersonalGrades();
 });
+
+function fetchPersonalGrades() {
+    fetch(`/profile/statistics`, {
+        method: 'POST'
+    }).then(response => {
+        if (response.ok) {
+            response.json().then(personalStatistics => {
+                var prev = personalStatistics[0]["second"];
+                var prev_id = personalStatistics[0]["first"];
+                var avg = prev;
+                personalStatistics.slice(1).forEach(eventGrade => {
+                    var curr = eventGrade["second"];
+                    avg += curr;
+                    $(`#personal-graph`).append(`
+                        <tr>
+                            <th scope="row">${prev_id}</th>
+                            <td style="--start: ${prev / 21}; --end: ${curr / 21};"></td>
+                        </tr>
+                    `);
+                    prev = curr;
+                    prev_id = eventGrade["first"];
+                });
+                $(`#personal-graph`).children().last().append(`
+<th scope="row" style="
+    margin-left: auto;
+">${prev_id}</th>
+                `);
+                $(`#average-grade-label`).html(Math.round(100 * avg / personalStatistics.length) / 100);
+            });
+        }
+    });
+}
 
 function showError(message) {
     $(`#error-label`).html(message);
@@ -91,6 +125,7 @@ function fetchTeamInfo() {
         if (response.ok) {
             $("#invitations-card").hide();
             $("#team-card").show();
+            $("#graph-card").show();
             setTeamInfo(await response.json());
         }
     });
