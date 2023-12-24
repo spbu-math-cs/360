@@ -33,7 +33,7 @@ object DemoGrade : IntIdTable("Demo_grade") {
     private val presentation = integer("presentation")
     private val additional = integer("additional")
     private val comment = varchar("comment", 500)
-    private val imagePath = "img/user_images/"
+    private val imagePath = "/img/user_images/"
 
     fun insert(gradeDTO: GradeDTO) {
         transaction {
