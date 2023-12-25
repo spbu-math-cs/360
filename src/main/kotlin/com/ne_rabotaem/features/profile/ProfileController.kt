@@ -251,16 +251,11 @@ class ProfileController(val call: ApplicationCall) {
             Event.fetchAll()
                 .asSequence()
                 .filter { it.type == EventType.demo }
-                .associate { it.eventId to DemoGrade.getAverage(it.eventId, teamId) }
-                .map {
-                    it.key to (it.value.avgLevel + it.value.avgGrade + it.value.avgPresentation) *
-                            (1.0 + it.value.avgAdditional / 9.0) *
-                            InTeamGrade.getDemoUserRating(userId, it.key) /
-                            InTeamGrade.getDemoAvgRating(it.key, userId)
-
+                .associate { it.eventId to DemoGrade.getCalculatedAverage(it.eventId, teamId) * 
+                                           InTeamGrade.getDemoUserRating(userId, it.eventId) / 
+                                           InTeamGrade.getDemoAvgRating(teamId, it.eventId)
                 }
                 .toList()
-                .sortedBy { Event.fetch(it.first)!!.date }
         ))
     }
 }

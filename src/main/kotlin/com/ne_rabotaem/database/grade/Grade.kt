@@ -144,7 +144,7 @@ object DemoGrade : IntIdTable("Demo_grade") {
                 PersonTeam,
                 joinType =  JoinType.FULL,
                 onColumn = personId,
-                otherColumn = PersonTeam.id)
+                otherColumn = PersonTeam.personId)
                 .join(User,
                     joinType = JoinType.INNER,
                     onColumn = personId,
@@ -164,6 +164,15 @@ object DemoGrade : IntIdTable("Demo_grade") {
                             )
                 }
         }
+    }
+
+    fun getCalculatedAverage(eventId: Int, requiredTeamId: Int): Double {
+        return transaction {
+            slice(level, grade, presentation, additional)
+            .select { (DemoGrade.eventId eq eventId) and
+                      (teamId eq requiredTeamId) }
+            .map { (it[level] + it[grade] + it[presentation]) * (1.0 + it[additional] / 9.0) }
+        }.average()
     }
 
     fun getComments(eventId: Int, teamId: Int): List<CommentReceiveRemote> {

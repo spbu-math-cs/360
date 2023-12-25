@@ -71,19 +71,18 @@ object InTeamGrade : IntIdTable("Inteam_grade") {
         }
     }
 
-    fun getDemoAvgRating(eventId: Int, userId: Int): Double {
-        val teamId = PersonTeam.getTeam(userId)
-
+    fun getDemoAvgRating(teamId: Int, eventId: Int): Double {
         return transaction {
             Join(InTeamGrade,
                 PersonTeam,
                 onColumn = InTeamGrade.assessedId,
                 otherColumn = PersonTeam.personId)
-                .slice(grade.avg())
-                .select { InTeamGrade.eventId eq eventId and (PersonTeam.teamId eq teamId) }
-                .toList()
-                .single()[grade.avg()]?.toDouble() ?: 1.0
-        }
+            .slice(grade.avg())
+            .select { InTeamGrade.eventId eq eventId and (PersonTeam.teamId eq teamId) }
+            .groupBy(PersonTeam.personId)
+            .toList()
+            .map { it[grade.avg()]?.toDouble() ?: 1.0 }
+        }.average()
     }
 
     fun update(gradeId: Int, grade: Int) {
