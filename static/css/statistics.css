@@ -55,6 +55,7 @@ h3 {
 }
 
 .comment > img {
+    aspect-ratio: 1 / 1;
     grid-column: 1 / 2;
     grid-row: 1 / -1;
     height: 4rem;
