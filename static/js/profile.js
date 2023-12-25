@@ -14,6 +14,11 @@ function fetchPersonalGrades() {
             response.json().then(personalStatistics => {
                 var prev = personalStatistics[0]["second"];
                 var prev_id = personalStatistics[0]["first"];
+                var maxGrade = 0;
+                personalStatistics.forEach(eventGrade => {
+                    maxGrade = eventGrade["second"] > maxGrade ? eventGrade["second"] : maxGrade;
+                });
+                maxGrade *= 1.1;
                 var avg = prev;
                 personalStatistics.slice(1).forEach(eventGrade => {
                     var curr = eventGrade["second"];
@@ -21,7 +26,7 @@ function fetchPersonalGrades() {
                     $(`#personal-graph`).append(`
                         <tr>
                             <th scope="row">${prev_id}</th>
-                            <td style="--start: ${prev / 21}; --end: ${curr / 21};"></td>
+                            <td style="--start: ${prev / maxGrade}; --end: ${curr / maxGrade};"></td>
                         </tr>
                     `);
                     prev = curr;
