@@ -117,7 +117,7 @@ object DemoGrade : IntIdTable("Demo_grade") {
                 PersonTeam,
                 joinType =  JoinType.FULL,
                 onColumn = personId,
-                otherColumn = PersonTeam.id)
+                otherColumn = PersonTeam.personId)
                 .join(User,
                     joinType = JoinType.INNER,
                     onColumn = personId,
