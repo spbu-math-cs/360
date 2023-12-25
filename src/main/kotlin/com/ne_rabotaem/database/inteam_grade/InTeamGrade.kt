@@ -6,6 +6,7 @@ import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.features.vote.PersonDemoGradeResponseRemote
 import com.ne_rabotaem.features.vote.PersonInTeamVotingResponseRemote
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.avg
@@ -70,10 +71,16 @@ object InTeamGrade : IntIdTable("Inteam_grade") {
         }
     }
 
-    fun getDemoAvgRating(eventId: Int): Double {
+    fun getDemoAvgRating(eventId: Int, userId: Int): Double {
+        val teamId = PersonTeam.getTeam(userId)
+
         return transaction {
-            slice(grade.avg())
-                .select { InTeamGrade.eventId eq eventId }
+            Join(InTeamGrade,
+                PersonTeam,
+                onColumn = InTeamGrade.assessedId,
+                otherColumn = PersonTeam.personId)
+                .slice(grade.avg())
+                .select { InTeamGrade.eventId eq eventId and (PersonTeam.teamId eq teamId) }
                 .toList()
                 .single()[grade.avg()]?.toDouble() ?: 1.0
         }

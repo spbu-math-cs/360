@@ -256,7 +256,7 @@ class ProfileController(val call: ApplicationCall) {
                     it.key to (it.value.avgLevel + it.value.avgGrade + it.value.avgPresentation) *
                             (1.0 + it.value.avgAdditional / 9.0) *
                             InTeamGrade.getDemoUserRating(userId, it.key) /
-                            InTeamGrade.getDemoAvgRating(it.key)
+                            InTeamGrade.getDemoAvgRating(it.key, userId)
 
                 }
                 .toList()
