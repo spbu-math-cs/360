@@ -250,7 +250,7 @@ class ProfileController(val call: ApplicationCall) {
         call.respond(Json.encodeToString(
             Event.fetchAll()
                 .asSequence()
-                .filter { it.type == EventType.demo }
+                .filter { (it.type == EventType.demo) and (it.eventId < 7) } // TODO: fix
                 .associate { it.eventId to DemoGrade.getCalculatedAverage(it.eventId, teamId) * 
                                            InTeamGrade.getDemoUserRating(userId, it.eventId) / 
                                            InTeamGrade.getDemoAvgRating(teamId, it.eventId)

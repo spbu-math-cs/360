@@ -87,7 +87,7 @@ function fetchPersonalStatistics(eventId) {
                 personalStatistics.forEach(eventGrade => {
                     if (eventGrade["first"] == eventId) {
                         $(`#personal-grade-graph > p`).html(Math.floor(eventGrade["second"] * 100) / 100);
-                        $(`#personal-grade-graph`).attr("style", `--ratio: ${eventGrade["second"] / 21};`);
+                        $(`#personal-grade-graph`).attr("style", `--ratio: ${Math.min(eventGrade["second"] / 21, 1)};`);
                     }
                 })
             });

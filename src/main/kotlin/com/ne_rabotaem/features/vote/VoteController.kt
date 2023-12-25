@@ -39,9 +39,9 @@ class VoteController(val call: ApplicationCall) {
         userId = UserId.getId(call)!!
     }
 
-    private fun isDemoValid(eventDTO: EventDTO): Boolean {
-	return true;
-        /* return eventDTO.start < LocalTime.now() && eventDTO.finish > LocalTime.now() */
+    fun isDemoValid(eventDTO: EventDTO): Boolean {
+	    return eventDTO.eventId < 7; // TODO: fix
+        // return eventDTO.start < LocalTime.now() && eventDTO.finish > LocalTime.now()
     }
 
     suspend fun getPage(eventId: Int) {
@@ -51,10 +51,10 @@ class VoteController(val call: ApplicationCall) {
             return;
         }
 
-//        if (!isDemoValid(eventDTO)) {
-//            call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
-//            return
-//        }
+       if (!isDemoValid(eventDTO)) {
+           call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
+           return
+       }
 
         call.respond(MustacheContent("voting.html", mapOf<String, String>()))
     }
