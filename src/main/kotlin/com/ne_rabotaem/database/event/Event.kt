@@ -16,8 +16,8 @@ enum class EventType {
 }
 
 object Event : IntIdTable("Event") {
-    private val type = customEnumeration("type", "event", { value -> EventType.valueOf(value as String) }, { PGEnum("event", it) })
-    private val date = date("date")
+    private val type = customEnumeration("type", "event", { value -> EventType.valueOf(value as String) }, { PGEnum("event_type", it) })
+    val date = date("date")
     private val start = time("start")
     private val finish = time("finish")
 

@@ -1,0 +1,107 @@
+.statistics-content {
+    margin: 2rem auto;
+    padding: 1rem 1rem 2rem 1rem;
+    max-width: 700px;
+    text-align: center;
+}
+
+h1 {
+    margin: 0;
+    font-size: 3rem;
+}
+
+h3 {
+    margin: 1rem auto;
+}
+
+#comments-container.empty::after {
+    content: "No comments";
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #777;
+}
+
+.comment {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-top: 1rem;
+    padding: 1rem 1rem;
+}
+
+.comment > p {
+    text-align: start;
+    margin: 0;
+}
+
+.comment > h3 {
+    margin: 0 auto .5rem 0;
+    text-align: start;
+    font-size: 1.2rem;
+}
+
+.grades-container {
+    margin: 2rem auto;
+}
+
+
+.graph-inner {
+    margin-top: 3rem;
+}
+
+.comment {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    grid-template-rows: min-content min-content;
+}
+
+.comment > img {
+    aspect-ratio: 1 / 1;
+    grid-column: 1 / 2;
+    grid-row: 1 / -1;
+    height: 4rem;
+    margin-right: 1rem;
+    border-radius: 100%;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.comment > h3 {
+    grid-column: 2 / -1;
+    grid-row: 1 / 2;
+}
+
+.comment > p {
+    grid-column: 2 / -1;
+    grid-row: 2 / -1;
+}
+
+#personal-grade-graph {
+    border-radius: 10px;
+    height: 2rem;
+    width: 80%;
+    background-color: hsl(185, 30%, 92%);
+    margin: 0 auto;
+    position: relative;
+}
+
+#personal-grade-graph > p {
+    position: relative;
+    margin: 0;
+    text-align: center;
+    color: white;
+    mix-blend-mode: hard-light;
+    line-height: 2rem;
+    text-shadow: 2px 2px 7px hsl(0, 0%, 25%);
+}
+
+#personal-grade-graph::before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    border-radius: 10px;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: calc(var(--ratio, 0) * 100%);
+    background-color: #419197;
+}

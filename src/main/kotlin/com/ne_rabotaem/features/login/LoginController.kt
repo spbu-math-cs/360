@@ -3,6 +3,8 @@ package com.ne_rabotaem.features.login
 import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.token.TokenDTO
 import com.ne_rabotaem.database.user.User
+import com.ne_rabotaem.utils.Hashing
+import com.ne_rabotaem.utils.PasswordCheck
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.mustache.*
@@ -12,11 +14,10 @@ import java.util.*
 
 class LoginController(val call: ApplicationCall) {
     suspend fun getPage() {
-        call.respond(MustacheContent("login_sub.html", mapOf<String, String>()))
+        call.respond(MustacheContent("login.html", mapOf<String, String>()))
     }
     suspend fun performLogin() {
         val loginReceiveRemote = call.receive<LoginReceiveRemote>()
-        print(loginReceiveRemote.login)
 
         val userDTO = User.fetch(loginReceiveRemote.login)
         if (userDTO == null) {
@@ -24,7 +25,9 @@ class LoginController(val call: ApplicationCall) {
             return
         }
 
-        if (userDTO.password != loginReceiveRemote.password) {
+        println(userDTO.last_name)
+
+        if (userDTO.password != Hashing.getHash(loginReceiveRemote.login + loginReceiveRemote.password)) {
             call.respond(HttpStatusCode.BadRequest, "Wrong password!")
             return
         }

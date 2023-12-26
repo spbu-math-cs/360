@@ -7,24 +7,36 @@ import io.ktor.server.routing.*
 
 fun Application.configureVoteRouting() {
     routing {
-        get("/demo/grades") {
-            VoteController(call).getPage()
-        }
-        get("/demo/grades") {
-            if (call.request.queryParameters.contains("id")) {
-                VoteController(call).getDemo(Integer.parseInt(call.request.queryParameters["id"]!!))
-            }
-            else call.respond(HttpStatusCode.BadRequest, "Request must contain demo id!")
-        }
-        get("/demo/teams") {
-            // Get a list of all the teams you can vote for
+        get("/demo/vote") {
             if (call.request.queryParameters.contains("eventId")) {
-                VoteController(call).getTeams(Integer.parseInt(call.request.queryParameters["eventId"]!!))
+                VoteController(call).getPage(Integer.parseInt(call.request.queryParameters["eventId"]!!))
             }
             else call.respond(HttpStatusCode.BadRequest, "BadRequest: Request must contain eventId.")
         }
+
+        get("/demo/vote/teams") {
+            // Get a list of all the teams you can vote for
+
+            if (call.request.queryParameters.contains("eventId")) {
+                VoteController(call).getTeams()
+            }
+            else call.respond(HttpStatusCode.BadRequest, "BadRequest: Request must contain eventId.")
+        }
+
         post("/demo/vote") {
             VoteController(call).vote()
+        }
+
+        post("/demo/vote/inteam") {
+            VoteController(call).inTeamVote()
+        }
+
+        get("/demo/vote/grades") {
+            VoteController(call).getDemoGrades()
+        }
+
+        get("/demo/vote/inteam/grades") {
+            VoteController(call).getInTeamGrades()
         }
     }
 }

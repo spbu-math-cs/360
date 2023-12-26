@@ -11,6 +11,9 @@ drop table if exists Token;
 drop table if exists Event;
 drop table if exists Team;
 drop table if exists Demo_grade;
+drop table if exists Person_team;
+drop table if exists Invite;
+drop table if exists Inteam_grade;
 
 -- CREATE TABLES
 create table if not exists Person(
@@ -20,12 +23,13 @@ create table if not exists Person(
 	father_name varchar(24),
 	login varchar(20) unique,
 	password varchar(20),
-	rank rank
+	rank rank,
+	image_src varchar(100)
 );
 
 create table if not exists Token(
 	id serial primary key,
-	login varchar(20),
+	login varchar(20) references Person(login),
 	token varchar(128) 
 );
 
@@ -50,11 +54,32 @@ create table if not exists Demo_grade(
 	event_id serial references Event(id),
 	person_id serial references Person(id),
 	team_id serial references Team(id),
-    level int,
-    grade int,
-    presentation int,
-    additional int,
+    level int check(level >= 1 and level <= 5),
+    grade int check(grade >= 1 and grade <= 5),
+    presentation int check(presentation >= 1 and presentation <= 5),
+    additional int check(level >= 0 and level <= 3),
 	comment varchar(500)
+);
+
+create table if not exists Person_team(
+	id serial primary key,
+	person_id serial references Person(id),
+	team_id serial references Team(id)
+);
+
+create table if not exists Invite(
+	id serial primary key,
+	team_id serial references Team(id),
+	from_whom serial references Person(id),
+	to_whom serial references Person(id)
+);
+
+create table if not exists Inteam_grade(
+	id serial primary key,
+	event_id serial references Event(id),
+	evaluator_id serial references Person(id),
+	assessed_id serial references Person(id),
+	grade int check(grade >= 0 and grade <= 10)
 );
 
 -- CLEAR TABLES
@@ -63,6 +88,9 @@ truncate Token restart identity cascade;
 truncate Event restart identity cascade;
 truncate Team restart identity cascade;
 truncate Demo_grade restart identity cascade;
+truncate Person_team restart identity cascade;
+truncate Invite restart identity cascade;
+truncate Inteam_grade restart identity cascade;
 
 -- SHOW TABLES
 select * from Person;
@@ -70,6 +98,9 @@ select * from Token;
 select * from Event;
 select * from Team;
 select * from Demo_grade;
+select * from Person_team;
+select * from Invite;
+select * from Inteam_grade;
 
 SELECT SESSION_USER, CURRENT_USER;
 
@@ -90,4 +121,4 @@ insert into Team (number, name, project_name, teacher_id) values
 (6, 'Team 6', 'GiveGift', 1),
 (7, 'Team 7', '360', 1);
 
-insert into Event values (1, event_type 'demo', date '17-10-2023', time '11:15', time '12:50');
+insert into Event values (2, event_type 'demo', date '13-11-2023', time '11:15', time '12:50');
