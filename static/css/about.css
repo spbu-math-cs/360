@@ -62,7 +62,8 @@
     --color-text: rgb(15, 65, 19);
 }
 
-.sprints > * {
+.sprints > *,
+.developers {
     color: var(--color-text, black);
 
     & h1,
