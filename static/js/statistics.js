@@ -13,7 +13,6 @@ $(function() {
     fetchRankStatistics(eventId);
 
     // Previous InTeam votings feature
-    $("#in-team-voting-card").remove(); // disabled
     // fetchInteamVoting_Feature(eventId, profileInfoResponse);
     // fetchInteamPreviousGrades(eventId);
 });
