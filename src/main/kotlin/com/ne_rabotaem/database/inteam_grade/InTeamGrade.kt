@@ -12,6 +12,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.avg
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
@@ -62,30 +63,25 @@ object InTeamGrade : IntIdTable("Inteam_grade") {
         }
     }
 
-    fun getDemoUserRating(userId: Int, eventId: Int): Double {
-        return transaction {
-            slice(grade.avg())
-                .select { assessedId eq userId and (InTeamGrade.eventId eq eventId) }
-                .toList()
-                .single()[grade.avg()]?.toDouble() ?: 0.0
-        }
-    }
+    data class UsersStatistics(val eventId: Int, val teamId: Int, val personId: Int, val grade: Double);
 
-    fun getDemoAvgRating(teamId: Int, eventId: Int): Double {
-        val res = transaction {
+    fun getAllUsersRatings(): List<UsersStatistics> {
+        return transaction {
             Join(InTeamGrade,
                 PersonTeam,
                 onColumn = InTeamGrade.assessedId,
                 otherColumn = PersonTeam.personId)
-            .slice(grade.avg())
-            .select { InTeamGrade.eventId eq eventId and (PersonTeam.teamId eq teamId) }
-            .groupBy(PersonTeam.personId)
+            .slice(eventId, PersonTeam.personId, PersonTeam.teamId, grade.avg())
+            .selectAll()
+            .groupBy(eventId, PersonTeam.personId, PersonTeam.teamId)
             .toList()
-            .map { it[grade.avg()]?.toDouble() ?: 1.0 }
-        }.average()
-
-        if (res.isNaN()) return 0.0
-        return res
+            .map { 
+                UsersStatistics(it[eventId].value, 
+                                it[PersonTeam.teamId].value, 
+                                it[PersonTeam.personId].value, 
+                                it[grade.avg()]?.toDouble() ?: 0.0) 
+            }
+        }
     }
 
     fun update(gradeId: Int, grade: Int) {

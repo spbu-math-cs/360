@@ -177,6 +177,19 @@ object DemoGrade : IntIdTable("Demo_grade") {
         return (if (res.isNaN()) 0.0 else res)
     }
 
+    data class CalculatedGrade(val eventId: Int, val grade: Double);
+
+    fun getAllCalculatedAverages(requiredTeamId: Int): List<CalculatedGrade> {
+        return transaction {
+            slice(eventId, level, grade, presentation, additional)
+            .select { teamId eq requiredTeamId }
+            .map { 
+                CalculatedGrade(it[eventId].value,
+                                (it[level] + it[grade] + it[presentation]) * (1.0 + it[additional] / 9.0)) 
+            }
+        }
+    }
+
     fun getComments(eventId: Int, teamId: Int): List<CommentReceiveRemote> {
         return transaction {
             Join(DemoGrade,

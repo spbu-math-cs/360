@@ -1,6 +1,7 @@
 package com.ne_rabotaem.features.profile
 
 import com.ne_rabotaem.database.event.Event
+import com.ne_rabotaem.database.event.EventDTO
 import com.ne_rabotaem.database.event.EventType
 import com.ne_rabotaem.database.grade.DemoGrade
 import com.ne_rabotaem.database.person_team.InTeamGrade
@@ -68,18 +69,9 @@ class ProfileController(val call: ApplicationCall) {
             return
         }
 
-        val members: List<TeammateResponseRemote> = PersonTeam.getMembers(teamId).map {
-            User.fetch(it)!!.run {
-                TeammateResponseRemote(
-                    user_id = it,
-                    first_name = this.first_name,
-                    last_name = this.last_name,
-                    father_name = this.father_name
-                )
-            }
-        }
+        val members: List<TeammateResponseRemote> = PersonTeam.getMembers(teamId)
 
-       call.respond(Json.encodeToString(TeammatesResponseRemote(teamId!!, members)))
+        call.respond(Json.encodeToString(TeammatesResponseRemote(teamId!!, members)))
     }
 
     suspend fun leave() {
@@ -248,15 +240,43 @@ class ProfileController(val call: ApplicationCall) {
             return
         }
 
+        val allUsersRatings = InTeamGrade.getAllUsersRatings()
+        val teamAverageRatings: Map<Int, Double> = 
+                allUsersRatings.filter { it.teamId == teamId }
+                               .groupBy { it.eventId }
+                               .mapValues { it.value.map { it.grade }.average() ?: 0.0 }
+
+        val userRatingsByEvent: Map<Int, Double> =
+                allUsersRatings.filter { it.personId == userId }
+                               .associate { it.eventId to it.grade }
+        
+        val allCalculatedGrades = DemoGrade.getAllCalculatedAverages(teamId);
+        val gradesByEvent: Map<Int, Double> =
+                allCalculatedGrades.groupBy { it.eventId }
+                                   .mapValues { it.value.map { it.grade }.average() ?: 0.0 }
+
         call.respond(Json.encodeToString(
             Event.fetchAll()
                 .asSequence()
-                .filter { (it.type == EventType.demo) and EventCheck.isDemoFinished(Event.fetch(it.eventId)!!) }
+                .filter { (it.type == EventType.demo) and EventCheck.isDemoFinished(EventDTO(it.eventId, 
+                                                                                             it.type, 
+                                                                                             it.date, 
+                                                                                             it.start,
+                                                                                             it.finish)) }
                 .associate {
-                    val teamAvg = InTeamGrade.getDemoAvgRating(teamId, it.eventId)
-                    it.eventId to DemoGrade.getCalculatedAverage(it.eventId, teamId) *
-                            InTeamGrade.getDemoUserRating(userId, it.eventId) / if (teamAvg.toInt() == 0) 1.0 else teamAvg
+                    var teamAvg = teamAverageRatings[it.eventId]
+                    if (teamAvg == null || teamAvg.isNaN() || teamAvg.toInt() == 0)
+                        teamAvg = 1.0;
 
+                    var userRating = userRatingsByEvent[it.eventId]
+                    if (userRating == null || userRating.isNaN())
+                        userRating = 0.0;
+
+                    var teamGrade = gradesByEvent[it.eventId]
+                    if (teamGrade == null || teamGrade.isNaN())
+                        teamGrade = 0.0;
+
+                    it.eventId to teamGrade * userRating / teamAvg
                 }
                 .toList()
         ))

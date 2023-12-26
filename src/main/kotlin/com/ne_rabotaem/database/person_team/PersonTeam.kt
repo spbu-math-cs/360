@@ -2,8 +2,10 @@ package com.ne_rabotaem.database.person_team
 
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
+import com.ne_rabotaem.features.profile.TeammateResponseRemote
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.Join
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
@@ -29,10 +31,18 @@ object PersonTeam : IntIdTable("Person_team") {
         }
     }
 
-    fun getMembers(teamId: Int): List<Int> {
+    fun getMembers(teamId: Int): List<TeammateResponseRemote> {
         return transaction {
-            select { PersonTeam.teamId eq teamId }.toList().map {
-                it[personId].value
+            Join(PersonTeam,
+                 User,
+                 onColumn=personId,
+                 otherColumn=User.id)
+            .slice(personId, User.first_name, User.last_name, User.father_name)
+            .select { PersonTeam.teamId eq teamId }.toList().map {
+                TeammateResponseRemote(it[personId].value,
+                                       it[User.first_name],
+                                       it[User.last_name],
+                                       it[User.father_name])
             }
         }
     }
