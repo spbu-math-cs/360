@@ -11,6 +11,7 @@ import com.ne_rabotaem.database.person_team.PersonTeamDTO
 import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.token.Token
 import com.ne_rabotaem.database.user.User
+import com.ne_rabotaem.utils.EventCheck
 import com.ne_rabotaem.utils.Hashing
 import com.ne_rabotaem.utils.PasswordCheck
 import com.ne_rabotaem.utils.UserCheck
@@ -250,10 +251,12 @@ class ProfileController(val call: ApplicationCall) {
         call.respond(Json.encodeToString(
             Event.fetchAll()
                 .asSequence()
-                .filter { (it.type == EventType.demo) and (it.eventId < 7) } // TODO: fix
-                .associate { it.eventId to DemoGrade.getCalculatedAverage(it.eventId, teamId) * 
-                                           InTeamGrade.getDemoUserRating(userId, it.eventId) / 
-                                           InTeamGrade.getDemoAvgRating(teamId, it.eventId)
+                .filter { (it.type == EventType.demo) and EventCheck.isDemoFinished(Event.fetch(it.eventId)!!) }
+                .associate {
+                    val teamAvg = InTeamGrade.getDemoAvgRating(teamId, it.eventId)
+                    it.eventId to DemoGrade.getCalculatedAverage(it.eventId, teamId) *
+                            InTeamGrade.getDemoUserRating(userId, it.eventId) / if (teamAvg.toInt() == 0) 1.0 else teamAvg
+
                 }
                 .toList()
         ))

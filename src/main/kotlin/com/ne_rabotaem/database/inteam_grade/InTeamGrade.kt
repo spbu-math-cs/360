@@ -72,7 +72,7 @@ object InTeamGrade : IntIdTable("Inteam_grade") {
     }
 
     fun getDemoAvgRating(teamId: Int, eventId: Int): Double {
-        return transaction {
+        val res = transaction {
             Join(InTeamGrade,
                 PersonTeam,
                 onColumn = InTeamGrade.assessedId,
@@ -83,6 +83,9 @@ object InTeamGrade : IntIdTable("Inteam_grade") {
             .toList()
             .map { it[grade.avg()]?.toDouble() ?: 1.0 }
         }.average()
+
+        if (res.isNaN()) return 0.0
+        return res
     }
 
     fun update(gradeId: Int, grade: Int) {

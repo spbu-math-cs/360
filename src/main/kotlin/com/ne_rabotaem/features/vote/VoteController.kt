@@ -12,6 +12,7 @@ import com.ne_rabotaem.database.team.Team
 import com.ne_rabotaem.database.user.User
 import com.ne_rabotaem.database.user.User.checkSuperUser
 import com.ne_rabotaem.features.demo.GradeReceiveRemote
+import com.ne_rabotaem.utils.EventCheck
 import com.ne_rabotaem.utils.UserCheck
 import com.ne_rabotaem.utils.UserId
 import io.ktor.http.*
@@ -42,11 +43,6 @@ class VoteController(val call: ApplicationCall) {
         userId = UserId.getId(call)!!
     }
 
-    fun isDemoValid(eventDTO: EventDTO): Boolean {
-	    val dateTime = ZonedDateTime.now(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Europe/Moscow"))
-        return eventDTO.start < dateTime.toLocalTime() && eventDTO.finish > dateTime.toLocalTime() && eventDTO.date == dateTime.toLocalDate()
-    }
-
     suspend fun getPage(eventId: Int) {
         val eventDTO = Event.fetch(eventId)
         if (eventDTO == null) {
@@ -54,7 +50,7 @@ class VoteController(val call: ApplicationCall) {
             return;
         }
 
-       if (!isDemoValid(eventDTO)) {
+       if (!EventCheck.isDemoValid(eventDTO)) {
            call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
            return
        }
@@ -106,7 +102,7 @@ class VoteController(val call: ApplicationCall) {
             call.respond(HttpStatusCode.BadRequest, "No such event!")
             return;
         }
-        if (!isDemoValid(eventDTO)) {
+        if (!EventCheck.isDemoValid(eventDTO)) {
             call.respond(HttpStatusCode.Locked, "You can only vote during demo!")
             return
         }

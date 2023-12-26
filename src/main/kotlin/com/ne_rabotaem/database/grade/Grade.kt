@@ -167,12 +167,14 @@ object DemoGrade : IntIdTable("Demo_grade") {
     }
 
     fun getCalculatedAverage(eventId: Int, requiredTeamId: Int): Double {
-        return transaction {
+        val res = transaction {
             slice(level, grade, presentation, additional)
             .select { (DemoGrade.eventId eq eventId) and
                       (teamId eq requiredTeamId) }
             .map { (it[level] + it[grade] + it[presentation]) * (1.0 + it[additional] / 9.0) }
         }.average()
+
+        return (if (res.isNaN()) 0.0 else res)
     }
 
     fun getComments(eventId: Int, teamId: Int): List<CommentReceiveRemote> {
