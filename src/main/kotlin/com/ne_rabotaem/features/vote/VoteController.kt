@@ -22,7 +22,10 @@ import io.ktor.server.response.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.time.Clock
 import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class VoteController(val call: ApplicationCall) {
     private val isUserValid get() = UserCheck.isUserExists(call)
@@ -40,8 +43,8 @@ class VoteController(val call: ApplicationCall) {
     }
 
     fun isDemoValid(eventDTO: EventDTO): Boolean {
-	    return eventDTO.eventId < 7; // TODO: fix
-        // return eventDTO.start < LocalTime.now() && eventDTO.finish > LocalTime.now()
+	    val dateTime = ZonedDateTime.now(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Europe/Moscow"))
+        return eventDTO.start < dateTime.toLocalTime() && eventDTO.finish > dateTime.toLocalTime() && eventDTO.date == dateTime.toLocalDate()
     }
 
     suspend fun getPage(eventId: Int) {
