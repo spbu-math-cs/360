@@ -67,6 +67,7 @@ function vote(teamId, eventId) {
     var grade_4 = parseInt($(`#grade-input-team${teamId}-4`).val());
     var comment = $(`#grade-comment-team${teamId}`).val();
 
+    lockVoteCard(`#voting-card-team${teamId}`, `#voting-button-team${teamId}`);
     fetch('/demo/vote', {
         method: 'POST',
         headers: {
@@ -87,9 +88,13 @@ function vote(teamId, eventId) {
     })
     .then(response => {
         if (response.ok) {
-            lockVoteCard(`#voting-card-team${teamId}`, `#voting-button-team${teamId}`);
+            // nice
         } else {
-            response.text().then(text => alert(text));
+            response.text().then(text => { 
+                // такого не бывает блять
+                unlockVoteCard(`#voting-card-team${teamId}`, `#voting-button-team${teamId}`);
+                alert(text)
+            });
         }
     });
 }
@@ -362,6 +367,7 @@ function inTeamVote(eventId) {
         voteResult.push({"personId": UID, "grade": grade});
     });
 
+    lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
     fetch('/demo/vote/inteam', {
         method: 'POST',
         headers: {
@@ -377,9 +383,13 @@ function inTeamVote(eventId) {
     })
     .then(response => {
         if (response.ok) {
-            lockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
+            // nice
         } else {
-            response.text().then(text => alert(text));
+            response.text().then(text => { 
+                // ну такого не бывает офк
+                unlockVoteCard(`#in-team-voting-card`, `#in-team-voting-button`);
+                alert(text) 
+            });
         }
     });
 }
