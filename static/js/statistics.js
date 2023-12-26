@@ -13,8 +13,8 @@ $(function() {
     fetchRankStatistics(eventId);
 
     // Previous InTeam votings feature
-    // fetchInteamVoting_Feature(eventId, profileInfoResponse);
-    // fetchInteamPreviousGrades(eventId);
+    fetchInteamVoting_Feature(eventId, profileInfoResponse);
+    fetchInteamPreviousGrades(eventId);
 });
 
 var profileInfoFetched = false;
