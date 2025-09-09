@@ -7,6 +7,8 @@
 
 Веб-сервис для оценивания демо и проектов
 
+<img width="479" height="726" alt="image" src="https://github.com/user-attachments/assets/b965a224-22c6-4303-bce0-6949cbe025f9" />
+
 ## Содержание
 - [Технологии](#технологии)
 - [License](#license)
